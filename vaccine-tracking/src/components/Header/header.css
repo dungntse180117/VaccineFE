@@ -1,0 +1,56 @@
+/* header.css */
+
+/* Định nghĩa chiều cao của header */
+.header {
+  height: 60px; /* Điều chỉnh giá trị này theo ý muốn */
+  /* Các thuộc tính khác của header (background-color, padding, v.v.) */
+  background-color: #f0f0f0; /* Ví dụ: màu nền */
+  padding: 10px 0; /* Ví dụ: padding trên và dưới */
+}
+
+/* Định nghĩa chiều cao của nội dung header để căn giữa các phần tử theo chiều dọc */
+.header-content {
+  display: flex;
+  align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+  justify-content: space-between; /* Phân bổ khoảng trống đều giữa các phần tử */
+  max-width: 1200px; /* Ví dụ: giới hạn chiều rộng nội dung */
+  margin: 0 auto; /* Căn giữa nội dung theo chiều ngang */
+  height: 100%; /* Đảm bảo nội dung header chiếm toàn bộ chiều cao của header */
+}
+
+/* Định nghĩa kích thước logo */
+.logo img {
+  height: 40px; /* Điều chỉnh giá trị này theo ý muốn */
+  width: auto; /* Giữ tỷ lệ khung hình */
+}
+
+/* Các style khác (ví dụ: cho menu, nút login, v.v.) */
+.header-nav a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: #333;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-profile a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-profile button {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.user-profile button:hover {
+  background-color: #da190b;
+}
