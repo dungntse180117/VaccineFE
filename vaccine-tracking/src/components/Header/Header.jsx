@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './header.css';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
-  // Lấy thông tin người dùng từ localStorage
-  const user = localStorage.getItem('user');
-  const isLoggedIn = !!user; // Kiểm tra xem người dùng đã đăng nhập hay chưa
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [roleId, setRoleId] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    
+
+    setIsLoggedIn(!!token);
+
+    if (userData) {
+      try {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        setRoleId(parsedUser.roleId); 
+      } catch (error) {
+        console.error("Error parsing user data from localStorage:", error);
+      }
+    }
+  }, []);
 
   const handleLogout = () => {
-    // Xóa token và user khỏi localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    // Điều hướng người dùng về trang chủ hoặc trang đăng nhập
-    window.location.href = '/'; // Hoặc history.push('/login') nếu bạn đang dùng useHistory
+    localStorage.removeItem('roleId');
+    setIsLoggedIn(false);
+    setUser(null);
+    setRoleId(null);
+    window.location.href = '/';
   };
 
   return (
@@ -29,16 +49,17 @@ const Header = () => {
         </nav>
         <div className="header-login">
           {isLoggedIn ? (
-            // Hiển thị thông tin người dùng và nút Logout nếu đã đăng nhập
             <div className="user-profile">
-              <Link to="/profile">
-                {/* Thay đổi cách hiển thị thông tin người dùng tùy theo dữ liệu bạn có */}
-                <span>{JSON.parse(user).name || JSON.parse(user).email}</span>
-              </Link>
+              <span>{user?.name || user?.email || 'Unknown User'}</span>
+              <div className="dropdown-menu">
+                <Link to="/profile">Profile</Link>
+                <Link to="/childProfile">Child Profile</Link>
+                {roleId === 1 && <Link to="/dashboard">Dashboard</Link>}
+
+              </div>
               <button onClick={handleLogout}>Logout</button>
             </div>
           ) : (
-            // Hiển thị nút Login nếu chưa đăng nhập
             <Link to="/login">Login</Link>
           )}
         </div>

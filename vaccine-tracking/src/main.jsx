@@ -4,8 +4,8 @@ import { StyledEngineProvider } from "@mui/joy/styles";
 import AuthPage from "./pages/Login/AuthPage";
 import HomePage from "./pages/Homepage/Homepage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import ProtectedRoute from "./config/ProtectedRoute";
+import UserProfile from "./pages/UserProfile/UserProfile";
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
@@ -14,6 +14,14 @@ const App = () => {
           <Route path="/" element={<HomePage />} />  {/* Route to HomePage */}
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/login" element={<AuthPage />} /> { /* Route to login */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </StyledEngineProvider>

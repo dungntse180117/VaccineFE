@@ -21,7 +21,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import GoogleIcon from "../../components/GoogleIcon";
 import api from "../../config/axios";
 
-
 function ColorSchemeToggle(props) {
   // Toggle theme (lightmode or darkmode) logic here
 }
@@ -70,9 +69,23 @@ export default function AuthPage() {
             email: data.email,
             password: data.password,
           });
-          const { token } = response.data;
-          localStorage.setItem("token", token);``
-          localStorage.setItem("user", JSON.stringify(response.data));
+
+          // Lấy dữ liệu từ phản hồi
+          const { id, name, email, roleId, token } = response.data;
+
+          // Lưu trữ dữ liệu vào localStorage
+          localStorage.setItem("token", token);
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              id,
+              name,
+              email,
+              roleId,
+            })
+          ); 
+          localStorage.setItem("roleId", roleId); 
+
           navigate("/");
         } catch (err) {
           console.error(err);
@@ -95,7 +108,7 @@ export default function AuthPage() {
             email: data.email,
             password: data.password,
             phone: data.phone,
-            address :data.address,
+            address: data.address,
           });
           console.log("Registration successful", response.data);
         } catch (error) {
@@ -277,7 +290,7 @@ export default function AuthPage() {
                     <Input type="text" name="address" />
                   </FormControl>
                 )}
-             
+
                 <Stack sx={{ gap: 4, mt: 2 }}>
                   {authMode === "signin" && (
                     <Box
