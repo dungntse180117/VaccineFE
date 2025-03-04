@@ -1,0 +1,115 @@
+/* ManageAccount.css */
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+h2 {
+  color: #1976d2;
+  text-align: left;
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+
+p.error {
+  color: #f44336;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.create-button {
+  background-color: #4caf50;
+  color: white;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+
+  &:hover {
+      background-color: #388e3c;
+  }
+}
+
+.table-container {
+  margin-top: 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+  background-color: #e0e0e0;
+  font-weight: bold;
+  color: #333;
+}
+
+.table-cell {
+  padding: 16px;
+  color: #555;
+}
+
+.MuiTableRow-root:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.edit-button,
+.delete-button {
+  color: #757575;
+  transition: color 0.3s ease;
+
+  &:hover {
+      color: #2196f3;
+  }
+}
+
+.dialog-container .MuiDialog-paper {
+  padding: 20px;
+}
+
+.dialog-container .MuiDialogTitle-root {
+  text-align: center;
+  color: #1976d2;
+}
+
+.dialog-container .MuiFormControl-root {
+  margin-bottom: 15px;
+}
+
+.MuiInputLabel-root {
+  color: #757575 !important;
+}
+
+.MuiSelect-select {
+  color: #555;
+}
+
+.dialog-container .MuiDialogActions-root {
+  justify-content: flex-end;
+}
+
+.dialog-container .MuiDialogActions-root .MuiButton-root {
+  margin-left: 10px;
+}
+
+.dialog-container .MuiTextField-root {
+  margin-bottom: 15px;
+}
+
+.manager_container {
+  width: 100%;
+  position: relative;
+  padding-left: 10px;
+}
+
+.usertable {
+  width: 100%;
+  position: relative;
+}
+
+/* CSS for Role Filter and Search Bar */
+.MuiFormControl-root {
+  margin-right: 16px;
+}
+
+.MuiTextField-root {
+  flex: 1;
+  max-width: 300px;
+}

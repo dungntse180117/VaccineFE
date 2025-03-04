@@ -55,6 +55,7 @@ const Header = () => {
                 <Link to="/profile">Profile</Link>
                 <Link to="/childProfile">Child Profile</Link>
                 {roleId === 1 && <Link to="/dashboard">Dashboard</Link>}
+                {roleId === 1 && <Link to="/manageaccount">Manage User</Link>}
 
               </div>
               <button onClick={handleLogout}>Logout</button>
