@@ -1,0 +1,28 @@
+/* UserSidebar.css */
+
+/* Style for the sidebar container */
+.sidebar-container {
+    width: 200px; /* Adjust as needed */
+    background-color: #f0f2f5; /* Optional: Sidebar background */
+    height: 100%;
+    overflow-y: auto; /* Optional: Enable vertical scrolling if content overflows */
+  }
+  
+  /* Style for individual sidebar items */
+  .sidebar-item {
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #333;
+    display: block;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sidebar-item:hover {
+    background-color: #ddd; /* Optional: Hover effect */
+  }
+  
+  /* Style for active (selected) sidebar items */
+  .sidebar-item.active {
+    background-color: #cce5ff; /* Optional: Active item highlight */
+    color: #0056b3;
+  }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   CssVarsProvider,
   extendTheme,
@@ -71,7 +71,7 @@ export default function AuthPage() {
           });
 
           // Lấy dữ liệu từ phản hồi
-          const { id, name, email, roleId, token } = response.data;
+          const { id, name, email, roleId, token } = response.data; // Thêm accountId
 
           // Lưu trữ dữ liệu vào localStorage
           localStorage.setItem("token", token);
@@ -83,8 +83,9 @@ export default function AuthPage() {
               email,
               roleId,
             })
-          ); 
-          localStorage.setItem("roleId", roleId); 
+          );
+          localStorage.setItem("accountId",id); // lấy id thay vì accountId
+          localStorage.setItem("roleId", roleId);
 
           navigate("/");
         } catch (err) {

@@ -7,6 +7,7 @@ import ManageAccount from "./pages/ManageUser/ManageAccount";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./config/ProtectedRoute";
 import UserProfile from "./pages/UserProfile/UserProfile";
+import PatientManager from "./pages/PatientManager/PatientManager";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/patientmanager" element={<PatientManager/>} />  // Đã sửa
         </Routes>
       </Router>
     </StyledEngineProvider>
