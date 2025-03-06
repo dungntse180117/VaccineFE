@@ -53,4 +53,25 @@ export const updatePatient = (id, data) => {
 export const deletePatient = (id) => {
   return api.delete(`/api/Patients/${id}`);
 };
+// Vaccinations API
+export const getAllVaccination = () => {
+  return api.get("/api/Vaccinations");
+};
+
+export const createVaccinationt = (data) => {
+  return api.post("/api/Vaccinations", data);
+};
+
+export const getVaccinationId = (id) => {
+  return api.get(`/api/Vaccinations/${id}`);
+};
+
+
+export const updateVaccination = (id, data) => {
+  return api.put(`/api/Vaccinations/${id}`, data);
+};
+
+export const deleteVaccination = (id) => {
+  return api.delete(`/api/Vaccinations/${id}`);
+};
 export default api;

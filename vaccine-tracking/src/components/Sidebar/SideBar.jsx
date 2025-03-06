@@ -21,11 +21,8 @@ const DashboardSidebar = () => {
   const headerHeight = 73; 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-    {
-      text: "Manage User",
-      icon: <ManageAccounts />,  
-      path: "/manageaccount",
-    },
+    {text: "Manage User",icon: <ManageAccounts />,  path: "/manageaccount"},
+    {text: "Manage Vaccine",icon: <ManageAccounts />,  path: "/managevaccine",}
   ];
 
   return (

@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./config/ProtectedRoute";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import PatientManager from "./pages/PatientManager/PatientManager";
+import ManageVaccine from "./pages/ManageVaccine/ManageVaccine";
 
 const App = () => {
   return (
@@ -33,7 +34,8 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/patientmanager" element={<PatientManager/>} />  // Đã sửa
+          <Route path="/patientmanager" element={<PatientManager/>} /> 
+          <Route path="/managevaccine" element={<ManageVaccine/>} />  
         </Routes>
       </Router>
     </StyledEngineProvider>
