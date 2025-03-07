@@ -22,9 +22,11 @@ const DashboardSidebar = () => {
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
     {text: "Manage User",icon: <ManageAccounts />,  path: "/manageaccount"},
-    {text: "Manage Vaccine",icon: <ManageAccounts />,  path: "/managevaccine",}
-  ];
+    {text: "Vaccine",icon: <ManageAccounts />,  path: "/managevaccine"},
+    {text: "Disease",icon: <ManageAccounts />,  path: "/diseasemanager",}
 
+  ];
+  
   return (
     <Drawer
       variant="permanent"

@@ -9,7 +9,7 @@ import ProtectedRoute from "./config/ProtectedRoute";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import PatientManager from "./pages/PatientManager/PatientManager";
 import ManageVaccine from "./pages/ManageVaccine/ManageVaccine";
-
+import DiseaseManager from "./pages/DiseaseManager/DiseaseManager";
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
@@ -34,8 +34,23 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+           <Route
+            path="/managevaccine"
+            element={
+              <ProtectedRoute requiredRole={1}>
+                <ManageVaccine />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/patientmanager" element={<PatientManager/>} /> 
-          <Route path="/managevaccine" element={<ManageVaccine/>} />  
+          <Route
+            path="/diseasemanager"
+            element={
+              <ProtectedRoute requiredRole={1}>
+                <DiseaseManager />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </StyledEngineProvider>

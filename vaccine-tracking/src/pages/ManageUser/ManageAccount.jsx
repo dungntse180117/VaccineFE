@@ -165,9 +165,9 @@ const ManageAccount = () => {
 
     return (
         <Layout>
-            <h2>User Management</h2>
-            {error && <p className="error">{error}</p>}
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
+            <h2 className="manage-account-title">User Management</h2>
+            {error && <p className="manage-account-error">{error}</p>}
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }} className="manage-account-filter-container">
                 {/* Bộ lọc theo Role */}
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel id="role-filter-label">Show only</InputLabel>
@@ -177,6 +177,7 @@ const ManageAccount = () => {
                         value={selectedRoleId}
                         label="Filter by Role"
                         onChange={(e) => setSelectedRoleId(e.target.value)}
+                        className="manage-account-select"
                     >
                         <MenuItem value="">All</MenuItem>
                         <MenuItem value="1">Admin</MenuItem>
@@ -193,19 +194,21 @@ const ManageAccount = () => {
                     onChange={handleSearchChange}
                 />
             </Box>
+            <Box display="flex" justifyContent="flex-end" mb={2}>
+                <Button variant="contained" onClick={handleOpen} className="manage-account-create-button">Create New User</Button>
+            </Box>
 
-            <Button variant="contained" onClick={handleOpen}>Create New User</Button>
 
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableContainer component={Paper} className="manage-account-table-container">
+                <Table sx={{ minWidth: 650 }} aria-label="simple table" className="manage-account-table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Role</TableCell>
-                            <TableCell>Phone</TableCell>
-                            <TableCell>Address</TableCell>
-                            <TableCell>Actions</TableCell>
+                            <TableCell className="manage-account-table-header">Name</TableCell>
+                            <TableCell className="manage-account-table-header">Email</TableCell>
+                            <TableCell className="manage-account-table-header">Role</TableCell>
+                            <TableCell className="manage-account-table-header">Phone</TableCell>
+                            <TableCell className="manage-account-table-header">Address</TableCell>
+                            <TableCell className="manage-account-table-header">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -213,19 +216,20 @@ const ManageAccount = () => {
                             <TableRow
                                 key={user.accountId}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                className="manage-account-table-row"
                             >
-                                <TableCell component="th" scope="row">
+                                <TableCell component="th" scope="row" className="manage-account-table-cell">
                                     {user.name}
                                 </TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{roleLabel(user.roleId)}</TableCell>
-                                <TableCell>{user.phone}</TableCell>
-                                <TableCell>{user.address}</TableCell>
-                                <TableCell>
-                                    <IconButton aria-label="edit" onClick={() => handleEditOpen(user)}>
+                                <TableCell className="manage-account-table-cell">{user.email}</TableCell>
+                                <TableCell className="manage-account-table-cell">{roleLabel(user.roleId)}</TableCell>
+                                <TableCell className="manage-account-table-cell">{user.phone}</TableCell>
+                                <TableCell className="manage-account-table-cell">{user.address}</TableCell>
+                                <TableCell className="manage-account-table-cell">
+                                    <IconButton aria-label="edit" onClick={() => handleEditOpen(user)} className="manage-account-edit-button">
                                         <EditIcon />
                                     </IconButton>
-                                    <IconButton aria-label="delete" onClick={() => handleDelete(user.accountId)}>
+                                    <IconButton aria-label="delete" onClick={() => handleDelete(user.accountId)} className="manage-account-delete-button">
                                         <DeleteIcon />
                                     </IconButton>
                                 </TableCell>
@@ -235,7 +239,7 @@ const ManageAccount = () => {
                 </Table>
             </TableContainer>
 
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} className="manage-account-dialog-container">
                 <DialogTitle>Create New User</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -305,7 +309,7 @@ const ManageAccount = () => {
                 </DialogActions>
             </Dialog>
 
-            <Dialog open={editOpen} onClose={handleEditClose}>
+            <Dialog open={editOpen} onClose={handleEditClose} className="manage-account-dialog-container">
                 <DialogTitle>Edit User</DialogTitle>
                 <DialogContent>
                     <TextField
