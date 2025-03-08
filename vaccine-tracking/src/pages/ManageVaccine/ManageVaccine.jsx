@@ -107,9 +107,6 @@ function ManageVaccine() {
       }));
     } catch (error) {
       console.error(`Error fetching image for vaccine ${vaccinationId}:`, error);
-      // **Remove the setError call here to prevent the alert**
-      // setError(`Error fetching image for vaccine ${vaccinationId}: ${error.message}`);  <-- REMOVE THIS LINE
-      // Handle error appropriately (e.g., display a default image or error message)
     }
   };
   // Add use Effect to Fetch list diseases.
@@ -227,6 +224,34 @@ function ManageVaccine() {
     }
   };
 
+    // Hàm lấy đơn vị tuổi
+  const getAgeUnitText = (ageUnitId) => {
+        switch (ageUnitId) {
+            case 1:
+                return "ngày tuổi";
+            case 2:
+                return "tháng tuổi";
+            case 3:
+                return "năm tuổi";
+            default:
+                return "tuổi";
+        }
+    };
+
+    // Hàm lấy đơn vị khoảng cách tiêm
+    const getIntervalUnitText = (unitId) => {
+        switch (unitId) {
+            case 1:
+                return "ngày";
+            case 2:
+                return "tháng";
+            case 3:
+                return "năm";
+            default:
+                return "không xác định";
+        }
+    };
+
   return (
     <Layout>
       <Typography variant="h4" align="center" gutterBottom className="manage-vaccine-title">
@@ -237,8 +262,7 @@ function ManageVaccine() {
       <Box display="flex" justifyContent="flex-start" mb={2} className="manage-vaccine-button-box">
         <Button
           variant="contained"
-          color="primary"
-          startIcon={<Add />}
+          color="primary"       
           onClick={handleOpenForm}
           className="manage-vaccine-add-button"
         >
@@ -271,6 +295,11 @@ function ManageVaccine() {
                 <TableCell className="manage-vaccine-table-header">Nhà Sản Xuất</TableCell>
                 <TableCell className="manage-vaccine-table-header">Số Mũi Tiêm</TableCell>
                 <TableCell className="manage-vaccine-table-header">Giá</TableCell>
+                                {/* THÊM CỘT ĐỘ TUỔI PHÙ HỢP */}
+                                <TableCell className="manage-vaccine-table-header">Độ tuổi phù hợp</TableCell>
+
+                                {/* THÊM CỘT KHOẢNG CÁCH TIÊM */}
+                                <TableCell className="manage-vaccine-table-header">Khoảng cách tiêm</TableCell>
                 <TableCell className="manage-vaccine-table-header">Hình ảnh</TableCell>
                 <TableCell className="manage-vaccine-table-header">Phòng Bệnh</TableCell>
                 <TableCell className="manage-vaccine-table-header">Actions</TableCell>
@@ -283,6 +312,15 @@ function ManageVaccine() {
                   <TableCell className="manage-vaccine-table-cell">{vaccine.manufacturer}</TableCell>
                   <TableCell className="manage-vaccine-table-cell">{vaccine.totalDoses}</TableCell>
                   <TableCell className="manage-vaccine-table-cell">{vaccine.price}</TableCell>
+                                       {/* HIỂN THỊ THÔNG TIN ĐỘ TUỔI PHÙ HỢP */}
+                                        <TableCell className="manage-vaccine-table-cell">
+                                          {vaccine.minAge} - {vaccine.maxAge} {getAgeUnitText(vaccine.ageUnitId)}
+                                        </TableCell>
+
+                                        {/* HIỂN THỊ THÔNG TIN KHOẢNG CÁCH TIÊM */}
+                                        <TableCell className="manage-vaccine-table-cell">
+                                          {vaccine.interval} {getIntervalUnitText(vaccine.unitId)}
+                                        </TableCell>
                   <TableCell className="manage-vaccine-table-cell">
                     {vaccineImages[vaccine.vaccinationId] ? (
                       <img

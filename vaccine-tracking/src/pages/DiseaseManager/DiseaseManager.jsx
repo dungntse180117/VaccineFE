@@ -138,11 +138,10 @@ function DiseaseManager() {
         Quản lý Bệnh
       </Typography>
 
-      <Box display="flex" justifyContent="flex-end" mb={2} className="disease-manager-button-box">
+      <Box display="flex" justifyContent="flex-start" mb={2}>
         <Button
           variant="contained"
           color="primary"
-          startIcon={<Add />}
           onClick={handleOpenForm}
           className="disease-manager-add-button"
         >
@@ -171,7 +170,7 @@ function DiseaseManager() {
           <Table sx={{ minWidth: 800 }} aria-label="disease table" className="disease-manager-table">
             <TableHead>
               <TableRow>
-                <TableCell className="disease-manager-table-header">ID</TableCell>
+                {/* <TableCell className="disease-manager-table-header">ID</TableCell> <-- XÓA CỘT NÀY */}
                 <TableCell className="disease-manager-table-header">Tên Bệnh</TableCell>
                 <TableCell className="disease-manager-table-header">Mô Tả</TableCell>
                 <TableCell className="disease-manager-table-header">Actions</TableCell>
@@ -180,7 +179,7 @@ function DiseaseManager() {
             <TableBody>
               {diseases.map((disease) => (
                 <TableRow key={disease.diseaseId}>
-                  <TableCell className="disease-manager-table-cell">{disease.diseaseId}</TableCell>
+                  {/* <TableCell className="disease-manager-table-cell">{disease.diseaseId}</TableCell>  <-- XÓA Ô NÀY */}
                   <TableCell className="disease-manager-table-cell">{disease.diseaseName}</TableCell>
                   <TableCell className="disease-manager-table-cell">{disease.description}</TableCell>
                   <TableCell className="disease-manager-table-cell">

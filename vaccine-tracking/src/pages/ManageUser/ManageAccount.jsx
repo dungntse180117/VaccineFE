@@ -157,7 +157,7 @@ const ManageAccount = () => {
             const roleMatch = selectedRoleId ? user.roleId === parseInt(selectedRoleId, 10) : true;
             const searchMatch = searchKeyword
                 ? user.name.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-                  user.email.toLowerCase().includes(searchKeyword.toLowerCase())
+                user.email.toLowerCase().includes(searchKeyword.toLowerCase())
                 : true;
             return roleMatch && searchMatch;
         });
@@ -194,8 +194,8 @@ const ManageAccount = () => {
                     onChange={handleSearchChange}
                 />
             </Box>
-            <Box display="flex" justifyContent="flex-end" mb={2}>
-                <Button variant="contained" onClick={handleOpen} className="manage-account-create-button">Create New User</Button>
+            <Box display="flex" justifyContent="flex-start" mb={2}>
+                <Button variant="contained" onClick={handleOpen} className="manage-account-create-button">Tạo tài khoản</Button>
             </Box>
 
 

@@ -55,9 +55,9 @@ function VaccineForm({ open, onClose, onSubmit, initialValues }) {
   // Dữ liệu mẫu cho select (thay bằng API thật nếu có)
   const ageUnits = [
     { id: 0, name: "Không xác định" }, // Thêm giá trị 0
-    { id: 1, name: "Năm" },
+    { id: 1, name: "Ngày" },
     { id: 2, name: "Tháng" },
-    { id: 3, name: "Ngày" },
+    { id: 3, name: "Năm" },
   ];
 
   const intervalUnits = [

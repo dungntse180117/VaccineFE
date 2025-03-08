@@ -1,0 +1,94 @@
+/* VaccinationList.css */
+
+/*SearchBar css */
+.search-form-container {
+    width: 400px;      
+    max-width: 400px;   
+    min-width: 200px;   
+    height: 300x; /* Đặt chiều cao cố định */
+    padding: 2;
+}
+/* Giảm padding tổng thể của container */
+.vaccination-list-container {
+    padding: 10px;
+    width: 1400px;   
+}   
+
+/* Giảm chiều cao của thẻ và điều chỉnh flexbox */
+.vaccination-card {
+    display: flex;
+    flex-direction: column;
+    height: auto; /* Cho phép chiều cao tự động điều chỉnh */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.vaccination-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Giảm chiều cao của hình ảnh và padding */
+.vaccination-image {
+    width: 100%;
+    height: 120px; /* Giảm chiều cao hình ảnh */
+    object-fit: contain;
+    padding: 2px; /* Giảm padding hình ảnh */
+}
+
+.vaccination-card:hover .vaccination-image {
+    transform: scale(1.05); /* Phóng to hình ảnh khi di chuột qua */
+}
+
+/* Giảm kích thước phông chữ và khoảng cách */
+.vaccination-name-link {
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: bold;
+    font-size: 1rem; /* Giảm kích thước phông chữ tên vaccine */
+    transition: color 0.2s ease-in-out;
+    text-align: left; /* CĂN CHỈNH VĂN BẢN SANG TRÁI */
+}
+
+.vaccination-name-link:hover {
+    color: #1565c0;
+}
+
+/* Giảm padding của nội dung thẻ và khoảng cách giữa các phần tử */
+.card-content {
+    flex-grow: 1;
+    padding: 8px; /* Giảm padding nội dung thẻ */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start; /* CĂN CHỈNH CÁC PHẦN TỬ SANG TRÁI */
+}
+
+.card-content > * {
+    margin-bottom: 2px; /* Giảm khoảng cách giữa các phần tử */
+    text-align: left; /* CĂN CHỈNH VĂN BẢN SANG TRÁI */
+    font-size: 0.9rem; /* Giảm kích thước font chữ */
+}
+
+/* Giảm kích thước phông chữ của chip bệnh và giảm margin */
+.vaccination-card .disease-chip {
+    margin-right: 2px;
+    margin-bottom: 2px;
+    font-size: 0.7rem;
+}
+
+.no-diseases {
+    font-style: italic;
+    color: #757575;
+    font-size: 0.8rem;
+    text-align: left; 
+}
+
+.vaccination-card .MuiCardActionArea-root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+

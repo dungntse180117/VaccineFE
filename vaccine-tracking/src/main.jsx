@@ -10,6 +10,8 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import PatientManager from "./pages/PatientManager/PatientManager";
 import ManageVaccine from "./pages/ManageVaccine/ManageVaccine";
 import DiseaseManager from "./pages/DiseaseManager/DiseaseManager";
+import VaccineList from "./pages/VaccineInfomation/VaccineList";
+import VaccineDetail from "./pages/VaccineInfomation/VaccineDetail";
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
@@ -18,6 +20,9 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/login" element={<AuthPage />} />
+          <Route path="/vaccinelist" element={<VaccineList />} />
+          <Route path="/vaccinedetail/:vaccinationId" element={<VaccineDetail />} />
+        
           <Route
             path="/profile"
             element={
