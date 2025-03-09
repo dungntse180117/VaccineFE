@@ -1,0 +1,19 @@
+.vaccination-service-detail-paper {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 900px; /* Tăng max-width để phù hợp với bố cục mới */
+  }
+  
+  .vaccination-service-detail-title {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .vaccination-service-detail-subtitle {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .vaccination-info-paper {
+    padding: 10px;
+  }

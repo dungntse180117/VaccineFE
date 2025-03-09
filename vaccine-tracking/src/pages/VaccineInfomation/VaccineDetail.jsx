@@ -139,7 +139,7 @@ function VaccineDetail() {
                                     Khoảng cách giữa các mũi: <strong>{vaccine.interval} {intervalUnitText}</strong>
                                 </Typography>
                                 <Typography variant="body1" color="textSecondary" className="vaccine-detail-info">
-                                    Giá: <strong>{vaccine.price}</strong>
+                                    Giá: <strong>{vaccine.price}</strong> vnđ
                                 </Typography>
                                 <Typography variant="body1" color="textSecondary" className="vaccine-detail-info">
                                     Mô tả: {vaccine.description}

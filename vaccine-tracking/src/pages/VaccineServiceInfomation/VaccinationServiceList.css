@@ -1,0 +1,34 @@
+.vaccinationservice-list-container {
+    width: 800px;
+    margin-top: 20px;
+    padding: 20px;
+    padding-right: 600px;
+    padding-right: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+.vaccination-service-card {
+    height: 120px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.vaccination-list-paper {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.vaccination-item {
+    display: flex;        
+    justify-content: center; 
+    align-items: center;    
+}

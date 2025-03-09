@@ -23,7 +23,8 @@ const DashboardSidebar = () => {
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
     {text: "Manage User",icon: <ManageAccounts />,  path: "/manageaccount"},
     {text: "Vaccine",icon: <ManageAccounts />,  path: "/managevaccine"},
-    {text: "Disease",icon: <ManageAccounts />,  path: "/diseasemanager",}
+    {text: "Disease",icon: <ManageAccounts />,  path: "/diseasemanager"},
+    {text: "Gói tiêm",icon: <ManageAccounts />,  path: "/managevaccinationservice"}
 
   ];
   

@@ -164,5 +164,33 @@ export const createVaccinationDisease = async (vaccinationId, diseaseId) => {
     throw error;
   }
 };
+// Vaccination Service API
+export const getAllVaccinationServices = () => {
+  return api.get("/api/VaccinationServices");
+};
+
+export const getVaccinationServiceById = (id) => {
+  return api.get(`/api/VaccinationServices/${id}`);
+};
+
+export const createVaccinationService = (data) => {
+  return api.post("/api/VaccinationServices", data);
+};
+
+export const updateVaccinationService = (id, data) => {
+  return api.put(`/api/VaccinationServices/${id}`, data);
+};
+
+export const deleteVaccinationService = (id) => {
+  return api.delete(`/api/VaccinationServices/${id}`);
+};
+
+export const createVaccinationServiceVaccination = (data) => {
+  return api.post("/api/VaccinationServices/vaccination", data);
+};
+
+export const deleteVaccinationServiceVaccination = (data) => {
+  return api.delete("/api/VaccinationServices/vaccination", { data: data });
+};
 
 export default api;

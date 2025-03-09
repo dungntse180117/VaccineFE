@@ -43,8 +43,8 @@ const Header = () => {
         </div>
         <nav className="header-nav">
           <a href="/">Home</a>
-          <a href="/vaccinelist">Vaccine</a>
-          <a href="/services">Services</a>
+          <a href="/vaccinelist">Danh mục vaccine</a>
+          <a href="/vaccinationservicelist">Danh sách các gói</a>
           <a href="/contact">Contact</a>
         </nav>
         <div className="header-login">

@@ -16,9 +16,10 @@
 
 /* Giảm chiều cao của thẻ và điều chỉnh flexbox */
 .vaccination-card {
+    height: 350px;
+    width: 300px;
     display: flex;
     flex-direction: column;
-    height: auto; /* Cho phép chiều cao tự động điều chỉnh */
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
