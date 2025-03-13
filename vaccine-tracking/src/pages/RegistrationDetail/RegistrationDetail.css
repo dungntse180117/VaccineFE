@@ -1,0 +1,29 @@
+.registration-detail-title {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .registration-detail-add-button {
+    background-color: #4CAF50;
+    color: white;
+    &:hover {
+      background-color: #367c39;
+    }
+  }
+
+  .registration-detail-table-container {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .registration-detail-table-header {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+    padding: 12px;
+  }
+
+  .registration-detail-table-cell {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }

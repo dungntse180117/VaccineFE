@@ -15,6 +15,7 @@
   import ManageVaccinationService from "./pages/ManageVaccinationServices/ManageVaccinationService";
   import VaccinationServiceList from "./pages/VaccineServiceInfomation/VaccinationServiceList";
   import VaccinationServiceDetail from "./pages/VaccineServiceInfomation/VaccinationServiceDetail";
+  import RegistrationDetail from "./pages/RegistrationDetail/RegistrationDetail";
   const App = () => {
     return (
       <StyledEngineProvider injectFirst>
@@ -65,6 +66,14 @@
               element={
                 <ProtectedRoute requiredRole={1}>
                   <ManageVaccinationService />
+                </ProtectedRoute>
+              }
+            />
+             <Route
+              path="/registrationdetail"
+              element={
+                <ProtectedRoute requiredRole={1}>
+                  <RegistrationDetail />
                 </ProtectedRoute>
               }
             />

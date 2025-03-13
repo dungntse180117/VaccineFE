@@ -192,5 +192,138 @@ export const createVaccinationServiceVaccination = (data) => {
 export const deleteVaccinationServiceVaccination = (data) => {
   return api.delete("/api/VaccinationServices/vaccination", { data: data });
 };
+//RegistrationDetail API
+const API_BASE_URL = '/api/RegistrationDetails'; // Define the base URL here
+export const getAllRegistrations = async () => {  // Add "export"
+  try {
+    const response = await api.get("/api/Registrations"); // Or whatever the correct endpoint is
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all registrations:", error);
+    throw error;
+  }
+};
+export const createRegistrationDetail = async (requestData) => {
+  try {
+    const response = await api.post(API_BASE_URL, requestData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating registration detail:', error);
+    throw error;
+  }
+};
+
+export const getRegistrationDetail = async (id) => {
+  try {
+    const response = await api.get(`${API_BASE_URL}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting registration detail with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const getAllRegistrationDetails = async () => {
+  try {
+    const response = await api.get(API_BASE_URL);
+    return response.data;
+  } catch (error) {
+    console.error('Error getting all registration details:', error);
+    throw error;
+  }
+};
+
+export const updateRegistrationDetail = async (id, requestData) => {
+  try {
+    const response = await api.put(`${API_BASE_URL}/${id}`, requestData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating registration detail with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const deleteRegistrationDetail = async (id) => {
+  try {
+    await api.delete(`${API_BASE_URL}/${id}`);
+    return;
+  } catch (error) {
+    console.error(`Error deleting registration detail with ID ${id}:`, error);
+    throw error;
+  }
+};
+//Appointment API
+const APPOINTMENT_BASE_URL = '/api/Appointment';
+
+export const getAppointmentDetail = async (id) => {
+  try {
+    const response = await api.get(`${APPOINTMENT_BASE_URL}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting appointment detail with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const getAppointment = async () => {
+  try {
+    const response = await api.get(APPOINTMENT_BASE_URL);
+    return response.data;
+  } catch (error) {
+    console.error('Error getting appointments:', error);
+    throw error;
+  }
+};
+
+export const createAppointment = async (requestData) => {
+  try {
+    const response = await api.post(APPOINTMENT_BASE_URL, requestData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating appointment:', error);
+    throw error;
+  }
+};
+
+export const updateAppointment = async (id, requestData) => {
+  try {
+    await api.put(`${APPOINTMENT_BASE_URL}/${id}`, requestData);
+    return;
+  } catch (error) {
+    console.error(`Error updating appointment with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const deleteAppointment = async (id) => {
+  try {
+    await api.delete(`${APPOINTMENT_BASE_URL}/${id}`);
+    return;
+  } catch (error) {
+    console.error(`Error deleting appointment with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const getAppointmentVaccinations = async (appointmentId) => {
+  try {
+    const response = await api.get(`${APPOINTMENT_BASE_URL}/${appointmentId}/vaccinations`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting appointment vaccinations for appointment ID ${appointmentId}:`, error);
+    throw error;
+  }
+};
+
+export const getRegistrationsWithAppointmentsByAccountId = async (accountId) => {
+  try {
+    const response = await api.get(`${APPOINTMENT_BASE_URL}/account/${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting registrations with appointments for account ID ${accountId}:`, error);
+    throw error;
+  }
+};
+
 
 export default api;
