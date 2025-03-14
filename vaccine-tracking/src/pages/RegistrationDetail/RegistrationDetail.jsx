@@ -22,7 +22,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import Layout from "../../components/Layout/Layout";
+import LayoutStaff from "../../components/Layout/LayoutStaff";
 import "./RegistrationDetail.css";
 import {
   getAllRegistrationDetails,
@@ -123,7 +123,7 @@ function RegistrationDetail() {
   };
 
   return (
-    <Layout>
+    <LayoutStaff>
       <Typography
         variant="h4"
         align="center"
@@ -277,7 +277,7 @@ function RegistrationDetail() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Layout>
+    </LayoutStaff>
   );
 }
 

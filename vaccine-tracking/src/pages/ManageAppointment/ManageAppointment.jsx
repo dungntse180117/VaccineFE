@@ -20,7 +20,7 @@ import {
   Button,
 } from "@mui/material";
 import { Edit, Delete, Visibility } from "@mui/icons-material"; // Import Visibility icon
-import Layout from "../../components/Layout/Layout";
+import LayoutStaff from "../../components/Layout/LayoutStaff";
 import "./ManageAppointment.css";
 import {
   getAppointment,
@@ -111,7 +111,7 @@ function ManageAppointment() {
   };
 
   return (
-    <Layout>
+    <LayoutStaff>
       <Typography
         variant="h4"
         align="center"
@@ -252,7 +252,7 @@ function ManageAppointment() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Layout>
+    </LayoutStaff>
   );
 }
 

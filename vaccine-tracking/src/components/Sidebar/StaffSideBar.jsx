@@ -35,6 +35,11 @@ const StaffSideBar = () => {
         icon: <EventAvailableIcon />,
         path: "/managevisit", 
       },
+      {
+        text: "Quản lí yêu cầu thay đổi ngày tiêm",
+        icon: <EventAvailableIcon />,
+        path: "/managevisitdaychangerequest", 
+      },
   ];
 
   return (

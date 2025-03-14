@@ -1,0 +1,109 @@
+/* ManageVisitDayChangeRequest.css */
+
+.manage-request-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .manage-request-content {
+    padding: 24px;
+    margin-left: 200px; /* Adjust based on your sidebar width */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Page Header */
+  .manage-request-content h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Removed Filter Status Box CSS -  .filter-status-box and .filter-label rules are removed */
+  
+  
+  /* Table Container */
+  .manage-request-content .table-container {
+    overflow-x: auto;
+  }
+  
+  .manage-request-content .table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .manage-request-content .table-container th,
+  .manage-request-content .table-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .manage-request-content .table-container th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  
+  .manage-request-content .table-container tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* No Requests Message */
+  .manage-request-content .no-requests-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    flex-direction: column;
+    color: #777;
+  }
+  
+  /* Edit Modal */
+  .ant-modal-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .ant-form-item-label > label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .ant-input,
+  .ant-picker,
+  .ant-select {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+  }
+  
+  .ant-input:focus,
+  .ant-picker:focus,
+  .ant-select:focus {
+    border-color: #40a9ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+  
+  .ant-btn-primary {
+    background-color: #1890ff;
+    border-color: #1890ff;
+    color: white;
+  }
+  
+  .ant-btn-primary:hover,
+  .ant-btn-primary:focus {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+  }
+  
+  .ant-btn {
+    border-radius: 4px;
+  }
+  
+  /* Actions Column Buttons (Icons) */
+  .manage-request-content .table-container .MuiIconButton-root {
+    margin-right: 4px; /* Spacing between action icons */
+  }

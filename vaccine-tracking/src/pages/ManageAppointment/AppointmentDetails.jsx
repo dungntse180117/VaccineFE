@@ -22,14 +22,13 @@ import {
   Chip,
   Grid,
 } from "@mui/material";
-import Layout from "../../components/Layout/Layout";
+import LayoutStaff from "../../components/Layout/LayoutStaff";
 import "./ManageAppointment.css";
 import { useParams } from "react-router-dom";
 import {
   getAppointmentDetail,
   getVisitsByAppointmentId,
   createVisit,
-  getVisitDayChangeRequestsByVisitId, // Import getVisitDayChangeRequestsByVisitId - No longer needed, you can remove this line
 } from "../../config/axios";
 
 function AppointmentDetails() {
@@ -175,34 +174,34 @@ function AppointmentDetails() {
 
   if (loading) {
     return (
-      <Layout>
+      <LayoutStaff>
         <Box display="flex" justifyContent="center" alignItems="center" height={200}>
           <CircularProgress />
         </Box>
-      </Layout>
+      </LayoutStaff>
     );
   }
 
   if (error) {
     return (
-      <Layout>
+      <LayoutStaff>
         <Alert severity="error">{error}</Alert>
-      </Layout>
+      </LayoutStaff>
     );
   }
 
   if (!appointment) {
     return (
-      <Layout>
+      <LayoutStaff>
         <Typography variant="h6" align="center">
           Appointment not found.
         </Typography>
-      </Layout>
+      </LayoutStaff>
     );
   }
 
   return (
-    <Layout>
+    <LayoutStaff>
       <Box padding={3}>
         <Typography
           variant="h4"
@@ -402,7 +401,7 @@ function AppointmentDetails() {
           </DialogActions>
         </Dialog>
       </Box>
-    </Layout>
+    </LayoutStaff>
   );
 }
 

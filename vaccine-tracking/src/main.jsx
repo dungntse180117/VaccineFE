@@ -19,6 +19,7 @@ import RegistrationDetail from "./pages/RegistrationDetail/RegistrationDetail";
 import ManageAppointment from "./pages/ManageAppointment/ManageAppointment";
 import AppointmentDetails from "./pages/ManageAppointment/AppointmentDetails";
 import ManageVisit from "./pages/ManageVisit/ManageVisit";
+import ManageVisitDayChangeRequest from "./pages/ManageVisitDayChangeRequest/ManageVisitDayChangeRequest";
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
@@ -101,6 +102,14 @@ const App = () => {
             element={
               <ProtectedRoute requiredRole={1}>
                 <ManageVisit />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/managevisitdaychangerequest"
+            element={
+              <ProtectedRoute requiredRole={1}>
+                <ManageVisitDayChangeRequest />
               </ProtectedRoute>
             }
           />

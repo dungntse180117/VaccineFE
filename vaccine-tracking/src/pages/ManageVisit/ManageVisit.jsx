@@ -11,7 +11,7 @@ import {
 import { DatePicker } from 'antd';
 import moment from "moment";
 import AppHeader from "../../components/Header/Header";
-import UserSidebar from "../../components/Sidebar/UserSideBar";
+import StaffSideBar from "../../components/Sidebar/StaffSideBar";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import {
@@ -225,7 +225,7 @@ const ManageVisit = () => {
         >
             <AppHeader />
             <Layout>
-                <UserSidebar />
+                <StaffSideBar />
                 <Content
                     className="manage-visit-content"
                     style={{
