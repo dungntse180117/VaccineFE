@@ -1,0 +1,47 @@
+/* Các style cho trang quản lý lịch hẹn (nếu bạn dùng chung CSS) */
+.appointment-manager-title {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.appointment-manager-table-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-manager-table-header {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: left;
+  padding: 12px;
+}
+
+.appointment-manager-table-cell {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.appointment-manager-edit-button {
+  color: #2196f3;
+}
+
+.appointment-manager-delete-button {
+  color: #f44336;
+}
+
+
+.appointment-details-paper {
+  padding: 16px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px;
+  background-color: #fff; 
+}
+
+
+.appointment-details-main-title {
+  color: #333;
+  font-size: 2.5rem; 
+  font-weight: 600; 
+  margin-bottom: 24px; 
+  text-align: center; 
+}

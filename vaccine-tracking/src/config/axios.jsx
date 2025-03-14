@@ -324,6 +324,56 @@ export const getRegistrationsWithAppointmentsByAccountId = async (accountId) => 
     throw error;
   }
 };
+// Visit API
+export const getVisit = (id) => {
+  return api.get(`/api/Visit/${id}`);
+};
 
+export const getVisits = () => {
+  return api.get("/api/Visit");
+};
 
+export const createVisit = (data) => {
+  return api.post("/api/Visit", data);
+};
+
+export const updateVisit = (id, data) => {
+  return api.put(`/api/Visit/${id}`, data);
+};
+
+export const deleteVisit = (id) => {
+  return api.delete(`/api/Visit/${id}`);
+};
+
+export const updateVisitStatus = (id, data) => {
+  return api.put(`/api/Visit/${id}/status`, data);
+};
+
+export const getVisitsByAppointmentId = (appointmentId) => {
+  return api.get(`/api/Visit/appointment/${appointmentId}`);
+};
+// Visit Day Change Request API
+export const getVisitDayChangeRequest = (id) => {
+  return api.get(`/api/VisitDayChangeRequestController/${id}`);
+};
+
+export const getVisitDayChangeRequests = () => {
+  return api.get("/api/VisitDayChangeRequestController");
+};
+
+export const createVisitDayChangeRequest = (data) => {
+  return api.post("/api/VisitDayChangeRequestController", data);
+};
+
+export const updateVisitDayChangeRequest = (id, data) => {
+  return api.put(`/api/VisitDayChangeRequestController/${id}`, data);
+};
+
+export const deleteVisitDayChangeRequest = (id) => {
+  return api.delete(`/api/VisitDayChangeRequestController/${id}`);
+};
+
+export const getVisitDayChangeRequestsByVisitId = (visitId) => {
+  return api.get(`/api/VisitDayChangeRequestController/visit/${visitId}`);
+};
 export default api;
