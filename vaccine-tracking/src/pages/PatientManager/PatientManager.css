@@ -101,8 +101,10 @@
   }
   
   .ant-input, .ant-select-selector, .ant-picker {
-    font-size: 16px;  /* Increased font size */
-    height: 40px !important;  /* Increased height */
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 4px !important;
   }
   
   .ant-select-selection-item {

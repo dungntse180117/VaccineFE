@@ -352,6 +352,11 @@ export const updateVisitStatus = (id, data) => {
 export const getVisitsByAppointmentId = (appointmentId) => {
   return api.get(`/api/Visit/appointment/${appointmentId}`);
 };
+
+export const getVisitsByPatientId = (patientId) => {
+  return api.get(`/api/Visit/patient/${patientId}`);
+};
+
 // Visit Day Change Request API
 export const getVisitDayChangeRequest = (id) => {
   return api.get(`/api/VisitDayChangeRequest/${id}`);
@@ -376,4 +381,6 @@ export const deleteVisitDayChangeRequest = (id) => {
 export const getVisitDayChangeRequestsByVisitId = (visitId) => {
   return api.get(`/api/VisitDayChangeRequest/visit/${visitId}`);
 };
+
+
 export default api;

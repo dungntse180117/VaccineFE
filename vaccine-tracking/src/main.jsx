@@ -20,6 +20,8 @@ import ManageAppointment from "./pages/ManageAppointment/ManageAppointment";
 import AppointmentDetails from "./pages/ManageAppointment/AppointmentDetails";
 import ManageVisit from "./pages/ManageVisit/ManageVisit";
 import ManageVisitDayChangeRequest from "./pages/ManageVisitDayChangeRequest/ManageVisitDayChangeRequest";
+import PatientVisitManager from "./pages/PatientManager/PatientVisitManager";
+
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
@@ -32,6 +34,7 @@ const App = () => {
           <Route path="/vaccinationservicelist" element={<VaccinationServiceList />} />
           <Route path="/vaccinedetail/:vaccinationId" element={<VaccineDetail />} />
           <Route path="/vaccinationservicedetail/:id" element={<VaccinationServiceDetail />} />
+          <Route path="/patient-visits/:patientId" element={<PatientVisitManager />} />
           <Route
             path="/profile"
             element={

@@ -35,6 +35,8 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from '@mui/icons-material/Visibility'; // Import VisibilityIcon
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const { Content } = Layout;
 
@@ -56,6 +58,7 @@ const PatientManager = () => {
   const [addPatientForm] = Form.useForm();
   const [editPatientForm] = Form.useForm();
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     fetchUserData();
@@ -233,7 +236,20 @@ const PatientManager = () => {
       title: "Số điện thoại",
       dataIndex: "phone",
       key: "phone",
-    }, 
+    },
+    // ADD NEW "Xem Lịch Hẹn" COLUMN HERE:
+    {
+      title: "Lịch hẹn tiêm",
+      key: "visitsAction",
+      render: (text, record) => ( // render function for the new column
+        <IconButton
+          aria-label="view-visits"
+          onClick={() => navigate(`/patient-visits/${record.patientId}`)} // Navigate to PatientVisitManager
+        >
+          <VisibilityIcon />  {/* VisibilityIcon for "view" */}
+        </IconButton>
+      ),
+    },
     {
       title: "Hành động",
       key: "action",
@@ -300,7 +316,8 @@ const PatientManager = () => {
                     <TableCell>Số điện thoại người thân</TableCell>
                     <TableCell>Địa chỉ</TableCell>
                     <TableCell>Quan hệ</TableCell>
-                    <TableCell>Số điện thoại</TableCell> 
+                    <TableCell>Số điện thoại</TableCell>
+                    <TableCell>Lịch hẹn tiêm</TableCell> {/* New Column Header */}
                     <TableCell>Hành động</TableCell>
                   </TableRow>
                 </TableHead>
@@ -318,7 +335,15 @@ const PatientManager = () => {
                       <TableCell>{patient.guardianPhone}</TableCell>
                       <TableCell>{patient.address}</TableCell>
                       <TableCell>{patient.relationshipToAccount}</TableCell>
-                      <TableCell>{patient.phone}</TableCell> 
+                      <TableCell>{patient.phone}</TableCell>
+                      <TableCell> {/* New "Xem Lịch Hẹn" Button Cell */}
+                        <IconButton
+                          aria-label="view-visits"
+                          onClick={() => navigate(`/patient-visits/${patient.patientId}`)} // Navigate function call
+                        >
+                          <VisibilityIcon /> {/* Visibility Icon */}
+                        </IconButton>
+                      </TableCell>
                       <TableCell>
                         <IconButton
                           aria-label="edit"

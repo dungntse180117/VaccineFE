@@ -1,0 +1,126 @@
+/* File: PatientVisitManager.css */
+
+/* Layout chính */
+.patient-visit-manager-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.patient-visit-manager-header {
+    background: #fff;
+    padding-bottom: 70px;
+    padding-top: 10px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.patient-visit-manager-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 28px;
+}
+
+/* Main Content */
+.patient-visit-manager-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    margin-left: 200px;
+    overflow: hidden;
+}
+
+/* Breadcrumb */
+.ant-breadcrumb {
+    margin-bottom: 16px;
+}
+
+/* Calendar Container */
+.calendar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 600px;
+}
+
+/* FullCalendar Styling */
+.fc {
+    flex: 1;
+    height: 100% !important;
+}
+
+.fc-event {
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 4px;
+    color: whitesmoke;
+    border: none;
+}
+
+.fc-daygrid-event-dot {
+    display: none;
+}
+
+.fc-daygrid-day.fc-day {
+    transition: background-color 0.3s ease;
+}
+
+.fc-day-green {
+    background-color: green !important; /* Đã tiêm */
+}
+
+.fc-day-red {
+    background-color: red !important; /* Chưa tiêm */
+}
+
+.fc-daygrid-day.fc-day .fc-daygrid-day-number {
+    font-weight: bold;
+}
+
+/* Form items */
+.ant-form-item-label > label {
+    font-size: 16px;
+}
+
+.ant-input, .ant-select-selector, .ant-picker {
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 4px !important;
+    font-size: 16px;
+}
+
+.ant-select-selection-item {
+    line-height: 38px !important;
+}
+
+.ant-picker-input > input {
+    height: 38px !important;
+}
+
+/* Wallet Card */
+.patient-visit-manager-wallet-card {
+    background-color: #f0f2f5;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.patient-visit-manager-wallet-card h3 {
+    margin: 0;
+    color: #1890ff;
+    font-weight: bold;
+}
+
+/* Modal */
+.ant-modal-mask {
+    z-index: 1000;
+}
+
+.ant-modal-wrap {
+    z-index: 1050;
+}
