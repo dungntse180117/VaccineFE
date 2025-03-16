@@ -441,5 +441,83 @@ export const getVaccinationHistoriesByVisitId = async (visitId) => {
     throw error;
   }
 };
+// Registrations API
+export const createRegistration = (data) => {
+  return api.post("/api/Registrations", data);
+};
+
+export const getRegistration = (id) => {
+  return api.get(`/api/Registrations/${id}`);
+};
+
+export const updateRegistration = (id, data) => {
+  return api.put(`/api/Registrations/${id}`, data);
+};
+export const updateRegistrationStatus = (id, data) => {
+    return api.put(`/api/Registrations/${id}/status`, data);
+};
+
+export const deleteRegistration = (id) => {
+  return api.delete(`/api/Registrations/${id}`);
+};
+
+
+export const getPatientsByPhone = async (phone) => {
+  try {
+    const response = await api.get(`/api/Patients/byphone/${phone}`);
+    return response.data;
+  } catch (error) {
+      if (error.response) {
+          console.error("Server responded with error:", error.response.status, error.response.data);
+          throw new Error(error.response.data || "Server Error");
+      } else if (error.request) {
+          console.error("No response received:", error.request);
+          throw new Error("Network Error");
+      } else {
+          console.error("Request setup error:", error.message);
+          throw new Error(error.message || "An unexpected error occurred");
+      }
+  }
+};
+
+export const getAllVaccinationRegistration = async () => {
+  try {
+      const response = await api.get("/api/Vaccinations");
+      // Directly return response.data (which is the array)
+      return response.data;
+  } catch (error) {
+      console.error("getAllVaccinationRegistration: Error fetching vaccinations:", error);
+      if (error.response) {
+          console.error("Server responded with error:", error.response.status, error.response.data);
+          throw new Error(error.response.data || "Server Error");
+      } else if (error.request) {
+          console.error("No response received:", error.request);
+          throw new Error("Network Error");
+      } else {
+          console.error("Request setup error:", error.message);
+          throw new Error(error.message || "An unexpected error occurred");
+      }
+  }
+};
+
+export const getAllVaccinationServicesRegistration = async () => {  // Consistent naming!
+  try {
+      const response = await api.get("/api/VaccinationServices");
+       // Directly return response.data (which is the array, or whatever your API returns)
+      return response.data;
+  } catch (error) {
+      console.error("getAllVaccinationServicesRegistration: Error fetching services:", error);
+      if (error.response) {
+          console.error("Server responded with error:", error.response.status, error.response.data);
+          throw new Error(error.response.data || "Server Error");
+      } else if (error.request) {
+           console.error("No response received:", error.request);
+          throw new Error("Network Error");
+      } else {
+          console.error("Request setup error:", error.message);
+          throw new Error(error.message || "An unexpected error occurred");
+      }
+  }
+};
 
 export default api;

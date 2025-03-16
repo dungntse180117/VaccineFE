@@ -1,0 +1,125 @@
+.registration-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  /* Step headings */
+  .registration-step-heading {
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 2px solid #4CAF50; /* Green accent */
+    padding-bottom: 5px;
+    display: inline-block;
+  }
+  
+  /* Error messages */
+  .registration-error-message {
+    color: #d32f2f; /* Red */
+    margin-top: 5px;
+    font-size: 0.9em;
+  }
+  
+    /* Button group (for vaccines/services) */
+  .registration-button-group {
+    margin-bottom: 10px;
+  }
+  /* Buttons */
+  .registration-container button {
+    margin-top: 10px;
+    margin-right: 10px; /* Spacing between buttons */
+    /*  MUI Joy will style the buttons, but you can add overrides here */
+  }
+  .registration-next-button, .registration-create-patient-button,.registration-submit-button{
+    margin-top: 20px;
+  }
+
+  
+  /* Input fields (MUI Joy will style, but you can add overrides) */
+  .registration-container input[type="text"],
+  .registration-container input[type="date"],
+  .registration-container select {
+    margin-bottom: 10px; /* Add some spacing between form elements */
+    width: 100%; /* Make inputs take full width of their container */
+  }
+  
+  
+  /* List items (vaccines, services, patients) */
+  .registration-list-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px 0; /* Vertical margin only */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .registration-list-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .registration-list-item.selected {
+    background-color: #e0f7fa; /* Light blue for selected items */
+  }
+
+  .registration-checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+  /* Form controls (for spacing) */
+  .registration-form-control-group {
+    margin-bottom: 15px;
+  }
+
+  .registration-vaccination-list-container, .registration-service-list-container, .registration-patient-list-container {
+    margin-bottom: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .registration-container {
+      padding: 10px;
+    }
+  
+    .registration-step-heading {
+      font-size: 1.2em;
+    }
+
+  }
+
+  .registration-success-message {
+    color: #4CAF50; /* Green */
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.registration-loading-indicator{
+    margin-top: 10px;
+}
+.registration-selected-patients {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .registration-selected-patients ul {
+    list-style: none; /* Remove bullet points */
+    padding: 0;
+  }
+  
+  .registration-selected-patients li {
+    margin-bottom: 5px;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+  }
+  .registration-selected-patients li:last-child {
+    border-bottom: none; /* Remove border from last item*/
+  }
+  
