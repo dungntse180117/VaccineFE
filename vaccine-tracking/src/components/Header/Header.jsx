@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './header.css';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSyringe } from '@fortawesome/free-solid-svg-icons'; // Biểu tượng vaccine
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -10,7 +12,6 @@ const Header = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
-    
 
     setIsLoggedIn(!!token);
 
@@ -18,7 +19,7 @@ const Header = () => {
       try {
         const parsedUser = JSON.parse(userData);
         setUser(parsedUser);
-        setRoleId(parsedUser.roleId); 
+        setRoleId(parsedUser.roleId);
       } catch (error) {
         console.error("Error parsing user data from localStorage:", error);
       }
@@ -50,6 +51,10 @@ const Header = () => {
         <div className="header-login">
           {isLoggedIn ? (
             <div className="user-profile">
+              {/* Nút Đăng ký tiêm với biểu tượng vaccine */}
+              <Link to="/registration" className="register-button">
+                <FontAwesomeIcon icon={faSyringe} /> Đăng ký tiêm
+              </Link>
               <span>{user?.name || user?.email || 'Unknown User'}</span>
               <div className="dropdown-menu">
                 <Link to="/profile">Profile</Link>

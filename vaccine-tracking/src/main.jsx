@@ -24,6 +24,9 @@ import PatientVisitManager from "./pages/PatientManager/PatientVisitManager";
 import PatientHistoryVaccine from "./pages/PatientManager/PatientHistoryVaccine";
 import VisitHistoryVaccine from "./pages/ManageVisit/VisitHistoryVaccine";
 import Registration from "./pages/Registration/Registration";
+import PaymentSuccess from "./pages/Registration/PaymentSuccess";
+import PaymentFailed from "./pages/Registration/PaymentFailed";
+
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
@@ -39,7 +42,9 @@ const App = () => {
           <Route path="/patient-visits/:patientId" element={<PatientVisitManager />} />
           <Route path="/patient-history-vaccine/:patientId" element={<PatientHistoryVaccine />} />
           <Route path="/registration" element={<Registration />} />
-           
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+
           <Route
             path="/profile"
             element={

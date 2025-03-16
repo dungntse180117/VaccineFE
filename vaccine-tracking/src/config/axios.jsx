@@ -442,8 +442,14 @@ export const getVaccinationHistoriesByVisitId = async (visitId) => {
   }
 };
 // Registrations API
-export const createRegistration = (data) => {
-  return api.post("/api/Registrations", data);
+export const createRegistration = async (data) => {
+  try {
+    const response = await api.post("/api/Registrations", data);
+    return response.data; 
+  } catch (error) {
+    console.error("Error creating registration:", error);
+    throw error; 
+  }
 };
 
 export const getRegistration = (id) => {
@@ -483,8 +489,8 @@ export const getPatientsByPhone = async (phone) => {
 export const getAllVaccinationRegistration = async () => {
   try {
       const response = await api.get("/api/Vaccinations");
-      // Directly return response.data (which is the array)
-      return response.data;
+      console.log("getAllVaccinationRegistration response.data:", response.data); // KEEP THIS LOG
+      return response.data; // Return directly.
   } catch (error) {
       console.error("getAllVaccinationRegistration: Error fetching vaccinations:", error);
       if (error.response) {
@@ -500,14 +506,14 @@ export const getAllVaccinationRegistration = async () => {
   }
 };
 
-export const getAllVaccinationServicesRegistration = async () => {  // Consistent naming!
+export const getAllVaccinationServicesRegistration = async () => {
   try {
       const response = await api.get("/api/VaccinationServices");
-       // Directly return response.data (which is the array, or whatever your API returns)
-      return response.data;
+      console.log("getAllVaccinationServicesRegistration response.data:", response.data); // KEEP THIS LOG
+      return response.data; // Return directly.
   } catch (error) {
       console.error("getAllVaccinationServicesRegistration: Error fetching services:", error);
-      if (error.response) {
+       if (error.response) {
           console.error("Server responded with error:", error.response.status, error.response.data);
           throw new Error(error.response.data || "Server Error");
       } else if (error.request) {
@@ -520,4 +526,24 @@ export const getAllVaccinationServicesRegistration = async () => {  // Consisten
   }
 };
 
+// Thanh toán API
+export const createPayment = async (registrationId) => {
+  try {
+    const response = await api.post('/api/VnPay/CreatePayment', { registrationId });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating payment:", error);
+    throw error;
+  }
+};
+
+export const executePayment = async (queryParams) => {
+  try {
+    const response = await api.get(`/api/VnPay/PaymentExecute`, { params: queryParams });
+    return response.data;
+  } catch (error) {
+    console.error("Error executing payment:", error);
+    throw error;
+  }
+};
 export default api;

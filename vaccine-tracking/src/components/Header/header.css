@@ -54,6 +54,9 @@
 .user-profile a {
   text-decoration: none;
   color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .user-profile .dropdown-menu {
@@ -111,4 +114,24 @@
 .header-login a:hover {
   background-color: #007bff;
   color: white;
+}
+
+.register-button {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Khoảng cách giữa biểu tượng và văn bản */
+  padding: 8px 12px;
+  background-color: #4CAF50; /* Màu nền */
+  color: white; /* Màu chữ */
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.register-button:hover {
+  background-color: #45a049; /* Màu nền khi hover */
+}
+
+.register-button svg {
+  font-size: 16px; /* Kích thước biểu tượng */
 }

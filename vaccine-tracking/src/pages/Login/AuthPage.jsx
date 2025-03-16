@@ -18,8 +18,8 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import GoogleIcon from "../../components/GoogleIcon";
 import api from "../../config/axios";
+import { message } from "antd"; // Import message từ Ant Design
 
 function ColorSchemeToggle(props) {
   // Toggle theme (lightmode or darkmode) logic here
@@ -71,7 +71,7 @@ export default function AuthPage() {
           });
 
           // Lấy dữ liệu từ phản hồi
-          const { id, name, email, roleId, token } = response.data; // Thêm accountId
+          const { id, name, email, roleId, token } = response.data;
 
           // Lưu trữ dữ liệu vào localStorage
           localStorage.setItem("token", token);
@@ -84,13 +84,16 @@ export default function AuthPage() {
               roleId,
             })
           );
-          localStorage.setItem("accountId",id); // lấy id thay vì accountId
+          localStorage.setItem("accountId", id);
           localStorage.setItem("roleId", roleId);
 
+          // Hiển thị thông báo thành công
+          message.success("Đăng nhập thành công!");
           navigate("/");
         } catch (err) {
           console.error(err);
-          alert(err.response?.data || "An error occurred during login");
+          // Hiển thị thông báo lỗi từ phản hồi API
+          message.error(err.response?.data || "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!");
         }
         break;
       case "signup":
@@ -103,7 +106,6 @@ export default function AuthPage() {
           address: formElements.address.value,
         };
         try {
-          // TODO: Change to the real endpoint
           const response = await api.post("/api/Auth/register", {
             name: data.name,
             email: data.email,
@@ -112,17 +114,15 @@ export default function AuthPage() {
             address: data.address,
           });
           console.log("Registration successful", response.data);
+          // Hiển thị thông báo thành công
+          message.success("Đăng ký thành công!");
         } catch (error) {
           console.error("Registration failed", error.response.data);
+          // Hiển thị thông báo lỗi từ phản hồi API
+          message.error(error.response?.data || "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin!");
         }
         break;
-      case "forgotpassword":
-        data = {
-          email: formElements.email.value,
-        };
-        break;
     }
-    alert(JSON.stringify(data, null, 2));
   };
 
   return (
@@ -203,58 +203,25 @@ export default function AuthPage() {
           >
             <Stack sx={{ gap: 4, mb: 2 }}>
               <Stack sx={{ gap: 1 }}>
-                {authMode === "forgotpassword" && (
-                  <IconButton
-                    onClick={() => toggleAuthMode("signin")}
-                    sx={{ alignSelf: "flex-start", mb: 1 }}
-                  >
-                    <ArrowBackIcon />
-                  </IconButton>
-                )}
                 <Typography component="h1" level="h3">
-                  {authMode === "signin"
-                    ? "Sign in"
-                    : authMode === "signup"
-                    ? "Sign up"
-                    : "Forgot Password"}
+                  {authMode === "signin" ? "Sign in" : "Sign up"}
                 </Typography>
-                {authMode !== "forgotpassword" && (
-                  <Typography level="body-sm">
-                    {authMode === "signin"
-                      ? "Don't have an account yet? "
-                      : "Already have an account? "}
-                    <Link
-                      component="button"
-                      level="title-sm"
-                      onClick={() =>
-                        toggleAuthMode(
-                          authMode === "signin" ? "signup" : "signin"
-                        )
-                      }
-                    >
-                      {authMode === "signin" ? "Sign up!" : "Sign in!"}
-                    </Link>
-                  </Typography>
-                )}
-                {authMode === "forgotpassword" && (
-                  <Typography level="body-sm">
-                    Enter your email address and we'll send you a link to reset
-                    your password.
-                  </Typography>
-                )}
+                <Typography level="body-sm">
+                  {authMode === "signin"
+                    ? "Don't have an account yet? "
+                    : "Already have an account? "}
+                  <Link
+                    component="button"
+                    level="title-sm"
+                    onClick={() =>
+                      toggleAuthMode(authMode === "signin" ? "signup" : "signin")
+                    }
+                  >
+                    {authMode === "signin" ? "Sign up!" : "Sign in!"}
+                  </Link>
+                </Typography>
               </Stack>
-              {authMode === "signin" && (
-                <Button
-                  variant="soft"
-                  color="neutral"
-                  fullWidth
-                  startDecorator={<GoogleIcon />}
-                >
-                  Continue with Google
-                </Button>
-              )}
             </Stack>
-            {authMode === "signin" && <Divider>or</Divider>}
             <Stack sx={{ gap: 4, mt: 2 }}>
               <form onSubmit={handleSubmit}>
                 {authMode === "signup" && (
@@ -267,12 +234,10 @@ export default function AuthPage() {
                   <FormLabel>Email</FormLabel>
                   <Input type="email" name="email" />
                 </FormControl>
-                {authMode !== "forgotpassword" && (
-                  <FormControl required>
-                    <FormLabel>Password</FormLabel>
-                    <Input type="password" name="password" />
-                  </FormControl>
-                )}
+                <FormControl required>
+                  <FormLabel>Password</FormLabel>
+                  <Input type="password" name="password" />
+                </FormControl>
                 {authMode === "signup" && (
                   <FormControl required>
                     <FormLabel>Confirm Password</FormLabel>
@@ -306,13 +271,6 @@ export default function AuthPage() {
                         label="Remember me"
                         name="persistent"
                       />
-                      <Link
-                        level="title-sm"
-                        component="button"
-                        onClick={() => toggleAuthMode("forgotpassword")}
-                      >
-                        Forgot your password?
-                      </Link>
                     </Box>
                   )}
                   {authMode === "signup" && (
@@ -323,11 +281,7 @@ export default function AuthPage() {
                     />
                   )}
                   <Button type="submit" fullWidth>
-                    {authMode === "signin"
-                      ? "Sign in"
-                      : authMode === "signup"
-                      ? "Sign up"
-                      : "Reset Password"}
+                    {authMode === "signin" ? "Sign in" : "Sign up"}
                   </Button>
                 </Stack>
               </form>
@@ -356,7 +310,7 @@ export default function AuthPage() {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundImage:
-            "url(https://th.bing.com/th/id/OIP.3bLX-rGbPmlNGZoxahsJ-QHaE8?rs=1&pid=ImgDetMain)",
+            "url(https://res.cloudinary.com/dzxkl9am6/image/upload/v1742134250/Login_krzk4n.png)",
         })}
       />
     </CssVarsProvider>
