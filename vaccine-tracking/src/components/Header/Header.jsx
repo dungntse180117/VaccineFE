@@ -55,8 +55,7 @@ const Header = () => {
                 <Link to="/profile">Profile</Link>
                 <Link to="/patientmanager">Hồ sơ tiêm chủng</Link>
                 {roleId === 1 && <Link to="/dashboard">Dashboard</Link>}
-                {roleId === 1 && <Link to="/manageaccount">Manage User</Link>}
-
+                {roleId === 2 && <Link to="/registrationdetail">Quản lí đăng kí tiêm</Link>}
               </div>
               <button onClick={handleLogout}>Logout</button>
             </div>

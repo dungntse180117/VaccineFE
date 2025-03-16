@@ -21,6 +21,8 @@ import AppointmentDetails from "./pages/ManageAppointment/AppointmentDetails";
 import ManageVisit from "./pages/ManageVisit/ManageVisit";
 import ManageVisitDayChangeRequest from "./pages/ManageVisitDayChangeRequest/ManageVisitDayChangeRequest";
 import PatientVisitManager from "./pages/PatientManager/PatientVisitManager";
+import PatientHistoryVaccine from "./pages/PatientManager/PatientHistoryVaccine";
+import VisitHistoryVaccine from "./pages/ManageVisit/VisitHistoryVaccine";
 
 const App = () => {
   return (
@@ -35,6 +37,8 @@ const App = () => {
           <Route path="/vaccinedetail/:vaccinationId" element={<VaccineDetail />} />
           <Route path="/vaccinationservicedetail/:id" element={<VaccinationServiceDetail />} />
           <Route path="/patient-visits/:patientId" element={<PatientVisitManager />} />
+          <Route path="/patient-history-vaccine/:patientId" element={<PatientHistoryVaccine />} />
+           
           <Route
             path="/profile"
             element={
@@ -79,7 +83,7 @@ const App = () => {
           <Route
             path="/registrationdetail"
             element={
-              <ProtectedRoute requiredRole={1}>
+              <ProtectedRoute requiredRole={2}>
                 <RegistrationDetail />
               </ProtectedRoute>
             }
@@ -87,7 +91,7 @@ const App = () => {
           <Route
             path="/manageappointment"
             element={
-              <ProtectedRoute requiredRole={1}>
+              <ProtectedRoute requiredRole={2}>
                 <ManageAppointment />
               </ProtectedRoute>
             }
@@ -95,7 +99,7 @@ const App = () => {
           <Route
             path="/appointments/:appointmentId"
             element={
-              <ProtectedRoute requiredRole={1}>
+              <ProtectedRoute requiredRole={2}>
                 <AppointmentDetails />
               </ProtectedRoute>
             }
@@ -103,7 +107,7 @@ const App = () => {
           <Route
             path="/managevisit"
             element={
-              <ProtectedRoute requiredRole={1}>
+              <ProtectedRoute requiredRole={2}>
                 <ManageVisit />
               </ProtectedRoute>
             }
@@ -111,10 +115,18 @@ const App = () => {
            <Route
             path="/managevisitdaychangerequest"
             element={
-              <ProtectedRoute requiredRole={1}>
+              <ProtectedRoute requiredRole={2}>
                 <ManageVisitDayChangeRequest />
               </ProtectedRoute>
             }
+          />
+          <Route path="/visit-history-vaccine/:visitId" 
+          element=
+          {
+          <ProtectedRoute requiredRole={2}>
+          <VisitHistoryVaccine />
+          </ProtectedRoute>
+          } 
           />
         </Routes>
       </Router>

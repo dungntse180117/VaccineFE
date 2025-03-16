@@ -18,7 +18,6 @@ import api, {
   getAllPatientsByAccountId,
 } from "../../config/axios";
 import "./PatientManager.css";
-import UserSidebar from "../../components/Sidebar/UserSideBar";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import {
@@ -35,8 +34,9 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from '@mui/icons-material/Visibility'; // Import VisibilityIcon
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import HistoryIcon from '@mui/icons-material/History'; // Import HistoryIcon for Vaccination History
+import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
@@ -52,13 +52,13 @@ const PatientManager = () => {
   const [form] = Form.useForm();
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // Use isAddModalOpen instead of isAddModalVisible
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Use isEditModalOpen instead of isEditModalVisible
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [addPatientForm] = Form.useForm();
   const [editPatientForm] = Form.useForm();
   const [userData, setUserData] = useState(null);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUserData();
@@ -114,11 +114,11 @@ const PatientManager = () => {
   };
 
   const showAddModal = () => {
-    setIsAddModalVisible(true);
+    setIsAddModalOpen(true); // Use setIsAddModalOpen
   };
 
   const handleAddCancel = () => {
-    setIsAddModalVisible(false);
+    setIsAddModalOpen(false); // Use setIsAddModalOpen
     addPatientForm.resetFields();
   };
 
@@ -147,7 +147,7 @@ const PatientManager = () => {
 
   const showEditModal = (record) => {
     setSelectedPatient(record);
-    setIsEditModalVisible(true);
+    setIsEditModalOpen(true); // Use setIsEditModalOpen
     editPatientForm.setFieldsValue({
       dob: moment(record.dob, "YYYY-MM-DD"),
       patientName: record.patientName,
@@ -155,12 +155,12 @@ const PatientManager = () => {
       guardianPhone: record.guardianPhone,
       address: record.address,
       relationshipToAccount: record.relationshipToAccount,
-      phone: record.phone, 
+      phone: record.phone,
     });
   };
 
   const handleEditCancel = () => {
-    setIsEditModalVisible(false);
+    setIsEditModalOpen(false); // Use setIsEditModalOpen
     setSelectedPatient(null);
     editPatientForm.resetFields();
   };
@@ -237,16 +237,27 @@ const PatientManager = () => {
       dataIndex: "phone",
       key: "phone",
     },
-    // ADD NEW "Xem Lịch Hẹn" COLUMN HERE:
     {
       title: "Lịch hẹn tiêm",
       key: "visitsAction",
-      render: (text, record) => ( // render function for the new column
+      render: (text, record) => (
         <IconButton
           aria-label="view-visits"
-          onClick={() => navigate(`/patient-visits/${record.patientId}`)} // Navigate to PatientVisitManager
+          onClick={() => navigate(`/patient-visits/${record.patientId}`)}
         >
-          <VisibilityIcon />  {/* VisibilityIcon for "view" */}
+          <VisibilityIcon />
+        </IconButton>
+      ),
+    },
+    {
+      title: "Lịch sử tiêm",
+      key: "vaccinationHistoryAction",
+      render: (text, record) => (
+        <IconButton
+          aria-label="view-vaccination-history"
+          onClick={() => navigate(`/patient-history-vaccine/${record.patientId}`)}
+        >
+          <HistoryIcon />
         </IconButton>
       ),
     },
@@ -272,25 +283,25 @@ const PatientManager = () => {
   return (
     <Layout
       className="patient-manager-layout"
-      style={{ minHeight: "100vh" }} // Added minHeight
+      style={{ minHeight: "100vh" }}
     >
       <AppHeader />
       <Layout>
-        <UserSidebar />
-
         <Content
           style={{
             padding: "24px",
             marginLeft: drawerWidth,
-            display: "flex", // Added flex display
-            flexDirection: "column", // Added flex direction
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <Box>
-            <Breadcrumb style={{ margin: "16px 0" }}>
-              <Breadcrumb.Item>Trang chủ</Breadcrumb.Item>
-              <Breadcrumb.Item>Quản lý hồ sơ tiêm chủng</Breadcrumb.Item>
-            </Breadcrumb>
+            <Breadcrumb items={[ // Use items prop for Breadcrumb
+              { title: 'Trang chủ' },
+              { title: 'Quản lý hồ sơ tiêm chủng' },
+            ]}
+            style={{ margin: "16px 0" }}
+          />
           </Box>
 
           <MainContent>
@@ -309,7 +320,7 @@ const PatientManager = () => {
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
-                  <TableRow>
+                  <TableRow> {/* Removed extra whitespace in TableRow */}
                     <TableCell>Họ và tên</TableCell>
                     <TableCell>Ngày sinh</TableCell>
                     <TableCell>Giới tính</TableCell>
@@ -317,7 +328,8 @@ const PatientManager = () => {
                     <TableCell>Địa chỉ</TableCell>
                     <TableCell>Quan hệ</TableCell>
                     <TableCell>Số điện thoại</TableCell>
-                    <TableCell>Lịch hẹn tiêm</TableCell> {/* New Column Header */}
+                    <TableCell>Lịch hẹn tiêm</TableCell>
+                    <TableCell>Lịch sử tiêm</TableCell>
                     <TableCell>Hành động</TableCell>
                   </TableRow>
                 </TableHead>
@@ -336,12 +348,20 @@ const PatientManager = () => {
                       <TableCell>{patient.address}</TableCell>
                       <TableCell>{patient.relationshipToAccount}</TableCell>
                       <TableCell>{patient.phone}</TableCell>
-                      <TableCell> {/* New "Xem Lịch Hẹn" Button Cell */}
+                      <TableCell>
                         <IconButton
                           aria-label="view-visits"
-                          onClick={() => navigate(`/patient-visits/${patient.patientId}`)} // Navigate function call
+                          onClick={() => navigate(`/patient-visits/${patient.patientId}`)}
                         >
-                          <VisibilityIcon /> {/* Visibility Icon */}
+                          <VisibilityIcon />
+                        </IconButton>
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          aria-label="view-vaccination-history"
+                          onClick={() => navigate(`/patient-history-vaccine/${patient.patientId}`)}
+                        >
+                          <HistoryIcon />
                         </IconButton>
                       </TableCell>
                       <TableCell>
@@ -366,11 +386,11 @@ const PatientManager = () => {
 
             <Modal
               title="Tạo Hồ Sơ Tiêm Chủng"
-              visible={isAddModalVisible}
+              open={isAddModalOpen} // Use open instead of visible
               onCancel={handleAddCancel}
             >
               <Form
-                form={addPatientForm}
+                form={addPatientForm} // Pass form prop
                 layout="vertical"
                 onFinish={handleAddPatient}
               >
@@ -432,11 +452,11 @@ const PatientManager = () => {
 
             <Modal
               title="Chỉnh sửa người thân"
-              visible={isEditModalVisible}
+              open={isEditModalOpen} // Use open instead of visible
               onCancel={handleEditCancel}
             >
               <Form
-                form={editPatientForm}
+                form={editPatientForm} // Pass form prop
                 layout="vertical"
                 onFinish={handleEditPatient}
               >
@@ -498,7 +518,7 @@ const PatientManager = () => {
           </MainContent>
         </Content>
       </Layout>
-      
+
     </Layout>
   );
 };

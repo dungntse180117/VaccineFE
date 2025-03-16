@@ -381,6 +381,65 @@ export const deleteVisitDayChangeRequest = (id) => {
 export const getVisitDayChangeRequestsByVisitId = (visitId) => {
   return api.get(`/api/VisitDayChangeRequest/visit/${visitId}`);
 };
+// VaccinationHistory API
+export const getVaccinationHistory = async (id) => {
+  try {
+    const response = await api.get(`/api/VaccinationHistory/${id}`); 
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting vaccination history with ID ${id}:`, error);
+    throw error;
+  }
+};
 
+export const getAllVaccinationHistories = async () => {
+  try {
+    const response = await api.get("/api/VaccinationHistory");
+    return response.data;
+  } catch (error) {
+    console.error('Error getting all vaccination histories:', error);
+    throw error;
+  }
+};
+
+export const updateVaccinationHistory = async (id, requestData) => {
+  try {
+    const response = await api.put(`/api/VaccinationHistory/${id}`, requestData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating vaccination history with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const deleteVaccinationHistory = async (id) => {
+  try {
+    await api.delete(`/api/VaccinationHistory/${id}`); 
+    return;
+  } catch (error) {
+    console.error(`Error deleting vaccination history with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const getVaccinationHistoriesByPatientId = async (patientId) => {
+  try {
+    const response = await api.get(`/api/VaccinationHistory/patient/${patientId}`);
+    return response; 
+  } catch (error) {
+    console.error(`Error getting vaccination histories by patient ID ${patientId}:`, error);
+    throw error;
+  }
+};
+
+export const getVaccinationHistoriesByVisitId = async (visitId) => {
+  try {
+    const response = await api.get(`/api/VaccinationHistory/visit/${visitId}`);
+    return response.data;  
+  } catch (error) {
+    console.error(`Error getting vaccination histories by visit ID ${visitId}:`, error);
+    throw error;
+  }
+};
 
 export default api;

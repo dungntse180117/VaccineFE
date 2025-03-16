@@ -10,7 +10,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import './UserSidebar.css';
+import './StaffSidebar.css';
 
 
 const drawerWidth = 200; 

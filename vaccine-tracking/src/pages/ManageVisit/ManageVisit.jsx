@@ -3,10 +3,11 @@ import {
     Layout,
     Breadcrumb,
     message,
-    Modal, // Import Modal from antd for confirmation dialog
+    Modal,
     Form,
     Input,
     Button as AntButton,
+    Popover,
 } from "antd";
 import { DatePicker } from 'antd';
 import moment from "moment";
@@ -26,12 +27,13 @@ import {
     IconButton,
     Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import DoneIcon from '@mui/icons-material/Done'; // Import Done icon for "Đã tiêm" button
-import api, { getVisits, createVisit, updateVisit, deleteVisit, updateVisitStatus } from "../../config/axios"; // Import updateVisitStatus API
+import DoneIcon from '@mui/icons-material/Done';
+import HistoryIcon from '@mui/icons-material/History';
+import api, { getVisits, createVisit, updateVisit, deleteVisit, updateVisitStatus } from "../../config/axios";
 import "./ManageVisit.css";
+import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 const drawerWidth = 200;
@@ -52,6 +54,8 @@ const ManageVisit = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editVisitForm] = Form.useForm();
     const [selectedVisit, setSelectedVisit] = useState(null);
+    const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchVisits();
@@ -79,6 +83,7 @@ const ManageVisit = () => {
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
+        setIsDatePickerVisible(false);
     };
 
     const showAddModal = () => {
@@ -146,24 +151,32 @@ const ManageVisit = () => {
         }
     };
 
-
     const handleDeleteVisit = async (record) => {
-        try {
-            setLoading(true);
-            await deleteVisit(record.visitID);
+        Modal.confirm({
+            title: 'Xác nhận xóa',
+            content: 'Bạn có chắc chắn muốn xóa lịch hẹn này không?',
+            onOk: async () => {
+                try {
+                    setLoading(true);
+                    await deleteVisit(record.visitID);
 
-            message.success("Visit deleted successfully");
-            fetchVisits();
-        } catch (error) {
-            console.error("Error deleting visit:", error);
-            message.error(`Error deleting visit: ${error.message}`);
-        } finally {
-            setLoading(false);
-        }
+                    message.success("Visit deleted successfully");
+                    fetchVisits();
+                } catch (error) {
+                    console.error("Error deleting visit:", error);
+                    message.error(`Error deleting visit: ${error.message}`);
+                } finally {
+                    setLoading(false);
+                }
+            },
+            onCancel() {
+                // Không làm gì nếu người dùng hủy bỏ
+            },
+        });
     };
 
     const handleUpdateVisitStatus = (record) => {
-        console.log("handleUpdateVisitStatus function called for visit ID:", record.visitID); // Debugging line
+        console.log("handleUpdateVisitStatus function called for visit ID:", record.visitID);
         Modal.confirm({
             title: 'Xác nhận cập nhật trạng thái',
             content: 'Bạn có muốn cập nhật trạng thái thành "Đã tiêm"?',
@@ -172,7 +185,7 @@ const ManageVisit = () => {
                 try {
                     await updateVisitStatus(record.visitID, { status: "Đã tiêm" });
                     message.success("Cập nhật trạng thái thành công");
-                    fetchVisits(); // Refresh visits to reflect status update
+                    fetchVisits();
                 } catch (error) {
                     console.error("Error updating visit status:", error);
                     message.error("Cập nhật trạng thái thất bại");
@@ -184,7 +197,6 @@ const ManageVisit = () => {
         });
     };
 
-
     const visitColumns = [
         {
             title: "Visit Date",
@@ -194,19 +206,48 @@ const ManageVisit = () => {
         },
         { title: "Notes", dataIndex: "notes", key: "notes" },
         { title: "Status", dataIndex: "status", key: "status" },
-        // ADD NEW "Tên Người tiêm" COLUMN:
         {
             title: "Tên Người tiêm",
-            dataIndex: "patientName", // Make sure this matches the VisitResponse property name
+            dataIndex: "patientName",
             key: "patientName",
         },
-        // ADD NEW "Số điện thoại" COLUMN:
         {
             title: "Số điện thoại",
-            dataIndex: "patientPhone", // Make sure this matches the VisitResponse property name
+            dataIndex: "patientPhone",
             key: "patientPhone",
         },
-
+        {
+            title: "Lịch sử tiêm vaccine",
+            key: "vaccinationHistoryAction",
+            render: (text, record) => (
+                <IconButton
+                    aria-label="view-vaccination-history"
+                    onClick={() => navigate(`/visit-history-vaccine/${record.visitID}`)}
+                >
+                    <HistoryIcon />
+                </IconButton>
+            ),
+        },
+        {
+            title: "Hành động",
+            key: "action",
+            render: (text, record) => (
+                <TableCell>
+                    <IconButton aria-label="edit" onClick={() => showEditModal(record)}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete" onClick={() => handleDeleteVisit(record)}>
+                        <DeleteIcon />
+                    </IconButton>
+                    <IconButton
+                        aria-label="vaccinated"
+                        onClick={() => handleUpdateVisitStatus(record)}
+                    >
+                        <DoneIcon />
+                    </IconButton>
+                </TableCell>
+            ),
+        },
     ];
 
     const goToPreviousDay = () => {
@@ -217,6 +258,24 @@ const ManageVisit = () => {
         setSelectedDate(moment(selectedDate).add(1, 'day'));
     };
 
+    const handleOpenDatePicker = () => {
+        setIsDatePickerVisible(true);
+    };
+
+    const handleCloseDatePicker = () => {
+        setIsDatePickerVisible(false);
+    };
+
+    const datePickerContent = (
+        <DatePicker
+            value={selectedDate}
+            format="YYYY-MM-DD"
+            onChange={handleDateChange}
+            onOpenChange={(open) => {
+                if (!open) handleCloseDatePicker();
+            }}
+        />
+    );
 
     return (
         <Layout
@@ -248,12 +307,16 @@ const ManageVisit = () => {
                         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Box display="flex" alignItems="center">
                                 <Button onClick={goToPreviousDay}>Ngày trước</Button>
-                                <DatePicker
-                                    value={selectedDate}
-                                    format="YYYY-MM-DD"
-                                    onChange={handleDateChange}
-                                    style={{ margin: '0 10px' }}
-                                />
+                                <Popover
+                                    content={datePickerContent}
+                                    trigger="click"
+                                    open={isDatePickerVisible}
+                                    onOpenChange={handleOpenDatePicker}
+                                >
+                                    <Button style={{ margin: '0 10px' }}>
+                                        {selectedDate.format("YYYY-MM-DD")}
+                                    </Button>
+                                </Popover>
                                 <Button onClick={goToNextDay}>Ngày sau</Button>
                             </Box>
                         </Box>
@@ -272,7 +335,6 @@ const ManageVisit = () => {
                                             {visitColumns.map((column) => (
                                                 <TableCell key={column.key}>{column.title}</TableCell>
                                             ))}
-                                            <TableCell>Hành động</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -285,22 +347,7 @@ const ManageVisit = () => {
                                                     <TableCell key={`${visit.visitID}-${column.key}`}>
                                                         {typeof column.render === 'function' ? column.render(visit[column.dataIndex], visit) : visit[column.dataIndex]}
                                                     </TableCell>
-                                                ))}{/* No whitespace here */}
-                                                <TableCell>
-                                                    <IconButton aria-label="edit" onClick={() => showEditModal(visit)}>
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                    <IconButton aria-label="delete" onClick={() => handleDeleteVisit(visit)}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                    {/* ADD "Đã tiêm" Button */}
-                                                    <IconButton
-                                                        aria-label="vaccinated"
-                                                        onClick={() => handleUpdateVisitStatus(visit)}
-                                                    >
-                                                        <DoneIcon /> {/* Use Done icon */}
-                                                    </IconButton>
-                                                </TableCell>
+                                                ))}
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -308,7 +355,6 @@ const ManageVisit = () => {
                             </TableContainer>
                         )}
 
-                        {/* Edit Visit Modal (Keep this) */}
                         <Modal
                             title="Chỉnh sửa Lịch Hẹn Tiêm"
                             open={isEditModalOpen}
