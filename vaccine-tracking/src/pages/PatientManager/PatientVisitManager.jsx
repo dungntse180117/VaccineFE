@@ -96,7 +96,6 @@ const PatientVisitManager = () => {
         };
     }).filter(event => event !== null);
 
-    // Hàm để thêm class CSS cho ô ngày
     const handleDayCellClassNames = (args) => {
         if (!args || !args.date) return []; // Kiểm tra args và args.date
 
@@ -106,11 +105,11 @@ const PatientVisitManager = () => {
         const visitForCell = visits.find((visit) => moment(visit.visitDate).format("YYYY-MM-DD") === cellDate);
 
         if (visitForCell) {
-            // Thêm class CSS dựa trên trạng thái của visit
+        
             if (visitForCell.status === "Đã tiêm") {
-                return ["fc-day-green"]; // Class cho màu xanh
+                return ["fc-day-green"]; 
             } else if (visitForCell.status === "Chưa tiêm") {
-                return ["fc-day-red"]; // Class cho màu đỏ
+                return ["fc-day-red"]; 
             }
         }
         return [];

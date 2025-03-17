@@ -30,6 +30,7 @@ const Header = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('roleId');
+    localStorage.removeItem('accountId'); // Xóa accountId
     setIsLoggedIn(false);
     setUser(null);
     setRoleId(null);

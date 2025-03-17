@@ -17,7 +17,7 @@ import api, {
   deletePatient,
   getAllPatientsByAccountId,
 } from "../../config/axios";
-import "./PatientManager.css";
+import "./PatientManager.css"; // Make sure this CSS file exists and styles are applied correctly
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import {
@@ -35,12 +35,12 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import HistoryIcon from '@mui/icons-material/History'; // Import HistoryIcon for Vaccination History
+import HistoryIcon from '@mui/icons-material/History';
 import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
-const drawerWidth = 200;
+const drawerWidth = 200; // Adjust as needed
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
@@ -49,97 +49,82 @@ const MainContent = styled(Box)(({ theme }) => ({
 }));
 
 const PatientManager = () => {
-  const [form] = Form.useForm();
   const [patients, setPatients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // Use isAddModalOpen instead of isAddModalVisible
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Use isEditModalOpen instead of isEditModalVisible
+  const [loading, setLoading] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [addPatientForm] = Form.useForm();
-  const [editPatientForm] = Form.useForm();
-  const [userData, setUserData] = useState(null);
+  const [addPatientForm] = Form.useForm();  // Form instance for Add
+  const [editPatientForm] = Form.useForm(); // Form instance for Edit
   const navigate = useNavigate();
 
+  // Fetch patients on component mount
   useEffect(() => {
-    fetchUserData();
+    const fetchPatients = async () => {
+      setLoading(true);
+      try {
+        const accountId = localStorage.getItem("accountId");
+        if (accountId) {
+          const response = await getAllPatientsByAccountId(accountId);
+          setPatients(response.data);
+        } else {
+          console.warn("accountId not found in localStorage."); // Add a warning
+        }
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+        message.error(
+          error.response?.data?.message ||
+          error.message ||
+          "An error occurred while fetching patients."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatients();
   }, []);
 
-  useEffect(() => {
-    if (userData) {
-      fetchPatients();
-    }
-  }, [userData]);
-
-  const fetchUserData = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const email = localStorage.getItem("email");
-      const response = await api.get(`api/Account/email/${email}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      let user = response.data;
-
-      setUserData(user);
-      form.setFieldsValue({
-        name: user.name,
-        phone: user.phone,
-        address: user.address,
-        email: user.email,
-      });
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      message.error("Error fetching user data");
-      setLoading(false);
-    }
-  };
-
-  const fetchPatients = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const accountId = userData?.accountId;
-
-      if (accountId) {
-        const response = await getAllPatientsByAccountId(accountId);
-        setPatients(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching patients:", error);
-      message.error("Error fetching patients");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const showAddModal = () => {
-    setIsAddModalOpen(true); // Use setIsAddModalOpen
+    setIsAddModalOpen(true);
   };
 
   const handleAddCancel = () => {
-    setIsAddModalOpen(false); // Use setIsAddModalOpen
-    addPatientForm.resetFields();
+    setIsAddModalOpen(false);
+    addPatientForm.resetFields(); // Reset form fields
   };
 
-  const handleAddPatient = async (values) => {
+  const handleAddPatient = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
-      const accountId = userData.accountId;
+      const values = await addPatientForm.validateFields(); // Validate
+      const accountId = localStorage.getItem("accountId");
+
+      if (!accountId) {
+        message.error("AccountId not found in localStorage.");
+        return; // Exit if accountId is missing
+      }
 
       await createPatient({
         ...values,
-        accountId: accountId,
-        dob: values.dob.format("YYYY-MM-DD"),
+        accountId: parseInt(accountId, 10), // Ensure accountId is an integer
+        dob: values.dob.format("YYYY-MM-DD"), // Format date
       });
 
       message.success("Patient created successfully");
-      fetchPatients();
-      handleAddCancel();
+
+      // Refetch patients
+      const response = await getAllPatientsByAccountId(accountId);
+      console.log("Patients after create:", response.data); // Debug: Check fetched data
+      setPatients(response.data);
+
+      handleAddCancel(); // Close and reset
+
     } catch (error) {
       console.error("Error adding patient:", error);
-      message.error(`Error adding patient: ${error.message}`);
+      message.error(
+        error.response?.data?.message || error.message || "An error occurred while adding patient"
+      );
     } finally {
       setLoading(false);
     }
@@ -147,144 +132,82 @@ const PatientManager = () => {
 
   const showEditModal = (record) => {
     setSelectedPatient(record);
-    setIsEditModalOpen(true); // Use setIsEditModalOpen
-    editPatientForm.setFieldsValue({
-      dob: moment(record.dob, "YYYY-MM-DD"),
-      patientName: record.patientName,
-      gender: record.gender,
-      guardianPhone: record.guardianPhone,
-      address: record.address,
-      relationshipToAccount: record.relationshipToAccount,
-      phone: record.phone,
+    setIsEditModalOpen(true);
+    editPatientForm.setFieldsValue({ // Set initial values
+      ...record,
+      dob: moment(record.dob, 'YYYY-MM-DD'), // Convert to Moment object
     });
   };
 
   const handleEditCancel = () => {
-    setIsEditModalOpen(false); // Use setIsEditModalOpen
+    setIsEditModalOpen(false);
     setSelectedPatient(null);
-    editPatientForm.resetFields();
+    editPatientForm.resetFields(); // Reset
   };
 
-  const handleEditPatient = async (values) => {
+  const handleEditPatient = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
+      const values = await editPatientForm.validateFields(); // Validate
       await updatePatient(selectedPatient.patientId, {
         ...values,
-        dob: values.dob.format("YYYY-MM-DD"),
+        dob: values.dob.format('YYYY-MM-DD'), // Format
       });
 
       message.success("Patient updated successfully");
-      fetchPatients();
+
+      // Refetch patients
+      const accountId = localStorage.getItem("accountId");
+      if (accountId) {
+        const response = await getAllPatientsByAccountId(accountId);
+        console.log("Patients after update:", response.data); // Debug: Check fetched data
+        setPatients(response.data);
+      }
+
       handleEditCancel();
     } catch (error) {
       console.error("Error updating patient:", error);
-      message.error(`Error updating patient: ${error.message}`);
+      message.error(
+        error.response?.data?.message || error.message || "An error occurred while updating patient."
+      );
     } finally {
       setLoading(false);
     }
   };
+    const handleDeletePatient = (record) => {
+        Modal.confirm({
+            title: "Confirm Delete",
+            content: `Are you sure you want to delete ${record.patientName}?`,
+            okText: "Yes",
+            okType: "danger",
+            cancelText: "No",
+            onOk: async () => {
+                try {
+                    setLoading(true);
+                    await deletePatient(record.patientId);
+                    message.success("Patient deleted successfully");
 
-  const handleDeletePatient = async (record) => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      await deletePatient(record.patientId);
-
-      message.success("Patient deleted successfully");
-      fetchPatients();
-    } catch (error) {
-      console.error("Error deleting patient:", error);
-      message.error(`Error deleting patient: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const patientColumns = [
-    {
-      title: "Họ và tên",
-      dataIndex: "patientName",
-      key: "patientName",
-    },
-    {
-      title: "Ngày sinh",
-      dataIndex: "dob",
-      key: "dob",
-    },
-    {
-      title: "Giới tính",
-      dataIndex: "gender",
-      key: "gender",
-    },
-    {
-      title: "Số điện thoại người thân",
-      dataIndex: "guardianPhone",
-      key: "guardianPhone",
-    },
-    {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Quan hệ",
-      dataIndex: "relationshipToAccount",
-      key: "relationshipToAccount",
-    },
-    {
-      title: "Số điện thoại",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "Lịch hẹn tiêm",
-      key: "visitsAction",
-      render: (text, record) => (
-        <IconButton
-          aria-label="view-visits"
-          onClick={() => navigate(`/patient-visits/${record.patientId}`)}
-        >
-          <VisibilityIcon />
-        </IconButton>
-      ),
-    },
-    {
-      title: "Lịch sử tiêm",
-      key: "vaccinationHistoryAction",
-      render: (text, record) => (
-        <IconButton
-          aria-label="view-vaccination-history"
-          onClick={() => navigate(`/patient-history-vaccine/${record.patientId}`)}
-        >
-          <HistoryIcon />
-        </IconButton>
-      ),
-    },
-    {
-      title: "Hành động",
-      key: "action",
-      render: (text, record) => (
-        <>
-          <IconButton aria-label="edit" onClick={() => showEditModal(record)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            aria-label="delete"
-            onClick={() => handleDeletePatient(record)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </>
-      ),
-    },
-  ];
+                    // Refetch
+                    const accountId = localStorage.getItem("accountId");
+                    if (accountId) {
+                        const response = await getAllPatientsByAccountId(accountId);
+                         console.log("Patients after delete:", response.data); // Debug: Check fetched data
+                        setPatients(response.data);
+                    }
+                } catch (error) {
+                    console.error("Error Deleting patient:", error);
+                    message.error(
+                        error.response?.data?.message || error.message || "An error occurred while deleting patient."
+                    );
+                } finally {
+                    setLoading(false);
+                }
+            },
+        });
+    };
 
   return (
-    <Layout
-      className="patient-manager-layout"
-      style={{ minHeight: "100vh" }}
-    >
+    <Layout className="patient-manager-layout" style={{ minHeight: "100vh" }}>
       <AppHeader />
       <Layout>
         <Content
@@ -295,13 +218,13 @@ const PatientManager = () => {
             flexDirection: "column",
           }}
         >
-          <Box>
-            <Breadcrumb items={[ // Use items prop for Breadcrumb
-              { title: 'Trang chủ' },
-              { title: 'Quản lý hồ sơ tiêm chủng' },
-            ]}
-            style={{ margin: "16px 0" }}
-          />
+            <Box>
+                <Breadcrumb items={[
+                { title: 'Trang chủ' },
+                { title: 'Quản lý hồ sơ tiêm chủng' },
+                ]}
+                style={{ margin: "16px 0" }}
+            />
           </Box>
 
           <MainContent>
@@ -320,7 +243,7 @@ const PatientManager = () => {
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
-                  <TableRow> {/* Removed extra whitespace in TableRow */}
+                  <TableRow>
                     <TableCell>Họ và tên</TableCell>
                     <TableCell>Ngày sinh</TableCell>
                     <TableCell>Giới tính</TableCell>
@@ -334,7 +257,14 @@ const PatientManager = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {patients.map((patient) => (
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={10} style={{ textAlign: 'center' }}>
+                        Loading...
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                  patients.map((patient) => (
                     <TableRow
                       key={patient.patientId}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -379,146 +309,109 @@ const PatientManager = () => {
                         </IconButton>
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )))}
                 </TableBody>
               </Table>
             </TableContainer>
 
+            {/* Add Patient Modal */}
             <Modal
               title="Tạo Hồ Sơ Tiêm Chủng"
-              open={isAddModalOpen} // Use open instead of visible
+              open={isAddModalOpen}
               onCancel={handleAddCancel}
+              footer={[
+                <AntButton key="cancel" onClick={handleAddCancel}>
+                  Hủy
+                </AntButton>,
+                <AntButton key="submit" type="primary" onClick={handleAddPatient}>
+                  Lưu
+                </AntButton>,
+              ]}
             >
-              <Form
-                form={addPatientForm} // Pass form prop
-                layout="vertical"
-                onFinish={handleAddPatient}
-              >
+              <Form form={addPatientForm} layout="vertical">
                 <Form.Item
                   name="patientName"
                   label="Họ và tên"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập họ và tên",
-                    },
-                  ]}
+                  rules={[{ required: true, message: "Vui lòng nhập họ và tên" }]}
                 >
                   <Input />
                 </Form.Item>
                 <Form.Item
                   name="dob"
                   label="Ngày sinh"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập ngày sinh",
-                    },
-                  ]}
+                  rules={[{ required: true, message: "Vui lòng nhập ngày sinh" }]}
                 >
                   <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
                 </Form.Item>
                 <Form.Item name="gender" label="Giới tính">
                   <Input />
                 </Form.Item>
-                <Form.Item
-                  name="guardianPhone"
-                  label="Số điện thoại người thân"
-                >
+                <Form.Item name="guardianPhone" label="Số điện thoại người thân">
                   <Input />
                 </Form.Item>
                 <Form.Item name="address" label="Địa chỉ">
                   <Input />
                 </Form.Item>
-                <Form.Item
-                  name="relationshipToAccount"
-                  label="Mối quan hệ"
-                >
+                <Form.Item name="relationshipToAccount" label="Mối quan hệ">
                   <Input />
                 </Form.Item>
                 <Form.Item name="phone" label="Số điện thoại">
                   <Input />
-                </Form.Item>
-                <Form.Item>
-                  <AntButton type="primary" htmlType="submit">
-                    Lưu
-                  </AntButton>
-                  <AntButton htmlType="button" onClick={handleAddCancel}>
-                    Hủy
-                  </AntButton>
                 </Form.Item>
               </Form>
             </Modal>
 
+            {/* Edit Patient Modal */}
             <Modal
-              title="Chỉnh sửa người thân"
-              open={isEditModalOpen} // Use open instead of visible
+              title="Chỉnh sửa thông tin bệnh nhân"
+              open={isEditModalOpen}
               onCancel={handleEditCancel}
+              footer={[
+                <AntButton key="cancel" onClick={handleEditCancel}>
+                  Hủy
+                </AntButton>,
+                <AntButton key="submit" type="primary" onClick={handleEditPatient}>
+                  Lưu
+                </AntButton>,
+              ]}
             >
-              <Form
-                form={editPatientForm} // Pass form prop
-                layout="vertical"
-                onFinish={handleEditPatient}
-              >
-                <Form.Item
-                  name="patientName"
-                  label="Họ và tên"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập họ và tên",
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="dob"
-                  label="Ngày sinh"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập ngày sinh",
-                    },
-                  ]}
-                >
-                  <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
-                </Form.Item>
-                <Form.Item name="gender" label="Giới tính">
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="guardianPhone"
-                  label="Số điện thoại người thân"
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item name="address" label="Địa chỉ">
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="relationshipToAccount"
-                  label="Mối quan hệ"
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item name="phone" label="Số điện thoại">
-                  <Input />
-                </Form.Item>
-                <Form.Item>
-                  <AntButton type="primary" htmlType="submit">
-                    Lưu
-                  </AntButton>
-                  <AntButton htmlType="button" onClick={handleEditCancel}>
-                    Hủy
-                  </AntButton>
-                </Form.Item>
-              </Form>
+
+              <Form form={editPatientForm} layout="vertical">
+                    <Form.Item
+                        name="patientName"
+                        label="Họ và tên"
+                        rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="dob"
+                        label="Ngày sinh"
+                        rules={[{ required: true, message: 'Vui lòng nhập ngày sinh' }]}
+                    >
+                        <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
+                    </Form.Item>
+                    <Form.Item name="gender" label="Giới tính">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="guardianPhone" label="Số điện thoại người thân">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="address" label="Địa chỉ">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="relationshipToAccount" label="Mối quan hệ">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="phone" label="Số điện thoại">
+                        <Input />
+                    </Form.Item>
+                </Form>
+
             </Modal>
           </MainContent>
         </Content>
       </Layout>
-
     </Layout>
   );
 };

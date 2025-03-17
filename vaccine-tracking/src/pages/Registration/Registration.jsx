@@ -3,7 +3,6 @@ import {
     getAllVaccinationRegistration,
     getAllVaccinationServicesRegistration,
     getPatientsByPhone,
-    createPatient,
     createRegistration,
     getDiseaseByVaccinationId,
     createPayment,
@@ -12,28 +11,25 @@ import { format } from 'date-fns';
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Checkbox from "@mui/joy/Checkbox";
-import Divider from "@mui/joy/Divider";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import IconButton from "@mui/joy/IconButton";
-import Link from "@mui/joy/Link";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
-import Stack from "@mui/joy/Stack";
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import ListItemButton from '@mui/joy/ListItemButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Chip from '@mui/joy/Chip';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
-
-import './Registration.css';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import Table from '@mui/joy/Table';
+import "./Registration.css" // Import CSS file
 
 function Registration() {
+    // ... (Các state và useEffect giữ nguyên)
     const [step, setStep] = useState(1);
     const [vaccinations, setVaccinations] = useState([]);
     const [vaccinationServices, setVaccinationServices] = useState([]);
@@ -53,7 +49,6 @@ function Registration() {
         accountId: null,
     });
     const [desiredDate, setDesiredDate] = useState('');
-    const [showCreatePatientForm, setShowCreatePatientForm] = useState(false);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
@@ -61,7 +56,9 @@ function Registration() {
     const [displaySelectedPatients, setDisplaySelectedPatients] = useState([]);
     const [registrationId, setRegistrationId] = useState(null);
     const [registrationDetails, setRegistrationDetails] = useState(null);
-    const [paymentSuccess, setPaymentSuccess] = useState(false); // State để kiểm soát thông báo thanh toán thành công
+    const [selectedVaccineNames, setSelectedVaccineNames] = useState([]); // State for names
+    const [selectedServiceName, setSelectedServiceName] = useState(""); // State for service name
+
 
     useEffect(() => {
         const accountId = localStorage.getItem('accountId');
@@ -105,35 +102,33 @@ function Registration() {
     }, []);
 
     useEffect(() => {
-        const queryParams = new URLSearchParams(window.location.search);
-        const responseCode = queryParams.get('vnp_ResponseCode'); // Kiểm tra mã phản hồi từ VNPay
-
-        if (responseCode === '00') { // '00' là mã thành công từ VNPay
-            setPaymentSuccess(true);
-        }
     }, []);
 
-    const handleVaccineSelection = (vaccinationId) => {
+    const handleVaccineSelection = (vaccinationId, vaccinationName) => {
         if (selectedService !== null) {
             setErrors({ selection: 'You cannot select individual vaccines when a service is selected.' });
             return;
         }
         if (selectedVaccinations.includes(vaccinationId)) {
             setSelectedVaccinations(selectedVaccinations.filter((id) => id !== vaccinationId));
+             setSelectedVaccineNames(selectedVaccineNames.filter(name => name !== vaccinationName));
         } else {
             setSelectedVaccinations([...selectedVaccinations, vaccinationId]);
+            setSelectedVaccineNames([...selectedVaccineNames, vaccinationName]);
         }
         setErrors({ selection: '' });
     };
 
-    const handleServiceSelection = (serviceId) => {
+   const handleServiceSelection = (serviceId, serviceName) => {
         if (selectedVaccinations.length > 0) {
             setErrors({ selection: 'You cannot select a service when individual vaccines are selected.' });
             return;
         }
         setSelectedService(serviceId === selectedService ? null : serviceId);
+        setSelectedServiceName(serviceId === selectedService ? "" : serviceName);
         setErrors({ selection: '' });
     };
+
 
     const handleSearchPatient = async () => {
         setLoading(true);
@@ -141,12 +136,10 @@ function Registration() {
         try {
             const patients = await getPatientsByPhone(searchPhone);
             if (patients.length === 0) {
-                setShowCreatePatientForm(true);
                 setNewPatientData(prev => ({ ...prev, phone: searchPhone }));
                 setFoundPatients([]);
             } else {
                 setFoundPatients(patients);
-                setShowCreatePatientForm(false);
             }
         } catch (error) {
             setErrors({ search: error.message || 'Failed to search for patients.' });
@@ -172,39 +165,6 @@ function Registration() {
     const handleRemoveSelectedPatient = (patientId) => {
         setSelectedPatientIds(selectedPatientIds.filter((id) => id !== patientId));
         setDisplaySelectedPatients(prev => prev.filter((p) => p.patientId !== patientId));
-    };
-
-    const handleCreatePatient = async () => {
-        const validationErrors = {};
-        if (!newPatientData.dob) validationErrors.dob = 'Date of Birth is required.';
-        if (!newPatientData.patientName) validationErrors.patientName = 'Patient Name is required.';
-        if (!newPatientData.gender) validationErrors.gender = 'Gender is required.';
-        if (!newPatientData.phone) validationErrors.phone = "Phone is required";
-
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors({ ...errors, createPatient: validationErrors });
-            return;
-        }
-
-        try {
-            const createdPatient = await createPatient(newPatientData);
-            setSelectedPatientIds([...selectedPatientIds, createdPatient.patientId]);
-            setDisplaySelectedPatients([...displaySelectedPatients, createdPatient]);
-            setShowCreatePatientForm(false);
-            setNewPatientData({
-                dob: '',
-                patientName: '',
-                gender: '',
-                guardianPhone: '',
-                address: '',
-                relationshipToAccount: '',
-                phone: '',
-                accountId: localStorage.getItem('accountId') ? parseInt(localStorage.getItem('accountId'), 10) : null,
-            });
-            setFoundPatients([...foundPatients, createdPatient]);
-        } catch (error) {
-            setErrors({ ...errors, createPatient: { general: error.message || 'Failed to create patient.' } });
-        }
     };
 
     const handleCreateRegistration = async () => {
@@ -305,458 +265,394 @@ function Registration() {
         }
         setStep(3);
     };
-
     return (
-        <div className="registration-container">
-            {paymentSuccess && (
-                <div style={{
-                    position: 'fixed',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    backgroundColor: 'green',
-                    color: 'white',
-                    padding: '20px',
-                    borderRadius: '10px',
-                    zIndex: 1000
-                }}>
-                    Payment Successful!
-                </div>
-            )}
+       <Box>
+            <Header />
+             {/* Thêm tiêu đề "Đăng Ký Tiêm Chủng" */}
+            <Typography
+                level="h2"
+                component="h1" // Semantic HTML
+                sx={{ textAlign: 'center', marginTop: '20px', marginBottom: '0px' }}
+            >
+                Đăng Ký Tiêm Chủng
+            </Typography>
+            <Box className="RegistrationContainer">
 
-            {successMessage && <div className='registration-success-message'>{successMessage}</div>}
-
-            {/* Step 1: Select Vaccinations or Service */}
-            {step === 1 && (
-                <>
-                    <h2 className='registration-step-heading'>Step 1: Select Vaccinations or Service</h2>
-                    {errors.selection && <p className="registration-error-message">{errors.selection}</p>}
-
-                    <div className='registration-button-group'>
-                        <Button
-                            onClick={() => setShowVaccines(true)}
-                            variant={showVaccines ? 'soft' : 'plain'}
-                        >
-                            Vaccines
-                        </Button>
-                        <Button
-                            onClick={() => setShowVaccines(false)}
-                            variant={!showVaccines ? 'soft' : 'plain'}
-                        >
-                            Vaccination Services
-                        </Button>
-                    </div>
-
-                    {showVaccines ? (
-                        <div className='registration-vaccination-list-container'>
-                            {loading && <p className='registration-loading-indicator'>Loading vaccines...</p>}
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-                                {vaccinations.map((vaccination) => (
-                                    <Card
-                                        key={vaccination.vaccinationId}
-                                        variant="outlined"
-                                        sx={{
-                                            width: '300px',
-                                            cursor: 'pointer',
-                                            backgroundColor: selectedVaccinations.includes(vaccination.vaccinationId)
-                                                ? '#a5d6a7'
-                                                : 'inherit',
-                                            borderColor: selectedVaccinations.includes(vaccination.vaccinationId)
-                                                ? '#4caf50'
-                                                : 'inherit',
-                                        }}
-                                        onClick={() => handleVaccineSelection(vaccination.vaccinationId)}
-                                    >
-                                        <CardContent>
-                                            <Typography level="h6" component="h3">
-                                                {vaccination.vaccinationName}
-                                            </Typography>
-                                            <Typography level="body-sm">
-                                                <strong>Manufacturer:</strong> {vaccination.manufacturer}
-                                            </Typography>
-                                            <Typography level="body-sm">
-                                                <strong>Price:</strong> {vaccination.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                            </Typography>
-                                            <Typography level="body-sm">
-                                                <strong>Diseases:</strong>
-                                                {vaccination.diseases.length > 0 ? (
-                                                    <ul>
-                                                        {vaccination.diseases.map((disease) => (
-                                                            <li key={disease.diseaseId}>
-                                                                {disease.diseaseName}: {disease.description}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                ) : (
-                                                    'None'
-                                                )}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className='registration-service-list-container'>
-                            {loading && <p className='registration-loading-indicator'>Loading services...</p>}
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-                                {vaccinationServices.map((service) => (
-                                    <Card
-                                        key={service.serviceID}
-                                        variant="outlined"
-                                        sx={{
-                                            width: '300px',
-                                            cursor: 'pointer',
-                                            backgroundColor: selectedService === service.serviceID
-                                                ? '#a5d6a7'
-                                                : 'inherit',
-                                            borderColor: selectedService === service.serviceID
-                                                ? '#4caf50'
-                                                : 'inherit',
-                                        }}
-                                        onClick={() => handleServiceSelection(service.serviceID)}
-                                    >
-                                        <CardContent>
-                                            <Typography level="h6" component="h3">
-                                                {service.serviceName}
-                                            </Typography>
-                                            <Typography level="body-sm">
-                                                <strong>Price:</strong> {service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    <Button onClick={handleNextStepToStep2} variant="solid" color="primary" className='registration-next-button'>Next</Button>
-                </>
-            )}
-
-            {/* Step 2: Select Patients */}
-            {step === 2 && (
-                <div>
-                    <h2 className='registration-step-heading'>Step 2: Select Patients</h2>
-                    {errors.patientSelection && <p className="registration-error-message">{errors.patientSelection}</p>}
-                    <FormControl className='registration-form-control-group'>
-                        <FormLabel>Enter patient phone number</FormLabel>
-                        <Input
-                            type="text"
-                            value={searchPhone}
-                            onChange={(e) => setSearchPhone(e.target.value)}
-                            placeholder="Enter patient phone number"
-                            endDecorator={
-                                <Button onClick={handleSearchPatient} disabled={loading} className='registration-search-button'>
-                                    {loading ? "Searching..." : "Search Patient"}
-                                </Button>
-                            }
-                        />
-                    </FormControl>
-
-                    {errors.search && <p className="registration-error-message">{errors.search}</p>}
-
-                    {foundPatients.length > 0 && (
-                        <div className='registration-patient-list-container'>
-                            <h3>Found Patients:</h3>
-                            {foundPatients.map((patient) => (
-                                <div key={patient.patientId} className='registration-checkbox-container'>
-                                    <Checkbox
-                                        key={patient.patientId}
-                                        label={String(`${patient.patientName} - ${patient.phone}`)}
-                                        checked={selectedPatientIds.includes(patient.patientId)}
-                                        onChange={() => handlePatientSelection(patient.patientId)}
-                                    >
-                                    </Checkbox>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {showCreatePatientForm && (
-                        <div>
-                            <h3>Create New Patient</h3>
-                            {errors.createPatient && errors.createPatient.general && (
-                                <p className="registration-error-message">{errors.createPatient.general}</p>
+                {
+                    step === 1 && (
+                        <Box sx={{ marginBottom: '24px' }}>
+                            <Typography
+                                variant="h4"
+                                component="h2"
+                                className="RegistrationStepHeading"
+                            >
+                                Bước 1: Chọn Vaccine hoặc gói
+                            </Typography>
+                            {errors.selection && (
+                                <Typography
+                                    className="RegistrationErrorMessage"
+                                >
+                                    {errors.selection}
+                                </Typography>
                             )}
-                            <FormControl required className='registration-form-control-group'>
-                                <FormLabel>Date of Birth:</FormLabel>
+
+                            <Box className="RegistrationButtonGroup">
+                                <Button
+                                    onClick={() => setShowVaccines(true)}
+                                    variant={showVaccines ? 'soft' : 'plain'}
+                                >
+                                    Vaccines
+                                </Button>
+                                <Button
+                                    onClick={() => setShowVaccines(false)}
+                                    variant={!showVaccines ? 'soft' : 'plain'}
+                                >
+                                    Gói tiêm
+                                </Button>
+                            </Box>
+
+                           <Box className="RegistrationStepContent">
+                                <Box className="RegistrationSelectionList">
+                                {showVaccines ? (
+                                        <Box className = "RegistrationVaccinationListContainer">
+                                            {loading && <Box className="RegistrationLoadingIndicator">Loading vaccines...</Box>}
+                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                                                {vaccinations.map((vaccine) => (
+                                                    <Card
+                                                        key={vaccine.vaccinationId}
+                                                        variant="outlined"
+                                                        className={`${selectedVaccinations.includes(vaccine.vaccinationId)
+                                                            ? 'RegistrationCardSelected'
+                                                            : 'RegistrationCard'}`}  /* Thêm class động */
+
+                                                        onClick={() => handleVaccineSelection(vaccine.vaccinationId, vaccine.vaccinationName)}
+                                                    >
+                                                        <CardContent>
+                                                            <Typography level="h6" component="h3">
+                                                                {vaccine.vaccinationName}
+                                                            </Typography>
+                                                            <Typography level="body-sm">
+                                                                <strong>Nguồn gốc:</strong> {vaccine.manufacturer}
+                                                            </Typography>
+                                                            <Typography level="body-sm">
+                                                                <strong>Giá:</strong> {vaccine.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                            </Typography>
+                                                            <Typography level="body-sm">
+                                                                <strong>Phòng bệnh:</strong>
+                                                                {vaccine.diseases.length > 0 ? (
+                                                                    <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+                                                                        {vaccine.diseases.map((disease) => (
+                                                                            <li key={disease.diseaseId} style={{ display: 'inline-block', marginRight: '8px' }}>
+                                                                                {disease.diseaseName},
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                ) : (
+                                                                    'None'
+                                                                )}
+                                                            </Typography>
+                                                        </CardContent>
+                                                    </Card>
+                                                ))}
+                                            </Box>
+                                        </Box>
+                                    ) : (
+                                     <Box className = "RegistrationServiceListContainer">
+                                            {loading && <Box className="RegistrationLoadingIndicator">Loading services...</Box>}
+                                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                                                {vaccinationServices.map((service) => (
+                                                    <Card
+                                                        key={service.serviceID}
+                                                        variant="outlined"
+                                                        className={`${selectedService === service.serviceID ? 'RegistrationCardSelected' : 'RegistrationCard'}`}
+                                                        onClick={() => handleServiceSelection(service.serviceID, service.serviceName)}
+                                                    >
+                                                        <CardContent>
+                                                            <Typography level="h6" component="h3">
+                                                                {service.serviceName}
+                                                            </Typography>
+                                                            <Typography level="body-sm">
+                                                                <strong>Price:</strong> {service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                            </Typography>
+                                                        </CardContent>
+                                                    </Card>
+                                                ))}
+                                            </Box>
+                                        </Box>
+                                    )}
+                                </Box>
+
+                                <Box className="RegistrationSelectedTable">
+                                    <Typography level="h6" component="h3" gutterBottom>
+                                        Vaccine/Gói đã chọn:
+                                    </Typography>
+                                    {selectedVaccineNames.length > 0 && (
+                                        <Table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Tên Vaccine</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {selectedVaccineNames.map((name) => (
+                                                    <tr key={name}>
+                                                        <td>{name}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </Table>
+                                    )}
+
+                                    {selectedServiceName && (
+                                         <Table>
+                                         <thead>
+                                            <tr>
+                                                 <th>Tên Gói</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                                <tr>
+                                                <td>{selectedServiceName}</td>
+                                                   </tr>
+                                                </tbody>
+                                            </Table>
+                                    )}
+                                     <Button onClick={handleNextStepToStep2} variant="solid" color="primary" sx={{ marginTop: 2 }}>
+                                        Xác nhận
+                                      </Button>
+                                </Box>
+                            </Box>
+                        </Box>
+                    )
+                }
+
+                {
+                    step === 2 && (
+                         <Box sx={{ padding: '10px', marginBottom: '0px' }}>
+                           <Typography
+                                variant="h4"
+                                component="h2"
+                                className="RegistrationStepHeading"
+                            >
+                                Bước 2: Chọn hồ sơ tiêm
+                            </Typography>
+                             {errors.patientSelection &&  <Typography className="RegistrationErrorMessage">
+
+                                    {errors.patientSelection}
+                                </Typography>}
+                             <FormControl >
+                                <FormLabel>Nhập số điện thoại của người tiêm để đăng kí</FormLabel>
+                                <Input
+                                    type="text"
+                                    value={searchPhone}
+                                    onChange={(e) => setSearchPhone(e.target.value)}
+                                    placeholder="Nhập số điện thoại của người tiêm"
+
+                                    sx={{ marginBottom: 0 }}
+
+                                    endDecorator={
+                                        <Button onClick={handleSearchPatient} disabled={loading}  className='RegistrationSearchButton'>
+                                            {loading ? "Searching..." : "Kiếm hồ sơ người tiêm"}
+                                        </Button>
+                                    }
+                                />
+                            </FormControl>
+
+                            {errors.search &&   <Typography className="RegistrationErrorMessage">
+                                    {errors.search}
+                                </Typography>}
+
+                            {foundPatients.length > 0 && (
+                                 <Box  className = "RegistrationPatientListContainer">
+                                    <h3>Hồ sơ người tiêm:</h3>
+                                    {foundPatients.map((patient) => (
+                                         <Box  className='RegistrationCheckboxContainer'>
+                                            <Checkbox
+                                                label={String(`${patient.patientName} - ${patient.phone}`)}
+                                                checked={selectedPatientIds.includes(patient.patientId)}
+                                                onChange={() => handlePatientSelection(patient.patientId)}
+                                            >
+                                            </Checkbox>
+                                        </Box>
+                                    ))}
+                                </Box>
+                            )}
+                            {displaySelectedPatients.length > 0 && (
+                                <Box className="RegistrationSelectedPatients">
+                                     <Typography variant="h6" component="h3">
+                                        Hồ sơ người tiêm đã được chọn:
+                                    </Typography>
+                                    <List>
+                                         {displaySelectedPatients.map((patient) => (
+                                            <ListItem key={patient.patientId} secondaryAction={
+                                                <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveSelectedPatient(patient.patientId)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            }>
+                                                <ListItemButton>
+                                                    <ListItemDecorator>
+                                                        {/* Add a user avatar here if you have one */}
+                                                    </ListItemDecorator>
+                                                    {patient.patientName} - {patient.phone}
+                                                </ListItemButton>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Box>
+                            )}
+
+                            <Button onClick={handleNextStepToStep3} variant="solid" color="primary" className="RegistrationNextButton">Next</Button>
+                        </Box>
+                    )
+                }
+
+                {
+                   step === 3 && (
+                        <Box sx={{ padding: '24px', marginBottom: '24px' }}>
+                            <Typography
+                                variant="h4"
+                                component="h2"
+                                 className="RegistrationStepHeading"
+                            >
+                                Bước 3: Xác nhận thông tin đăng kí
+                            </Typography>
+                            <Typography variant="h6" component="h3" gutterBottom>
+                                Vaccine/Gói tiêm đã chọn:
+                            </Typography>
+
+                            {selectedService && (
+                               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                                    {vaccinationServices
+                                        .filter((service) => service.serviceID === selectedService)
+                                        .map((service) => (
+                                            <Card
+                                                key={service.serviceID}
+                                                variant="outlined"
+                                                 className='RegistrationCardSelected'
+                                            >
+                                                <CardContent>
+                                                    <Typography level="h6" component="h3">
+                                                        {service.serviceName}
+                                                    </Typography>
+                                                    <Typography level="body-sm">
+                                                        <strong>Price:</strong> {service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                    </Typography>
+                                                </CardContent>
+                                            </Card>
+                                        ))}
+                                </Box>
+                            )}
+
+                            {selectedVaccinations.length > 0 && (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                                    {vaccinations
+                                        .filter((vaccine) => selectedVaccinations.includes(vaccine.vaccinationId))
+                                        .map((vaccine) => (
+                                            <Card
+                                                key={vaccine.vaccinationId}
+                                                variant="outlined"
+                                                 className='RegistrationCardSelected'
+                                            >
+                                                <CardContent>
+                                                    <Typography level="h6" component="h3">
+                                                        {vaccine.vaccinationName}
+                                                    </Typography>
+                                                    <Typography level="body-sm">
+                                                        <strong>Nguồn gốc:</strong> {vaccine.manufacturer}
+                                                    </Typography>
+                                                    <Typography level="body-sm">
+                                                        <strong>Giá:</strong> {vaccine.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                    </Typography>
+                                                </CardContent>
+                                            </Card>
+                                        ))}
+                                </Box>
+                            )}
+
+                            {!selectedService && selectedVaccinations.length === 0 && (
+                                <p>No vaccinations or service selected.</p>
+                            )}
+
+                            <Typography level="body-md" sx={{ marginTop: '15px' }}>Người tiêm được đăng kí:</Typography>
+
+                            {displaySelectedPatients.length > 0 ? (
+                                <ul>
+                                    {displaySelectedPatients.map((patient) => (
+                                        <li key={patient.patientId}>{patient.patientName} - {patient.phone}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No patients selected.</p>
+                            )}
+
+                            <FormControl required  className = "RegistrationFormControlGroup">
+                                <FormLabel>Ngày tiêm mong muốn:</FormLabel>
                                 <Input
                                     type="date"
-                                    value={newPatientData.dob}
-                                    onChange={(e) =>
-                                        setNewPatientData({ ...newPatientData, dob: e.target.value })
-                                    }
+                                    value={desiredDate}
+                                    onChange={handleDateChange}
                                 />
-                                {errors.createPatient && errors.createPatient.dob && (
-                                    <p className="registration-error-message">{errors.createPatient.dob}</p>
-                                )}
+                                 {errors.desiredDate &&   <Typography className="RegistrationErrorMessage">
+                                        {errors.desiredDate}
+                                    </Typography>}
                             </FormControl>
-                            <FormControl required className='registration-form-control-group'>
-                                <FormLabel>Patient Name:</FormLabel>
-                                <Input
-                                    type="text"
-                                    value={newPatientData.patientName}
-                                    onChange={(e) =>
-                                        setNewPatientData({ ...newPatientData, patientName: e.target.value })
-                                    }
-                                />
-                                {errors.createPatient && errors.createPatient.patientName && (
-                                    <p className="registration-error-message">{errors.createPatient.patientName}</p>
-                                )}
-                            </FormControl>
-                            <FormControl required className='registration-form-control-group'>
-                                <FormLabel>Gender:</FormLabel>
-                                <Select
-                                    value={newPatientData.gender}
-                                    onChange={(event, newValue) =>
-                                        setNewPatientData({ ...newPatientData, gender: newValue })
-                                    }
-                                >
-                                    <Option value="">Select</Option>
-                                    <Option value="Male">Male</Option>
-                                    <Option value="Female">Female</Option>
-                                    <Option value="Other">Other</Option>
-                                </Select>
-
-                                {errors.createPatient && errors.createPatient.gender && (
-                                    <p className="registration-error-message">{errors.createPatient.gender}</p>
-                                )}
-                            </FormControl>
-
-                            <FormControl className='registration-form-control-group'>
-                                <FormLabel>Guardian Phone:</FormLabel>
-                                <Input
-                                    type="text"
-                                    value={newPatientData.guardianPhone}
-                                    onChange={(e) =>
-                                        setNewPatientData({ ...newPatientData, guardianPhone: e.target.value })
-                                    }
-                                />
-                            </FormControl>
-                            <FormControl className='registration-form-control-group'>
-                                <FormLabel>Address:</FormLabel>
-                                <Input
-                                    type="text"
-                                    value={newPatientData.address}
-                                    onChange={(e) =>
-                                        setNewPatientData({ ...newPatientData, address: e.target.value })
-                                    }
-                                />
-                            </FormControl>
-                            <FormControl className='registration-form-control-group'>
-                                <FormLabel>Relationship to Account:</FormLabel>
-                                <Input
-                                    type="text"
-                                    value={newPatientData.relationshipToAccount}
-                                    onChange={(e) =>
-                                        setNewPatientData({
-                                            ...newPatientData,
-                                            relationshipToAccount: e.target.value,
-                                        })
-                                    }
-                                />
-                            </FormControl>
-                            <FormControl required className='registration-form-control-group'>
-                                <FormLabel>Phone:</FormLabel>
-                                <Input
-                                    type="text"
-                                    value={newPatientData.phone}
-                                    onChange={(e) =>
-                                        setNewPatientData({ ...newPatientData, phone: e.target.value })
-                                    }
-                                />
-                                {errors.createPatient && errors.createPatient.phone && (
-                                    <p className="registration-error-message">{errors.createPatient.phone}</p>
-                                )}
-                            </FormControl>
-                            <Button type="button" onClick={handleCreatePatient} variant="solid" color="primary" className='registration-create-patient-button'>
-                                Create Patient
+                            {errors.createRegistration ? (
+                                <Typography className="RegistrationErrorMessage">
+                                    {errors.createRegistration}
+                                </Typography>
+                            ) : null}
+                            <Button
+                                onClick={handleCreateRegistration}
+                                variant="solid"
+                                color="primary"
+                                className='RegistrationCreateButton'
+                                disabled={loading || !desiredDate}
+                            >
+                                {loading ? 'Creating Registration...' : 'Xác nhận thông tin đăng kí'}
                             </Button>
-                        </div>
-                    )}
+                        </Box>
+                    )
+                }
 
-                    {displaySelectedPatients.length > 0 && (
-                        <div className='registration-selected-patients'>
-                            <Typography variant="h6" component="h3">
-                                Selected Patients:
+                {
+                    step === 4 && (
+                         <Box sx={{ padding: '24px', marginBottom: '24px' }}>
+                            <Typography
+                                variant="h4"
+                                component="h2"
+                                 className="RegistrationStepHeading"
+                            >
+                                Bước 4: Xác nhận thông tin thanh toán
                             </Typography>
-                            <List>
-                                {displaySelectedPatients.map((patient) => (
-                                    <ListItem key={patient.patientId} secondaryAction={
-                                        <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveSelectedPatient(patient.patientId)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    }>
-                                        <ListItemButton>
-                                            <ListItemDecorator>
-                                                {/* You could add a user avatar here if you have one */}
-                                            </ListItemDecorator>
-                                            {patient.patientName} - {patient.phone}
-                                        </ListItemButton>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </div>
-                    )}
+                            {registrationDetails && (
+                                <div>
+                                    <Typography variant="body1">
+                                        <strong>Ngày đăng kí:</strong> {registrationDetails.registrationDate}
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        <strong>Trạng thái:</strong> {registrationDetails.status}
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        <strong>Giá tiền:</strong> {registrationDetails?.totalAmount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                    </Typography>
+                                </div>
+                            )}
 
-                    <Button onClick={handleNextStepToStep3} variant="solid" color="primary" className='registration-next-button'>Next</Button>
-                </div>
-            )}
-
-            {/* Step 3: Confirm Registration */}
-            {step === 3 && (
-                <div>
-                    <h2 className='registration-step-heading'>Step 3: Confirm Registration</h2>
-                    <Typography variant="h6" component="h3" gutterBottom>
-                        Selected Vaccinations/Service:
-                    </Typography>
-
-                    {selectedService && (
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-                            {vaccinationServices
-                                .filter((service) => service.serviceID === selectedService)
-                                .map((service) => (
-                                    <Card
-                                        key={service.serviceID}
-                                        variant="outlined"
-                                        sx={{
-                                            width: '300px',
-                                            backgroundColor: '#a5d6a7',
-                                            borderColor: '#4caf50',
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography level="h6" component="h3">
-                                                {service.serviceName}
-                                            </Typography>
-                                            <Typography level="body-sm">
-                                                <strong>Price:</strong> {service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                        </div>
-                    )}
-
-                    {selectedVaccinations.length > 0 && (
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-                            {vaccinations
-                                .filter((vaccine) => selectedVaccinations.includes(vaccine.vaccinationId))
-                                .map((vaccine) => (
-                                    <Card
-                                        key={vaccine.vaccinationId}
-                                        variant="outlined"
-                                        sx={{
-                                            width: '300px',
-                                            backgroundColor: '#a5d6a7',
-                                            borderColor: '#4caf50',
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography level="h6" component="h3">
-                                                {vaccine.vaccinationName}
-                                            </Typography>
-                                            <Typography level="body-sm">
-                                                <strong>Manufacturer:</strong> {vaccine.manufacturer}
-                                            </Typography>
-                                            <Typography level="body-sm">
-                                                <strong>Price:</strong> {vaccine.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                            </Typography>
-                                            <Typography level="body-sm">
-                                                <strong>Diseases:</strong>
-                                                {vaccine.diseases.length > 0 ? (
-                                                    <ul>
-                                                        {vaccine.diseases.map((disease) => (
-                                                            <li key={disease.diseaseId}>
-                                                                {disease.diseaseName}: {disease.description}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                ) : (
-                                                    'None'
-                                                )}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                        </div>
-                    )}
-
-                    {!selectedService && selectedVaccinations.length === 0 && (
-                        <p>No vaccinations or service selected.</p>
-                    )}
-
-                    <Typography level="body-md" sx={{ marginTop: '15px' }}>Selected Patients:</Typography>
-
-                    {displaySelectedPatients.length > 0 ? (
-                        <ul>
-                            {displaySelectedPatients.map((patient) => (
-                                <li key={patient.patientId}>{patient.patientName} - {patient.phone}</li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No patients selected.</p>
-                    )}
-
-                    <FormControl required className='registration-form-control-group'>
-                        <FormLabel>Desired Vaccination Date:</FormLabel>
-                        <Input
-                            type="date"
-                            value={desiredDate}
-                            onChange={handleDateChange}
-                        />
-                        {errors.desiredDate && <p className="registration-error-message">{errors.desiredDate}</p>}
-                    </FormControl>
-                    {errors.createRegistration && (
-                        <p className="registration-error-message">{errors.createRegistration}</p>
-                    )}
-                    <Button
-                        onClick={handleCreateRegistration}
-                        variant="solid"
-                        color="primary"
-                        className='registration-create-button'
-                        disabled={loading || !desiredDate}
-                    >
-                        {loading ? 'Creating Registration...' : 'Create Registration'}
-                    </Button>
-                </div>
-            )}
-
-            {/* Step 4: Payment Confirmation */}
-            {step === 4 && (
-                <div>
-                    <h2 className='registration-step-heading'>Step 4: Payment Confirmation</h2>
-                    {registrationDetails && (
-                        <div>
-                            <Typography variant="body1">
-                                <strong>Registration ID:</strong> {registrationDetails.registrationID}
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>Registration Date:</strong> {registrationDetails.registrationDate}
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>Status:</strong> {registrationDetails.status}
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>Total Amount:</strong> {registrationDetails?.totalAmount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                            </Typography>
-                        </div>
-                    )}
-
-                    <Button
-                        onClick={handlePayment}
-                        variant="solid"
-                        color="primary"
-                        className='registration-payment-button'
-                        disabled={loading}
-                    >
-                        {loading ? 'Processing Payment...' : 'Proceed to Payment'}
-                    </Button>
-                </div>
-            )}
-        </div>
+                            <Button
+                                onClick={handlePayment}
+                                variant="solid"
+                                color="primary"
+                               className="RegistrationPaymentButton"
+                                disabled={loading}
+                            >
+                                {loading ? 'Processing Payment...' : 'Thanh toán'}
+                            </Button>
+                        </Box>
+                    )
+                }
+            </Box>
+            <Footer />
+        </Box>
     );
 }
-
 export default Registration;

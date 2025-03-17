@@ -3,37 +3,40 @@
   color: #fff;
   padding: 20px;
   text-align: center;
-  position: fixed;      
-  left: 0;
-  bottom: 0;
-  width: 100%;         
+  width: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the body takes at least the full viewport height */
+  margin: 0; /* Remove default margin */
 }
-  
-  .footer-content {
-    max-width: 1200px; /* Adjust as needed */
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  
-  .footer-nav {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .footer-nav a {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .footer-nav a:hover {
-    color: #ddd;
-  }
-  
+
+main {
+  flex: 1; /* Allow the main content to grow and fill the remaining space */
+}
+
+.footer-content {
+  max-width: 1200px; /* Adjust as needed */
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-nav a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+  color: #ddd;
+}
