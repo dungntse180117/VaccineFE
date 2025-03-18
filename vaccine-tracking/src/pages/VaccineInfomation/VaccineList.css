@@ -11,13 +11,14 @@
 /* Giảm padding tổng thể của container */
 .vaccination-list-container {
     padding: 10px;
-    width: 1400px;   
+    max-width: 1400px; 
+    margin: 0 auto;   
 }   
 
 /* Giảm chiều cao của thẻ và điều chỉnh flexbox */
 .vaccination-card {
     height: 350px;
-    width: 300px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     border-radius: 8px;

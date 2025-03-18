@@ -388,11 +388,6 @@ function Registration() {
                                     </Typography>
                                     {selectedVaccineNames.length > 0 && (
                                         <Table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Tên Vaccine</th>
-                                                </tr>
-                                            </thead>
                                             <tbody>
                                                 {selectedVaccineNames.map((name) => (
                                                     <tr key={name}>

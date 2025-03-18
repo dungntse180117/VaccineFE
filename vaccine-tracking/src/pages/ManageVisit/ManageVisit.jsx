@@ -32,7 +32,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DoneIcon from '@mui/icons-material/Done';
 import HistoryIcon from '@mui/icons-material/History';
 import api, { getVisits, createVisit, updateVisit, deleteVisit, updateVisitStatus } from "../../config/axios";
-import "./ManageVisit.css";
+import "./ManageVisit.css"; // Import CSS file
 import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
@@ -302,7 +302,7 @@ const ManageVisit = () => {
                     </Box>
 
                     <MainContent>
-                        <h2>Quản lý Lịch Hẹn Tiêm</h2>
+                        <h2 className="manage-visit-header">Quản lý Lịch Hẹn Tiêm</h2>
 
                         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Box display="flex" alignItems="center">

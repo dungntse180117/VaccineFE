@@ -546,4 +546,21 @@ export const executePayment = async (queryParams) => {
     throw error;
   }
 };
+//DashBoard API
+export const getRevenuePerMonth = (year) => {
+  return api.get(`/api/Dashboard/RevenuePerMonth?year=${year}`); 
+};
+
+export const getVisitsPerMonth = (year) => {
+  return api.get(`/api/Dashboard/VisitsPerMonth?year=${year}`); 
+};
+
+export const getMostPurchasedVaccine = () => {
+  return api.get('/api/Dashboard/MostPurchasedVaccine');
+};
+
+export const getMostPurchasedPackage = () => {
+  return api.get('/api/Dashboard/MostPurchasedPackage'); 
+};
+
 export default api;

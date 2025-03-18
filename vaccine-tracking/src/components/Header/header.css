@@ -1,38 +1,36 @@
-/* header.css */
-
 .header {
-  background-color: #f8f9fa; /* Light background color for the header */
+  background-color: #f8f9fa;
   padding: 10px 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
-  position: sticky; /* Keeps the header at the top when scrolling */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
   top: 0;
-  z-index: 100; /* Ensures the header stays on top of other elements */
+  z-index: 100;
 }
 
 .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1200px; /* Limits the content width */
-  margin: 0 auto; /* Centers the content */
-  padding: 0 20px; /* Adds padding to the sides */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .logo img {
-  height: 40px; /* Adjust logo size */
+  height: 40px;
   width: auto;
-  max-height: 40px; /* Maximum logo height */
+  max-height: 40px;
 }
 
 .header-nav a {
-  color: #343a40; /* Menu text color */
+  color: #343a40;
   text-decoration: none;
-  margin-left: 20px; /* Spacing between menu items */
-  transition: color 0.3s ease; /* Color transition effect */
+  margin-left: 20px;
+  transition: color 0.3s ease;
 }
 
 .header-nav a:hover {
-  color: #007bff; /* Hover color */
+  color: #007bff;
 }
 
 .header-login {
@@ -44,35 +42,31 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.username-dropdown {
   position: relative;
 }
 
-.user-profile span {
-  font-weight: bold; /* Bold user name */
+.username-dropdown span {
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.user-profile a {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-profile .dropdown-menu {
+.username-dropdown .dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #fff; /* Dropdown background color */
+  top: 100%; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  background-color: #fff;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 4px;
   padding: 5px 0;
 }
-
-.user-profile .dropdown-menu a {
+.username-dropdown .dropdown-menu a {
   color: #343a40;
   padding: 12px 16px;
   text-decoration: none;
@@ -80,16 +74,16 @@
   transition: background-color 0.3s ease;
 }
 
-.user-profile .dropdown-menu a:hover {
-  background-color: #f8f9fa; /* Dropdown item hover color */
+.username-dropdown .dropdown-menu a:hover {
+  background-color: #f8f9fa;
 }
 
-.user-profile:hover .dropdown-menu {
+.username-dropdown:hover .dropdown-menu {
   display: block;
 }
 
 .user-profile button {
-  background-color: #dc3545; /* Logout button color */
+  background-color: #dc3545;
   color: white;
   padding: 8px 12px;
   border: none;
@@ -103,10 +97,10 @@
 }
 
 .header-login a {
-  color: #007bff; /* Login button color */
+  color: #007bff;
   text-decoration: none;
   padding: 8px 12px;
-  border: 1px solid #007bff; /* Border color */
+  border: 1px solid #007bff;
   border-radius: 4px;
   transition: all 0.3s ease;
 }
@@ -119,19 +113,29 @@
 .register-button {
   display: flex;
   align-items: center;
-  gap: 5px; /* Khoảng cách giữa biểu tượng và văn bản */
+  gap: 5px;
   padding: 8px 12px;
-  background-color: #4CAF50; /* Màu nền */
-  color: white; /* Màu chữ */
+  background-color: #4CAF50;
+  color: white;
   text-decoration: none;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
 .register-button:hover {
-  background-color: #45a049; /* Màu nền khi hover */
+  background-color: #45a049;
 }
 
 .register-button svg {
-  font-size: 16px; /* Kích thước biểu tượng */
+  font-size: 16px;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.logo-link img {
+  border: none;
 }

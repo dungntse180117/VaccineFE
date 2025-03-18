@@ -26,6 +26,7 @@ import VisitHistoryVaccine from "./pages/ManageVisit/VisitHistoryVaccine";
 import Registration from "./pages/Registration/Registration";
 import PaymentSuccess from "./pages/Registration/PaymentSuccess";
 import PaymentFailed from "./pages/Registration/PaymentFailed";
+import Dashboard from "./pages/DashBoard/DashBoard";
 
 const App = () => {
   return (
@@ -83,6 +84,14 @@ const App = () => {
             element={
               <ProtectedRoute requiredRole={1}>
                 <ManageVaccinationService />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute requiredRole={1}>
+                <Dashboard />
               </ProtectedRoute>
             }
           />

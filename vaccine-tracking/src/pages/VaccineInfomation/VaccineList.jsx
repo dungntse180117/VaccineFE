@@ -280,7 +280,7 @@ function VaccinationList() {
                             const ageUnitText = getAgeUnitText(vaccine.ageUnitId);
 
                             return (
-                                <Grid item xs={12} sm={6} md={4} key={vaccine.vaccinationId}>
+                                <Grid item xs={12} sm={6} md={3} key={vaccine.vaccinationId}>
                                     <Card className="vaccination-card">
                                         <CardActionArea component={Link} to={`/vaccinedetail/${vaccine.vaccinationId}`}>
                                             <div className="image-container">
