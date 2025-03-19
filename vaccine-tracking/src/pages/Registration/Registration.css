@@ -77,9 +77,10 @@
   cursor: pointer;
 }
 .RegistrationCardSelected {
-  background-color: #47e6bef6;
-  border-color: #25d2f0;
+  background-color: #bec3c2f6;
+  border-color: #010809;
   width: 300px;
+  height: 150px;
 }
 
 .RegistrationSelectedTable {

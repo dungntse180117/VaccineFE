@@ -49,7 +49,7 @@ function VaccinationServiceDetail() {
 
   if (loading) {
     return (
-      <Box>
+      <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
         <Header />
         <Box display="flex" justifyContent="center" alignItems="center" height={200}>
           <CircularProgress />
@@ -61,11 +61,13 @@ function VaccinationServiceDetail() {
 
   if (error) {
     return (
-      <Box>
+      <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
         <Header />
-        <Alert severity="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
+        <Box display="flex" justifyContent="center" alignItems="center" p={3}>
+          <Alert severity="error" onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        </Box>
         <Footer />
       </Box>
     );
@@ -73,9 +75,9 @@ function VaccinationServiceDetail() {
 
   if (!vaccinationService) {
     return (
-      <Box>
+      <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
         <Header />
-        <Typography variant="h6" align="center">
+        <Typography variant="h6" align="center" sx={{ p: 3 }}>
           Không tìm thấy dịch vụ vaccine.
         </Typography>
         <Footer />
@@ -84,42 +86,44 @@ function VaccinationServiceDetail() {
   }
 
   return (
-    <Box>
+    <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
       <Header />
-      <Paper className="vaccination-service-detail-paper">
-        <Grid container spacing={2}>
+      <Paper className="vaccination-service-detail-paper" elevation={3}>
+        <Grid container spacing={3}>
           {/* Thông tin gói vaccine (bên trái) */}
           <Grid item xs={12} md={6}>
-            <Typography variant="h4" align="center" gutterBottom className="vaccination-service-detail-title">
+            <Typography variant="h4" className="vaccination-service-detail-title">
               {vaccinationService.serviceName}
             </Typography>
-            <Typography variant="body1">
-              <strong>Loại:</strong> {vaccinationService.categoryName}
+            <Paper className="vaccination-info-paper" elevation={0}>
+              <Typography variant="body1">
+                <strong>Loại:</strong> {vaccinationService.categoryName}
+              </Typography>
+              <Typography variant="body1">
+                <strong>Số mũi tiêm:</strong> {vaccinationService.totalDoses}
+              </Typography>
+              <Typography variant="body1">
+                <strong>Giá:</strong> {vaccinationService.price.toLocaleString()} vnđ
+              </Typography>
+              <Typography variant="body1">
+                <strong>Mô tả:</strong> {vaccinationService.description}
+              </Typography>
+            </Paper>
+            {/* Hiển thị danh sách các bệnh phòng ngừa */}
+            <Typography variant="subtitle1" mt={2}>
+              <strong>Phòng bệnh:</strong>
             </Typography>
-            <Typography variant="body1">
-              <strong>Số Mũi Tiêm:</strong> {vaccinationService.totalDoses}
-            </Typography>
-            <Typography variant="body1">
-              <strong>Giá:</strong> {vaccinationService.price} vnđ
-            </Typography>
-            <Typography variant="body1">
-              <strong>Mô tả:</strong> {vaccinationService.description}
-            </Typography>
-                {/* Hiển thị danh sách các bệnh phòng ngừa */}
-                <Typography variant="subtitle1" mt={2}>
-                  <strong>Phòng bệnh:</strong>
-                </Typography>
-                <Box display="flex" flexWrap="wrap" gap={0.5}>
-                  {/* Lấy danh sách các bệnh duy nhất từ tất cả các vaccine */}
-                  {[...new Set(vaccinationService.vaccinations.flatMap(v => v.diseases))].map((disease, index) => (
-                    <Chip label={disease} key={index} size="small" />
-                  ))}
-                </Box>
+            <Box display="flex" flexWrap="wrap" gap={0.5}>
+              {[...new Set(vaccinationService.vaccinations.flatMap((v) => v.diseases))].map(
+                (disease, index) => (
+                  <Chip label={disease} key={index} size="small" />
+                )
+              )}
+            </Box>
           </Grid>
 
-          {/* Danh sách vaccine (bên phải) */}
           <Grid item xs={12} md={6}>
-            <Typography variant="h6" gutterBottom className="vaccination-service-detail-subtitle">
+            <Typography variant="h6" className="vaccination-service-detail-subtitle">
               Danh sách Vaccine
             </Typography>
             {vaccinationService.vaccinations && vaccinationService.vaccinations.length > 0 ? (
@@ -128,13 +132,15 @@ function VaccinationServiceDetail() {
                   <ListItem key={vaccine.vaccinationId}>
                     <ListItemText
                       primary={vaccine.vaccinationName}
-                      secondary={`Giá: ${vaccine.price} vnđ, Số mũi tiêm: ${vaccine.totalDoses}`}
+                      secondary={`Giá: ${vaccine.price.toLocaleString()} vnđ, Số mũi tiêm: ${vaccine.totalDoses}`}
                     />
                   </ListItem>
                 ))}
               </List>
             ) : (
-              <Typography variant="body2">Không có vaccine nào trong gói này.</Typography>
+              <Typography variant="body2" color="textSecondary">
+                Không có vaccine nào trong gói này.
+              </Typography>
             )}
           </Grid>
         </Grid>

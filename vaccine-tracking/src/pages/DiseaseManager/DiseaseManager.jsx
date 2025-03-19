@@ -14,10 +14,10 @@ import {
   CircularProgress,
   Alert,
   TextField,
-  Dialog,  // Import Dialog
-  DialogTitle,  // Import DialogTitle
-  DialogContent, // Import DialogContent
-  DialogActions, // Import DialogActions
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { Edit, Delete, Add } from "@mui/icons-material";
 import {
@@ -25,7 +25,6 @@ import {
   deleteDisease,
   createDisease,
   updateDisease,
-  getDiseaseById,
 } from "../../config/axios";
 import Layout from "../../components/Layout/Layout";
 import "./DiseaseManager.css";
@@ -108,9 +107,13 @@ function DiseaseManager() {
   };
 
   const handleSubmit = async () => {
+    if (!formData.diseaseName) {
+      setError("Tên bệnh là bắt buộc.");
+      return;
+    }
+
     try {
       if (selectedDisease) {
-        // Cập nhật
         await updateDisease(selectedDisease.diseaseId, formData);
         setDiseases((prevDiseases) =>
           prevDiseases.map((disease) =>
@@ -120,9 +123,8 @@ function DiseaseManager() {
           )
         );
       } else {
-        // Tạo mới
         await createDisease(formData);
-        fetchDiseases(); // Refresh danh sách
+        fetchDiseases();
       }
       handleCloseForm();
       setError(null);
@@ -134,108 +136,120 @@ function DiseaseManager() {
 
   return (
     <Layout>
-      <Typography variant="h4" align="center" gutterBottom className="disease-manager-title">
-        Quản lý Bệnh
-      </Typography>
+      <Box className="disease-manager-container">
+        <Typography variant="h4" className="disease-manager-title">
+          Quản lý Bệnh
+        </Typography>
 
-      <Box display="flex" justifyContent="flex-start" mb={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleOpenForm}
-          className="disease-manager-add-button"
-        >
-          Thêm mới
-        </Button>
-      </Box>
-
-      {error && (
-        <Alert severity="error" onClose={() => setError(null)} className="disease-manager-alert">
-          {error}
-        </Alert>
-      )}
-
-      <TableContainer component={Paper} className="disease-manager-table-container">
-        {loading ? (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height={200}
-            className="disease-manager-loading-box"
+        <Box className="disease-manager-button-box">
+          <Button
+            variant="contained"
+            onClick={handleOpenForm}
+            className="disease-manager-add-button"
           >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Table sx={{ minWidth: 800 }} aria-label="disease table" className="disease-manager-table">
-            <TableHead>
-              <TableRow>
-                {/* <TableCell className="disease-manager-table-header">ID</TableCell> <-- XÓA CỘT NÀY */}
-                <TableCell className="disease-manager-table-header">Tên Bệnh</TableCell>
-                <TableCell className="disease-manager-table-header">Mô Tả</TableCell>
-                <TableCell className="disease-manager-table-header">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {diseases.map((disease) => (
-                <TableRow key={disease.diseaseId}>
-                  {/* <TableCell className="disease-manager-table-cell">{disease.diseaseId}</TableCell>  <-- XÓA Ô NÀY */}
-                  <TableCell className="disease-manager-table-cell">{disease.diseaseName}</TableCell>
-                  <TableCell className="disease-manager-table-cell">{disease.description}</TableCell>
-                  <TableCell className="disease-manager-table-cell">
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEdit(disease)}
-                      className="disease-manager-edit-button"
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      color="secondary"
-                      onClick={() => handleDelete(disease.diseaseId)}
-                      className="disease-manager-delete-button"
-                    >
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </TableContainer>
-
-      <Dialog open={isFormOpen} onClose={handleCloseForm} fullWidth maxWidth="sm">
-        <DialogTitle>{selectedDisease ? "Chỉnh sửa Bệnh" : "Thêm Bệnh"}</DialogTitle>
-        <DialogContent>
-          <Box mt={2}>
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Tên Bệnh"
-              name="diseaseName"
-              value={formData.diseaseName}
-              onChange={handleInputChange}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Mô tả"
-              name="description"
-              multiline
-              rows={3}
-              value={formData.description}
-              onChange={handleInputChange}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseForm}>Hủy</Button>
-          <Button color="primary" onClick={handleSubmit}>
-            {selectedDisease ? "Cập nhật" : "Thêm"}
+            Thêm Mới
           </Button>
-        </DialogActions>
-      </Dialog>
+        </Box>
+
+        {error && (
+          <Alert severity="error" onClose={() => setError(null)} className="disease-manager-alert">
+            {error}
+          </Alert>
+        )}
+
+        <TableContainer component={Paper} className="disease-manager-table-container">
+          {loading ? (
+            <Box className="disease-manager-loading-box">
+              <CircularProgress size={60} thickness={4} />
+            </Box>
+          ) : (
+            <Table sx={{ minWidth: 800 }} aria-label="disease table">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="disease-manager-table-header">Tên Bệnh</TableCell>
+                  <TableCell className="disease-manager-table-header">Mô Tả</TableCell>
+                  <TableCell className="disease-manager-table-header">Hành Động</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {diseases.map((disease) => (
+                  <TableRow key={disease.diseaseId} className="disease-manager-table-row">
+                    <TableCell className="disease-manager-table-cell">
+                      {disease.diseaseName || "N/A"}
+                    </TableCell>
+                    <TableCell className="disease-manager-table-cell">
+                      {disease.description || "N/A"}
+                    </TableCell>
+                    <TableCell className="disease-manager-table-cell">
+                      <IconButton
+                        onClick={() => handleEdit(disease)}
+                        className="disease-manager-edit-button"
+                      >
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDelete(disease.diseaseId)}
+                        className="disease-manager-delete-button"
+                      >
+                        <Delete />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
+
+        <Dialog
+          open={isFormOpen}
+          onClose={handleCloseForm}
+          fullWidth
+          maxWidth="sm"
+          className="disease-manager-dialog"
+        >
+          <DialogTitle className="disease-manager-dialog-title">
+            {selectedDisease ? "Chỉnh sửa Bệnh" : "Thêm Bệnh"}
+          </DialogTitle>
+          <DialogContent>
+            <Box mt={2}>
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Tên Bệnh"
+                name="diseaseName"
+                variant="outlined"
+                value={formData.diseaseName}
+                onChange={handleInputChange}
+                className="disease-manager-text-field"
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Mô Tả"
+                name="description"
+                multiline
+                rows={3}
+                variant="outlined"
+                value={formData.description}
+                onChange={handleInputChange}
+                className="disease-manager-text-field"
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseForm} className="disease-manager-add-button">
+              Hủy
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              className="disease-manager-add-button"
+            >
+              {selectedDisease ? "Cập Nhật" : "Thêm"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
     </Layout>
   );
 }

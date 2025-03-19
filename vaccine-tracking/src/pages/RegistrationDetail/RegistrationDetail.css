@@ -1,29 +1,52 @@
 .registration-detail-title {
-    color: #333;
-    margin-bottom: 20px;
-  }
+  color: #2c3e50;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 40px;
+}
 
-  .registration-detail-add-button {
-    background-color: #4CAF50;
-    color: white;
-    &:hover {
-      background-color: #367c39;
-    }
-  }
+.registration-detail-table-container {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
 
-  .registration-detail-table-container {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+.registration-detail-table-header {
+  background-color: #3498db;
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  padding: 16px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
 
-  .registration-detail-table-header {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    text-align: left;
-    padding: 12px;
-  }
+.registration-detail-table-cell {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+  color: #34495e;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
 
-  .registration-detail-table-cell {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
+.registration-detail-table-cell:hover {
+  background-color: #f9f9f9;
+}
+
+.registration-detail-add-button {
+  background-color: #27ae60;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.registration-detail-add-button:hover {
+  background-color: #219653;
+}

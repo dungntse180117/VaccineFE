@@ -106,7 +106,7 @@ function Registration() {
 
     const handleVaccineSelection = (vaccinationId, vaccinationName) => {
         if (selectedService !== null) {
-            setErrors({ selection: 'You cannot select individual vaccines when a service is selected.' });
+            setErrors({ selection: 'Chỉ được chọn 1 gói tiêm chủng hoặc nhiều vắc xin lẻ, không thể được chọn cả hai.' });
             return;
         }
         if (selectedVaccinations.includes(vaccinationId)) {
@@ -121,7 +121,7 @@ function Registration() {
 
    const handleServiceSelection = (serviceId, serviceName) => {
         if (selectedVaccinations.length > 0) {
-            setErrors({ selection: 'You cannot select a service when individual vaccines are selected.' });
+            setErrors({ selection: 'Bạn không thể chọn gói tiêm khi đã chọn vaccine lẻ' });
             return;
         }
         setSelectedService(serviceId === selectedService ? null : serviceId);

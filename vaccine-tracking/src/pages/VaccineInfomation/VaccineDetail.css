@@ -1,115 +1,121 @@
-/* VaccineDetail.css */
-
-/* Container chính để căn giữa mọi thứ */
 .vaccine-detail-container {
-    padding: 20px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: #ecf0f1; 
 }
 
-/* Style cho từng phần tử con của container */
-.vaccine-detail-container > * {
-    margin-bottom: 1rem;
-}
-
-/* Style thông tin chi tiết với Paper */
 .vaccine-detail-paper {
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+    background: #ffffff;
     width: 100%;
-    box-sizing: border-box;
+    max-width: 1500px;
+    transition: transform 0.3s ease;
+    height: 700px;
 }
 
-/*  Style cho phần chứa hình ảnh và thông tin  ***QUAN TRỌNG*** */
+.vaccine-detail-paper:hover {
+    transform: scale(1.02);
+}
+
 .detail-content-container {
     display: flex;
-    width: 100%;
-    max-width: 960px;
-    border-radius: 10px;
-    overflow: hidden;
     align-items: flex-start;
+    gap: 20px;
+    padding-top: 30px;
 }
 
-/* Style cho container hình ảnh (50% bên trái) */
 .image-container {
     width: 50%;
-    padding: 10px;
-    box-sizing: border-box;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding-top: 150px;
 }
 
-/* Style cho container thông tin (50% bên phải) */
-.info-container {
-    width: 50%;
-    padding: 10px;
-    box-sizing: border-box;
-    border-left: 1px solid #ccc;
-}
-
-/* Style cho hình ảnh */
 .vaccine-detail-image {
     width: 100%;
     height: auto;
-    max-height: 300px; /* Điều chỉnh chiều cao tối đa */
-    object-fit: contain;
+    max-height: 350px;
+    object-fit: cover;
     border-radius: 10px;
+    transition: transform 0.3s ease;
 }
 
-/* Style cho header */
+.vaccine-detail-image:hover {
+    transform: scale(1.05);
+}
+
+.info-container {
+    width: 50%;
+    padding: 15px;
+}
+
 .vaccine-detail-header {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 0.75rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
 }
 
-/* Style cho thông tin cơ bản */
 .vaccine-detail-info {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #34495e;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
 }
 
 .vaccine-detail-info strong {
-    font-weight: bold;
+    color: #2980b9;
+    font-weight: 600;
 }
 
-/* Style cho chip bệnh liên quan */
 .vaccine-detail-diseases {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+    margin-top: 1.5rem;
 }
 
 .disease-chip {
-    margin: 0.25rem;
-    font-size: 0.8rem;
-    background-color: #e0e0e0;
+    margin: 0.35rem;
+    font-size: 0.9rem;
+    background-color: #3498db;
+    color: #fff;
+    padding: 0.5rem;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
 }
 
-/* Chữ ghi không có bệnh */
+.disease-chip:hover {
+    background-color: #2980b9;
+}
+
 .no-diseases {
     font-style: italic;
-    color: #666;
+    color: #7f8c8d;
 }
 
-/* Điều chỉnh cho responsive (màn hình nhỏ hơn 768px) */
 @media (max-width: 768px) {
     .detail-content-container {
-        flex-direction: column; /* Stack các phần tử theo chiều dọc */
-        align-items:center;
+        flex-direction: column;
+        align-items: center;
     }
 
     .image-container,
     .info-container {
         width: 100%;
-        border-left: none; /* Loại bỏ đường kẻ ngăn cách trên màn hình nhỏ */
     }
-     .vaccine-detail-paper {
-     max-width: 400px;  
+
+    .vaccine-detail-image {
+        max-height: 300px;
     }
-     .vaccine-detail-image {
-        max-width: 400px; 
-        height: 250px;
-  }
+
+    .vaccine-detail-header {
+        font-size: 1.5rem;
+    }
+
+    .vaccine-detail-info {
+        font-size: 0.9rem;
+    }
 }

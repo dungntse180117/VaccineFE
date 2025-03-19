@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Typography, Grid, Card, CardContent, CardMedia, CardActionArea, Button } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, CardMedia, CardActionArea, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import { getAllVaccination, getVaccinationImage, getDiseaseByVaccinationId } from '../../config/axios'; // Import các hàm API
+import { getAllVaccination, getVaccinationImage, getDiseaseByVaccinationId } from '../../config/axios';
 import './HomePage.css';
-
+import NoImage from "../../assets/NoImage.png";
 const HomePage = () => {
     const [featuredVaccines, setFeaturedVaccines] = useState([]);
+    const [allVaccinesForPriceTable, setAllVaccinesForPriceTable] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchFeaturedVaccines = async () => {
+        const fetchVaccineData = async () => {
             setLoading(true);
             setError(null);
             try {
                 const response = await getAllVaccination();
                 if (response && response.data && Array.isArray(response.data)) {
-                    // Lấy 6 vaccine đầu tiên
-                    const vaccinesToFeature = response.data.slice(0, 6);
+                    const allVaccinesData = response.data;
+                    setAllVaccinesForPriceTable(allVaccinesData);
 
-                    const vaccinesWithData = await Promise.all(
+                    const vaccinesToFeature = allVaccinesData.slice(0, 6);
+
+                    const featuredVaccinesWithData = await Promise.all(
                         vaccinesToFeature.map(async (vaccine) => {
                             try {
                                 const diseasesResponse = await getDiseaseByVaccinationId(vaccine.vaccinationId);
@@ -35,15 +38,17 @@ const HomePage = () => {
                                 return {
                                     ...vaccine,
                                     diseases: diseasesResponse || [],
-                                    imageUrl: imageUrl || "https://res.cloudinary.com/dzxkl9am6/image/upload/v1741271135/covid-vaccine-01_original_sf9of3.png",
+                                    imageUrl: imageUrl || NoImage,
+                                    price: vaccine.price || 'Giá chưa cập nhật',
+                                    manufacturer: vaccine.manufacturer
                                 };
                             } catch (diseaseError) {
                                 console.error(`Error fetching data for vaccine ${vaccine.vaccinationId}:`, diseaseError);
-                                return { ...vaccine, diseases: [], imageUrl: null };
+                                return { ...vaccine, diseases: [], imageUrl: null, price: 'Giá chưa cập nhật', manufacturer: 'Không rõ' };
                             }
                         })
                     );
-                    setFeaturedVaccines(vaccinesWithData);
+                    setFeaturedVaccines(featuredVaccinesWithData);
                 } else {
                     setError("Không thể tải danh sách vaccine.");
                 }
@@ -55,7 +60,7 @@ const HomePage = () => {
             }
         };
 
-        fetchFeaturedVaccines();
+        fetchVaccineData();
     }, []);
 
     const getAgeUnitText = (ageUnitId) => {
@@ -95,24 +100,11 @@ const HomePage = () => {
         <Box className="home-page-container">
             <Header />
 
-            <Box
-                className="banner-container"
-                sx={{
-                    width: '100%',
-                    height: 'auto',
-                    overflow: 'hidden',
-                    marginTop: '20px',
-                    marginBottom: '20px',
-                }}
-            >
-                <img
-                    src="https://res.cloudinary.com/dzxkl9am6/image/upload/v1742193045/BannerHomePage_ffuuhf.png"
-                    alt="Banner HomePage"
-                    className="banner-image"
-                />
+            <Box className="banner-container">
+                <img src="https://res.cloudinary.com/dzxkl9am6/image/upload/v1742193045/BannerHomePage_ffuuhf.png" alt="Banner HomePage" className="banner-image" />
             </Box>
 
-            <Box className="featured-vaccines-section" sx={{ padding: 3 }}>
+            <Box className="featured-vaccines-section">
                 <Grid container alignItems="center" justifyContent="space-between" className="featured-vaccines-header">
                     <Grid item>
                         <Typography variant="h5" gutterBottom>
@@ -120,7 +112,7 @@ const HomePage = () => {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Button variant="text" component={Link} to="/vaccinelist" >
+                        <Button variant="text" component={Link} to="/vaccinelist">
                             Xem thêm
                         </Button>
                     </Grid>
@@ -132,14 +124,9 @@ const HomePage = () => {
                             <Grid item xs={12} sm={6} md={3} key={vaccine.vaccinationId}>
                                 <Card className="vaccination-card">
                                     <CardActionArea component={Link} to={`/vaccinedetail/${vaccine.vaccinationId}`}>
-                                        <div className="image-container">
+                                        <div className="images-container">
                                             {vaccine.imageUrl && (
-                                                <CardMedia
-                                                    component="img"
-                                                    image={vaccine.imageUrl}
-                                                    alt={vaccine.vaccinationName}
-                                                    className="vaccination-image"
-                                                />
+                                                <CardMedia component="img" image={vaccine.imageUrl} alt={vaccine.vaccinationName} className="vaccination-image" />
                                             )}
                                         </div>
                                         <CardContent>
@@ -164,8 +151,37 @@ const HomePage = () => {
                 </Box>
             </Box>
 
+            <Box className="vaccine-price-table-section">
+                <Typography variant="h5" gutterBottom align="center">
+                    Bảng Giá Tất Cả Vaccine
+                </Typography>
+                <TableContainer component={Paper} className="vaccine-price-table-wrapper">
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Tên Vaccine</TableCell>
+                                <TableCell align="left">Nhà Sản Xuất</TableCell>
+                                <TableCell align="left">Giá (VNĐ)</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {allVaccinesForPriceTable.map((vaccine) => (
+                                <TableRow key={vaccine.vaccinationId}>
+                                    <TableCell component="th" scope="row">
+                                        {vaccine.vaccinationName}
+                                    </TableCell>
+                                    <TableCell align="left">{vaccine.manufacturer}</TableCell>
+                                    <TableCell align="left">{vaccine.price}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
+
             <Footer />
         </Box>
     );
 };
+
 export default HomePage;

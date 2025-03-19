@@ -28,6 +28,7 @@ import {
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import "./VaccineList.css";  
+import NoImage from "../../assets/NoImage.png";
 
 function VaccinationList() {
     const [vaccines, setVaccines] = useState([]);
@@ -59,28 +60,22 @@ function VaccinationList() {
         setError(null);
         try {
             const response = await getAllVaccination();
-            console.log("Response from API (getAllVaccination):", response);
-
             if (response && response.data && Array.isArray(response.data)) {
-                // Fetch diseases and images for each vaccine
                 const vaccinesWithData = await Promise.all(
                     response.data.map(async (vaccine) => {
                         try {
                             const diseasesResponse = await getDiseaseByVaccinationId(vaccine.vaccinationId);
                             let imageUrl = null;
-
                             try {
                                 const imageResponse = await getVaccinationImage(vaccine.vaccinationId);
-                                console.log(`Image response for vaccine ${vaccine.vaccinationId}:`, imageResponse);
                                 imageUrl = imageResponse.data ? imageResponse.data : null;
                             } catch (imageError) {
                                 console.warn(`Could not fetch image for vaccine ${vaccine.vaccinationId}:`, imageError);
                             }
-
                             return {
                                 ...vaccine,
                                 diseases: diseasesResponse || [],
-                                imageUrl: imageUrl || "https://res.cloudinary.com/dzxkl9am6/image/upload/v1741271135/covid-vaccine-01_original_sf9of3.png",
+                                imageUrl: imageUrl ||NoImage,
                             };
                         } catch (diseaseError) {
                             console.error(`Error fetching data for vaccine ${vaccine.vaccinationId}:`, diseaseError);
@@ -99,7 +94,7 @@ function VaccinationList() {
             setLoading(false);
         }
     };
-    // data Diseases
+
     const fetchAvailableDiseases = async () => {
         try {
             const response = await getAllDiseases();
@@ -112,46 +107,30 @@ function VaccinationList() {
 
     const getAgeUnitText = (ageUnitId) => {
         switch (ageUnitId) {
-            case 1:
-                return "ngày tuổi";
-            case 2:
-                return "tháng tuổi";
-            case 3:
-                return "năm tuổi";
-            default:
-                return "tuổi";
+            case 1: return "ngày tuổi";
+            case 2: return "tháng tuổi";
+            case 3: return "năm tuổi";
+            default: return "tuổi";
         }
     };
 
-    // Hàm lọc danh sách vaccine (sử dụng state bộ lọc)
     const filteredVaccines = vaccines.filter((vaccine) => {
-        // Lọc theo tên
         const nameMatch = vaccine.vaccinationName.toLowerCase().includes(searchTerm.toLowerCase());
-
         let minAgeMatch = true;
         let maxAgeMatch = true;
-
-        // Lọc theo tuổi, chỉ khi có giá trị
         if (minAgeFilter) {
-            minAgeMatch = vaccine.maxAge >= parseInt(minAgeFilter);  // Lớn hơn hoặc bằng
+            minAgeMatch = vaccine.maxAge >= parseInt(minAgeFilter);
         }
-
         if (maxAgeFilter) {
-            maxAgeMatch = vaccine.minAge <= parseInt(maxAgeFilter);  // Bé hơn hoặc bằng
+            maxAgeMatch = vaccine.minAge <= parseInt(maxAgeFilter);
         }
-
-        // Lọc theo đơn vị tuổi
         const ageUnitMatch = !ageUnitFilter || vaccine.ageUnitId === parseInt(ageUnitFilter);
-
-        // Lọc theo bệnh
         const diseaseMatch = selectedDiseaseIds.length === 0 || selectedDiseaseIds.every(diseaseId =>
             vaccine.diseases.some(disease => disease.diseaseId === diseaseId)
         );
-
         return nameMatch && minAgeMatch && maxAgeMatch && ageUnitMatch && diseaseMatch;
     });
 
-    // Hàm xử lý sự kiện khi nhấn nút Tìm
     const handleSearch = () => {
         setSearchTerm(searchTermInput);
         setMinAgeFilter(minAgeFilterInput);
@@ -162,9 +141,9 @@ function VaccinationList() {
 
     if (loading) {
         return (
-            <Box>
+            <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
                 <Header />
-                <Typography variant="h6" align="center">Đang tải...</Typography>
+                <Typography variant="h6" align="center" sx={{ py: 5 }}>Đang tải...</Typography>
                 <Footer />
             </Box>
         );
@@ -172,26 +151,29 @@ function VaccinationList() {
 
     if (error) {
         return (
-            <Box>
+            <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
                 <Header />
-                <Typography variant="h6" color="error" align="center">{error}</Typography>
+                <Typography variant="h6" color="error" align="center" sx={{ py: 5 }}>{error}</Typography>
                 <Footer />
             </Box>
         );
     }
 
     return (
-        <Box>
+        <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
             <Header />
-            <Grid container spacing={2} padding={3} className="vaccination-list-container">
-
-                <Grid item xs={12} md={4}>
-                    <Paper sx={{ padding: 2, display: 'flex', flexDirection: 'column', gap: 2 }} className="search-form-container">
-                        <Typography variant="h6">Tìm kiếm và lọc</Typography>
+            <Grid container spacing={3} padding={3} className="vaccination-list-container">
+                <Grid item xs={12} md={3}>
+                    <Paper className="search-form-container">
+                        <Typography variant="h6" sx={{ color: "#2c3e50", mb: 1 }}>
+                            Tìm kiếm và lọc
+                        </Typography>
                         <TextField
                             label="Tìm kiếm theo tên"
                             value={searchTermInput}
                             onChange={(e) => setSearchTermInput(e.target.value)}
+                            variant="outlined"
+                            fullWidth
                         />
                         <Box sx={{ display: 'flex', gap: 2 }}>
                             <TextField
@@ -199,58 +181,39 @@ function VaccinationList() {
                                 type="number"
                                 value={minAgeFilterInput}
                                 onChange={(e) => setMinAgeFilterInput(e.target.value)}
-                                sx={{ width: 160 }} // Đặt chiều rộng ở đây (điều chỉnh giá trị này)
+                                variant="outlined"
+                                sx={{ flex: 1 }}
                             />
                             <TextField
                                 label="Tuổi tối đa"
                                 type="number"
                                 value={maxAgeFilterInput}
                                 onChange={(e) => setMaxAgeFilterInput(e.target.value)}
-                                sx={{ width: 160 }} // Đặt chiều rộng ở đây (điều chỉnh giá trị này)
+                                variant="outlined"
+                                sx={{ flex: 1 }}
                             />
-                            <FormControl sx={{ width: '150px' }}>
-                                <InputLabel id="age-unit-label">Đơn vị tuổi</InputLabel>
-                                <Select
-                                    labelId="age-unit-label"
-                                    id="age-unit"
-                                    value={ageUnitFilterInput}
-                                    label="Đơn vị tuổi"
-                                    onChange={(e) => setAgeUnitFilterInput(e.target.value)}
-                                    renderValue={(selected) => {
-                                        if (!selected) {
-                                            return <em>Đơn vị tuổi</em>;
-                                        }
-
-                                        switch (selected) {
-                                            case "1":
-                                                return "Ngày";
-                                            case "2":
-                                                return "Tháng";
-                                            case "3":
-                                                return "Năm";
-                                            default:
-                                                return "";
-                                        }
-                                    }}
-                                >
-                                    <MenuItem value="">
-                                        <em>Tất cả</em>
-                                    </MenuItem>
-                                    <MenuItem value="1">Ngày</MenuItem>
-                                    <MenuItem value="2">Tháng</MenuItem>
-                                    <MenuItem value="3">Năm</MenuItem>
-                                </Select>
-                            </FormControl>
                         </Box>
-                        <FormControl>
-                            <InputLabel id="disease-multiple-checkbox-label">Bệnh</InputLabel>
+                        <FormControl variant="outlined" fullWidth>
+                            <InputLabel>Đơn vị tuổi</InputLabel>
                             <Select
-                                labelId="disease-multiple-checkbox-label"
-                                id="disease-multiple-checkbox"
+                                value={ageUnitFilterInput}
+                                label="Đơn vị tuổi"
+                                onChange={(e) => setAgeUnitFilterInput(e.target.value)}
+                                renderValue={(selected) => selected ? getAgeUnitText(parseInt(selected)) : "Tất cả"}
+                            >
+                                <MenuItem value=""><em>Tất cả</em></MenuItem>
+                                <MenuItem value="1">Ngày</MenuItem>
+                                <MenuItem value="2">Tháng</MenuItem>
+                                <MenuItem value="3">Năm</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl variant="outlined" fullWidth>
+                            <InputLabel>Bệnh</InputLabel>
+                            <Select
                                 multiple
                                 value={selectedDiseaseIdsInput}
                                 onChange={(e) => setSelectedDiseaseIdsInput(
-                                    typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value,
+                                    typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
                                 )}
                                 renderValue={(selected) => {
                                     const selectedNames = selected.map(id => {
@@ -268,46 +231,45 @@ function VaccinationList() {
                                 ))}
                             </Select>
                         </FormControl>
-                        <Button variant="contained" onClick={handleSearch}>Tìm</Button>
+                        <Button variant="contained" onClick={handleSearch}>
+                            Tìm kiếm
+                        </Button>
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} md={8}>
-                     <Typography variant="h5" align="left" gutterBottom>Danh sách Vaccine</Typography> 
-                    <Grid container spacing={2}>
+                <Grid item xs={12} md={9} className="vaccine-list-section">
+                    <Typography variant="h5" align="left" style={{ paddingLeft: 50 }} gutterBottom sx={{ color: "#2c3e50", fontWeight: 600 }}>
+                        Danh sách Vaccine
+                    </Typography>
+                    <Grid container spacing={2} style={{ paddingLeft: 50 }}>
                         {filteredVaccines.map((vaccine) => {
-                            console.log(`Image URL for vaccine ${vaccine.vaccinationId}:`, vaccine.imageUrl);
                             const ageUnitText = getAgeUnitText(vaccine.ageUnitId);
-
                             return (
-                                <Grid item xs={12} sm={6} md={3} key={vaccine.vaccinationId}>
+                                <Grid item xs={12} sm={6} md={4} key={vaccine.vaccinationId}>
                                     <Card className="vaccination-card">
                                         <CardActionArea component={Link} to={`/vaccinedetail/${vaccine.vaccinationId}`}>
-                                            <div className="image-container">
-                                                {vaccine.imageUrl && (
-                                                    <CardMedia
-                                                        component="img"
-                                                        image={vaccine.imageUrl}
-                                                        alt={vaccine.vaccinationName}
-                                                        className="vaccination-image"
-                                                    />
-                                                )}
-                                            </div>
-                                            <CardContent>
-                                                <Typography variant="h6" component="div">
+                                            {vaccine.imageUrl && (
+                                                <CardMedia
+                                                    component="img"
+                                                    image={vaccine.imageUrl}
+                                                    alt={vaccine.vaccinationName}
+                                                    className="vaccination-image"
+                                                />
+                                            )}
+                                            <CardContent className="card-content">
+                                                <Typography variant="h6" component="div" className="vaccination-name-link">
                                                     {vaccine.vaccinationName}
                                                 </Typography>
-                                                <Typography variant="body2" color="textSecondary">
+                                                <Typography variant="body2">
                                                     Nhà sản xuất: {vaccine.manufacturer}
                                                 </Typography>
-                                                <Typography variant="body2" color="textSecondary">
+                                                <Typography variant="body2">
                                                     Số mũi tiêm: {vaccine.totalDoses}
                                                 </Typography>
-                                                {/* HIỂN THỊ THÔNG TIN TUỔI */}
-                                                <Typography variant="body2" color="textSecondary">
-                                                    Độ tuổi phù hợp: {vaccine.minAge} đến {vaccine.maxAge} {ageUnitText}
+                                                <Typography variant="body2">
+                                                    Tuổi: {vaccine.minAge} - {vaccine.maxAge} {ageUnitText}
                                                 </Typography>
-                                                <Box mt={1}>
+                                                <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                                     {vaccine.diseases && vaccine.diseases.length > 0 ? (
                                                         vaccine.diseases.map((disease) => (
                                                             <Chip
@@ -318,7 +280,9 @@ function VaccinationList() {
                                                             />
                                                         ))
                                                     ) : (
-                                                        <Typography variant="body2">Không có bệnh liên quan</Typography>
+                                                        <Typography variant="body2" className="no-diseases">
+                                                            Không có bệnh liên quan
+                                                        </Typography>
                                                     )}
                                                 </Box>
                                             </CardContent>

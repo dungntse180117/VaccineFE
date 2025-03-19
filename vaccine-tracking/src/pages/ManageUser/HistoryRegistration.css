@@ -1,29 +1,30 @@
-.visit-history-container {
+.history-registration-container {
+    background: #f4f6f8;
     padding: 40px 20px;
+    min-height: 100vh;
     width: 100%;
     box-sizing: border-box;
-    background-color: #f4f6f8;
-    min-height: 100vh;
   }
   
-  .visit-history-title {
-    color: #2c3e50;
-    font-family: "Roboto", sans-serif;
+  .history-registration-title {
+    margin-bottom: 30px;
+    font-size: 28px;
     font-weight: 700;
+    color: #2c3e50;
     text-transform: uppercase;
     letter-spacing: 1.2px;
-    margin-bottom: 40px;
+    font-family: "Roboto", sans-serif;
     text-align: center;
   }
   
-  .visit-history-table-container {
+  .history-registration-table-container {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     border-radius: 12px;
     overflow: hidden;
     background-color: #ffffff;
   }
   
-  .visit-history-table-header {
+  .history-registration-table-header {
     background-color: #3498db;
     color: #ffffff;
     font-weight: 600;
@@ -34,7 +35,7 @@
     letter-spacing: 0.5px;
   }
   
-  .visit-history-table-cell {
+  .history-registration-table-cell {
     padding: 16px;
     text-align: left;
     border-bottom: 1px solid #ecf0f1;
@@ -43,11 +44,11 @@
     transition: background-color 0.2s ease;
   }
   
-  .visit-history-table-row:hover .visit-history-table-cell {
+  .history-registration-table-row:hover .history-registration-table-cell {
     background-color: #f9f9f9;
   }
   
-  .visit-history-no-data {
+  .history-registration-no-data {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,26 +58,9 @@
     font-size: 1.2rem;
   }
   
-  .visit-history-modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 24px;
-  }
-  
-  .visit-history-modal-title {
-    color: #2c3e50;
-    font-weight: 700;
-    font-size: 1.25rem;
+  .history-registration-error {
+    color: #e74c3c;
     margin-bottom: 16px;
-  }
-  
-  .visit-history-breadcrumb {
-    margin: 16px 0;
-    color: #7f8c8d;
+    text-align: center;
+    font-size: 1.1rem;
   }

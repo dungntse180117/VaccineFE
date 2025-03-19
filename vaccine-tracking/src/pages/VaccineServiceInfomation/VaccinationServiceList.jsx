@@ -43,9 +43,11 @@ function VaccinationServiceList() {
 
     if (loading) {
         return (
-            <Box>
+            <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
                 <Header />
-                <Typography variant="h6" align="center">Đang tải...</Typography>
+                <Box display="flex" justifyContent="center" alignItems="center" height={200}>
+                    <CircularProgress />
+                </Box>
                 <Footer />
             </Box>
         );
@@ -53,43 +55,58 @@ function VaccinationServiceList() {
 
     if (error) {
         return (
-            <Box>
+            <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
                 <Header />
-                <Typography variant="h6" color="error" align="center">{error}</Typography>
+                <Box display="flex" justifyContent="center" alignItems="center" p={3}>
+                    <Alert severity="error" onClose={() => setError(null)}>
+                        {error}
+                    </Alert>
+                </Box>
                 <Footer />
             </Box>
         );
     }
 
     return (
-        <Box>
+        <Box sx={{ background: "#ecf0f1", minHeight: "100vh" }}>
             <Header />
-            <Typography variant="h5" align="center" gutterBottom>Danh sách Gói Tiêm Chủng</Typography>
-			<Paper className="vaccination-list-paper"> 
-            <Grid container spacing={2} className="vaccinationservice-list-container">
-                {vaccinationServices.map((service) => {
-                    return (
-                        <Grid item xs={12} sm={6} md={4} key={service.serviceID} className="vaccination-item">
-                            <Card className="vaccination-service-card">
-                                <CardActionArea component={Link} to={`/vaccinationservicedetail/${service.serviceID}`}>
-                                    <CardContent>
-                                        <Typography variant="h6" component="div">
-                                            {service.serviceName}
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            Loại: {service.categoryName}
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            Giá: {service.price} vnđ
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
-                    );
-                })}
-            </Grid>
-			</Paper>
+            <Typography 
+                variant="h5" 
+                align="center" 
+                gutterBottom 
+                sx={{ 
+                    color: "#2c3e50", 
+                    fontWeight: 600, 
+                    pt: 3 
+                }}
+            >
+                Danh sách Gói Tiêm Chủng
+            </Typography>
+            <Paper className="vaccination-list-paper" elevation={3}>
+                <Grid container spacing={3} className="vaccinationservice-list-container">
+                    {vaccinationServices.map((service) => {
+                        return (
+                            <Grid item xs={12} sm={6} md={4} key={service.serviceID} className="vaccination-item">
+                                <Card className="vaccination-service-card">
+                                    <CardActionArea component={Link} to={`/vaccinationservicedetail/${service.serviceID}`}>
+                                        <CardContent>
+                                            <Typography variant="h6" component="div">
+                                                {service.serviceName}
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                Loại: {service.categoryName}
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                Giá: {service.price.toLocaleString()} vnđ
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
+            </Paper>
             <Footer />
         </Box>
     );

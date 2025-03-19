@@ -18,16 +18,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   List,
   ListItem,
   ListItemText,
   Checkbox,
 } from "@mui/material";
-import { Edit, Delete, Add, CloudUpload } from "@mui/icons-material";
+import { Edit, Delete, Add } from "@mui/icons-material";
 import {
   getAllVaccinationServices,
   deleteVaccinationService,
@@ -40,26 +36,6 @@ import {
 import VaccinationServiceForm from "./VaccinationServiceForm";
 import Layout from "../../components/Layout/Layout";
 import "./ManageVaccinationService.css";
-
-// Định nghĩa cấu trúc dữ liệu (thay vì interface)
-/**
- * @typedef {object} VaccinationServiceResponse
- * @property {number} serviceID
- * @property {string} serviceName
- * @property {number} categoryId
- * @property {string} categoryName
- * @property {number} totalDoses
- * @property {number} price
- * @property {string} description
- * @property {VaccinationInfo[]} vaccinations
- */
-
-/**
- * @typedef {object} VaccinationInfo
- * @property {number} vaccinationId
- * @property {string} vaccinationName
- * @property {string[]} diseases
- */
 
 function ManageVaccinationService() {
   const [vaccinationServices, setVaccinationServices] = useState([]);
@@ -134,9 +110,7 @@ function ManageVaccinationService() {
         await updateVaccinationService(selectedService.serviceID, serviceData);
         setVaccinationServices((prevServices) =>
           prevServices.map((service) =>
-            service.serviceID === selectedService.serviceID
-              ? { ...service, ...serviceData }
-              : service
+            service.serviceID === selectedService.serviceID ? { ...service, ...serviceData } : service
           )
         );
       } else {
@@ -174,9 +148,9 @@ function ManageVaccinationService() {
       setError("Vui lòng chọn một dịch vụ và ít nhất một vaccine.");
       return;
     }
-  
+
     try {
-      let hasError = false; // Biến để theo dõi xem có lỗi xảy ra hay không
+      let hasError = false;
       for (const vaccinationId of selectedVaccinations) {
         try {
           await createVaccinationServiceVaccination({
@@ -185,17 +159,17 @@ function ManageVaccinationService() {
           });
         } catch (createError) {
           if (createError.response && createError.response.status === 400) {
-            setError(createError.response.data); // Hiển thị lỗi từ backend
-            hasError = true; // Đánh dấu là đã có lỗi
-            break; // Thoát khỏi vòng lặp nếu có lỗi
+            setError(createError.response.data);
+            hasError = true;
+            break;
           } else {
             setError("Lỗi khi liên kết vaccine. Vui lòng thử lại.");
             hasError = true;
-             break; // Thoát khỏi vòng lặp nếu có lỗi
+            break;
           }
         }
       }
-  
+
       if (!hasError) {
         fetchVaccinationServices();
         setSelectedVaccinations([]);
@@ -211,8 +185,6 @@ function ManageVaccinationService() {
 
   const handleRemoveVaccination = async (serviceId, vaccinationId) => {
     try {
-      // Gọi API xóa liên kết
-      console.log("Xóa liên kết:", { serviceID: serviceId, vaccinationID: vaccinationId });
       await deleteVaccinationServiceVaccination({ serviceID: serviceId, vaccinationID: vaccinationId });
       fetchVaccinationServices();
       setError(null);
@@ -224,138 +196,151 @@ function ManageVaccinationService() {
 
   return (
     <Layout>
-      <Typography variant="h4" align="center" gutterBottom className="manage-vaccine-title">
-        Quản lý Dịch vụ Vaccine
-      </Typography>
+      <Box className="manage-vaccination-service-container">
+        <Typography variant="h4" className="manage-vaccination-service-title">
+          Quản lý Dịch vụ Vaccine
+        </Typography>
 
-      {/*  Modified Box */}
-      <Box display="flex" justifyContent="flex-start" mb={2} className="manage-vaccine-button-box">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleOpenForm}
-          className="manage-vaccine-add-button"
-        >
-          Thêm mới
-        </Button>
-      </Box>
-
-      {error && (
-        <Alert severity="error" onClose={() => setError(null)} className="manage-vaccine-alert">
-          {error}
-        </Alert>
-      )}
-
-      <TableContainer component={Paper} className="manage-vaccine-table-container">
-        {loading ? (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height={200}
-            className="manage-vaccine-loading-box"
+        <Box className="manage-vaccination-service-button-box">
+          <Button
+            variant="contained"
+            onClick={handleOpenForm}
+            className="manage-vaccination-service-add-button"
           >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Table sx={{ minWidth: 800 }} aria-label="vaccination service table" className="manage-vaccine-table">
-            <TableHead>
-              <TableRow>
-                <TableCell className="manage-vaccine-table-header">Tên Dịch Vụ</TableCell>
-                <TableCell className="manage-vaccine-table-header">Loại</TableCell>
-                <TableCell className="manage-vaccine-table-header">Số Mũi Tiêm</TableCell>
-                <TableCell className="manage-vaccine-table-header">Giá</TableCell>
-                <TableCell className="manage-vaccine-table-header">Mô tả</TableCell>
-                <TableCell className="manage-vaccine-table-header">Vaccine</TableCell>
-                <TableCell className="manage-vaccine-table-header">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {vaccinationServices.map((service) => (
-                <TableRow key={service.serviceID}>
-                  <TableCell className="manage-vaccine-table-cell">{service.serviceName}</TableCell>
-                  <TableCell className="manage-vaccine-table-cell">{service.categoryName}</TableCell>
-                  <TableCell className="manage-vaccine-table-cell">{service.totalDoses}</TableCell>
-                  <TableCell className="manage-vaccine-table-cell">{service.price}</TableCell>
-                  <TableCell className="manage-vaccine-table-cell">{service.description}</TableCell>
-                  <TableCell className="manage-vaccine-table-cell">
-                    {service.vaccinations && service.vaccinations.length > 0 ? (
-                      <Box display="flex" flexWrap="wrap" gap={0.5}>
-                        {service.vaccinations.map((vaccine) => (
-                          <Chip
-                            key={vaccine.vaccinationId}
-                            label={vaccine.vaccinationName}
-                            onDelete={() => handleRemoveVaccination(service.serviceID, vaccine.vaccinationId)}
-                            deleteIcon={<Delete />}
-                            size="small"
-                          />
-                        ))}
-                      </Box>
-                    ) : (
-                      "Chưa có vaccine"
-                    )}
-                  </TableCell>
-                  <TableCell className="manage-vaccine-table-cell">
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEdit(service)}
-                      className="manage-vaccine-edit-button"
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      color="secondary"
-                      onClick={() => handleDelete(service.serviceID)}
-                      className="manage-vaccine-delete-button"
-                    >
-                      <Delete />
-                    </IconButton>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                      onClick={() => handleOpenVaccinationSelection(service.serviceID)}
-                    >
-                      Chọn Vaccine
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </TableContainer>
-
-      <VaccinationServiceForm
-        open={isFormOpen}
-        onClose={handleCloseForm}
-        onSubmit={handleSubmit}
-        initialValues={selectedService}
-      />
-
-      {/* Dialog to Select Vaccinations */}
-      <Dialog open={vaccinationSelectionOpen} onClose={handleCloseVaccinationSelection} fullWidth maxWidth="sm">
-        <DialogTitle>Chọn Vaccine cho Dịch vụ</DialogTitle>
-        <DialogContent>
-          <List>
-            {availableVaccinations.map((vaccine) => (
-              <ListItem key={vaccine.vaccinationId}>
-                <ListItemText primary={vaccine.vaccinationName} />
-                <Checkbox
-                  checked={selectedVaccinations.includes(vaccine.vaccinationId)}
-                  onChange={() => handleVaccinationToggle(vaccine.vaccinationId)}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseVaccinationSelection}>Hủy</Button>
-          <Button onClick={associateVaccinationsToService} color="primary">
-            Liên kết
+            Thêm Mới
           </Button>
-        </DialogActions>
-      </Dialog>
+        </Box>
+
+        {error && (
+          <Alert severity="error" onClose={() => setError(null)} className="manage-vaccination-service-alert">
+            {error}
+          </Alert>
+        )}
+
+        <TableContainer component={Paper} className="manage-vaccination-service-table-container">
+          {loading ? (
+            <Box className="manage-vaccination-service-loading-box">
+              <CircularProgress size={60} thickness={4} />
+            </Box>
+          ) : (
+            <Table sx={{ minWidth: 800 }} aria-label="vaccination service table">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="manage-vaccination-service-table-header">Tên Dịch Vụ</TableCell>
+                  <TableCell className="manage-vaccination-service-table-header">Loại</TableCell>
+                  <TableCell className="manage-vaccination-service-table-header">Số Mũi Tiêm</TableCell>
+                  <TableCell className="manage-vaccination-service-table-header">Giá</TableCell>
+                  <TableCell className="manage-vaccination-service-table-header">Mô Tả</TableCell>
+                  <TableCell className="manage-vaccination-service-table-header">Vaccine</TableCell>
+                  <TableCell className="manage-vaccination-service-table-header">Hành Động</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {vaccinationServices.map((service) => (
+                  <TableRow key={service.serviceID} className="manage-vaccination-service-table-row">
+                    <TableCell className="manage-vaccination-service-table-cell">
+                      {service.serviceName}
+                    </TableCell>
+                    <TableCell className="manage-vaccination-service-table-cell">
+                      {service.categoryName || "N/A"}
+                    </TableCell>
+                    <TableCell className="manage-vaccination-service-table-cell">
+                      {service.totalDoses || "N/A"}
+                    </TableCell>
+                    <TableCell className="manage-vaccination-service-table-cell">
+                      {service.price ? `${service.price} vnđ` : "N/A"}
+                    </TableCell>
+                    <TableCell className="manage-vaccination-service-table-cell">
+                      {service.description || "N/A"}
+                    </TableCell>
+                    <TableCell className="manage-vaccination-service-table-cell">
+                      {service.vaccinations && service.vaccinations.length > 0 ? (
+                        <Box display="flex" flexWrap="wrap" gap={0.5}>
+                          {service.vaccinations.map((vaccine) => (
+                            <Chip
+                              key={vaccine.vaccinationId}
+                              label={vaccine.vaccinationName}
+                              onDelete={() => handleRemoveVaccination(service.serviceID, vaccine.vaccinationId)}
+                              deleteIcon={<Delete />}
+                              size="small"
+                            />
+                          ))}
+                        </Box>
+                      ) : (
+                        "Chưa có vaccine"
+                      )}
+                    </TableCell>
+                    <TableCell className="manage-vaccination-service-table-cell">
+                      <IconButton
+                        onClick={() => handleEdit(service)}
+                        className="manage-vaccination-service-edit-button"
+                      >
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDelete(service.serviceID)}
+                        className="manage-vaccination-service-delete-button"
+                      >
+                        <Delete />
+                      </IconButton>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => handleOpenVaccinationSelection(service.serviceID)}
+                      >
+                        Chọn Vaccine
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
+
+        <VaccinationServiceForm
+          open={isFormOpen}
+          onClose={handleCloseForm}
+          onSubmit={handleSubmit}
+          initialValues={selectedService}
+        />
+
+        {/* Dialog Chọn Vaccine */}
+        <Dialog
+          open={vaccinationSelectionOpen}
+          onClose={handleCloseVaccinationSelection}
+          fullWidth
+          maxWidth="sm"
+          className="manage-vaccination-service-dialog"
+        >
+          <DialogTitle className="manage-vaccination-service-dialog-title">
+            Chọn Vaccine cho Dịch vụ
+          </DialogTitle>
+          <DialogContent>
+            <List>
+              {availableVaccinations.map((vaccine) => (
+                <ListItem key={vaccine.vaccinationId}>
+                  <ListItemText primary={vaccine.vaccinationName} />
+                  <Checkbox
+                    checked={selectedVaccinations.includes(vaccine.vaccinationId)}
+                    onChange={() => handleVaccinationToggle(vaccine.vaccinationId)}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseVaccinationSelection}>Hủy</Button>
+            <Button
+              variant="contained"
+              onClick={associateVaccinationsToService}
+              className="manage-vaccination-service-add-button"
+            >
+              Liên Kết
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
     </Layout>
   );
 }

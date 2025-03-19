@@ -1,96 +1,131 @@
-/* VaccinationList.css */
-
-/*SearchBar css */
-.search-form-container {
-    width: 400px;      
-    max-width: 400px;   
-    min-width: 200px;   
-    height: 300x; /* Đặt chiều cao cố định */
-    padding: 2;
-}
-/* Giảm padding tổng thể của container */
 .vaccination-list-container {
-    padding: 10px;
-    max-width: 1400px; 
-    margin: 0 auto;   
-}   
-
-/* Giảm chiều cao của thẻ và điều chỉnh flexbox */
-.vaccination-card {
-    height: 350px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #ecf0f1;
+  }
+  
+  .search-form-container {
+    width: 100%;
+    max-width: 400px;
+    min-width: 200px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .search-form-container .MuiTextField-root,
+  .search-form-container .MuiFormControl-root {
+    background: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .search-form-container .MuiButton-root {
+    background-color: #2980b9;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-form-container .MuiButton-root:hover {
+    background-color: #2c3e50;
+  }
+  
+     
+  .vaccine-list-section {
+    padding-left: 50px; 
+  } 
+  
+  .vaccination-card {
+    height: 360px;
     width: 100%;
     display: flex;
     flex-direction: column;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-}
-
-.vaccination-card:hover {
-    transform: translateY(-4px);
-}
-
-/* Giảm chiều cao của hình ảnh và padding */
-.vaccination-image {
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .vaccination-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .vaccination-image {
     width: 100%;
-    height: 120px; /* Giảm chiều cao hình ảnh */
+    height: 130px;
     object-fit: contain;
-    padding: 2px; /* Giảm padding hình ảnh */
-}
-
-.vaccination-card:hover .vaccination-image {
-    transform: scale(1.05); /* Phóng to hình ảnh khi di chuột qua */
-}
-
-/* Giảm kích thước phông chữ và khoảng cách */
-.vaccination-name-link {
+    padding: 5px;
+    transition: transform 0.3s ease;
+  }
+  
+  .vaccination-card:hover .vaccination-image {
+    transform: scale(1.1);
+  }
+  
+  .vaccination-name-link {
     text-decoration: none;
-    color: #1976d2;
-    font-weight: bold;
-    font-size: 1rem; /* Giảm kích thước phông chữ tên vaccine */
+    color: #2980b9;
+    font-weight: 600;
+    font-size: 1.1rem;
     transition: color 0.2s ease-in-out;
-    text-align: left; /* CĂN CHỈNH VĂN BẢN SANG TRÁI */
-}
-
-.vaccination-name-link:hover {
-    color: #1565c0;
-}
-
-/* Giảm padding của nội dung thẻ và khoảng cách giữa các phần tử */
-.card-content {
+    text-align: left;
+  }
+  
+  .vaccination-name-link:hover {
+    color: #2c3e50;
+  }
+  
+  .card-content {
     flex-grow: 1;
-    padding: 8px; /* Giảm padding nội dung thẻ */
+    padding: 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: flex-start; /* CĂN CHỈNH CÁC PHẦN TỬ SANG TRÁI */
-}
-
-.card-content > * {
-    margin-bottom: 2px; /* Giảm khoảng cách giữa các phần tử */
-    text-align: left; /* CĂN CHỈNH VĂN BẢN SANG TRÁI */
-    font-size: 0.9rem; /* Giảm kích thước font chữ */
-}
-
-/* Giảm kích thước phông chữ của chip bệnh và giảm margin */
-.vaccination-card .disease-chip {
-    margin-right: 2px;
-    margin-bottom: 2px;
-    font-size: 0.7rem;
-}
-
-.no-diseases {
+    align-items: flex-start;
+  }
+  
+  .card-content > * {
+    margin-bottom: 6px;
+    text-align: left;
+    font-size: 0.95rem;
+    color: #34495e;
+  }
+  
+  /* Chip bệnh */
+  .vaccination-card .disease-chip {
+    margin-right: 4px;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .vaccination-card .disease-chip:hover {
+    background-color: #2980b9;
+  }
+  
+  .no-diseases {
     font-style: italic;
-    color: #757575;
-    font-size: 0.8rem;
-    text-align: left; 
-}
-
-.vaccination-card .MuiCardActionArea-root {
+    color: #7f8c8d;
+    font-size: 0.85rem;
+    text-align: left;
+  }
+  
+  /* Card Action Area */
+  .vaccination-card .MuiCardActionArea-root {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-
+  }
+  
+  

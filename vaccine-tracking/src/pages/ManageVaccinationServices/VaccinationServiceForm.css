@@ -1,7 +1,42 @@
+.vaccination-service-form-dialog .MuiDialog-paper {
+  border-radius: 12px; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
+  padding: 24px;
+}
+
+.vaccination-service-form-title {
+  color: #2c3e50; 
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
 .vaccination-service-form-text-field {
-    margin-bottom: 16px;
-  }
-  
-  .vaccination-service-form-form-control {
-    margin-bottom: 16px;
-  }
+  margin-bottom: 16px;
+}
+
+.vaccination-service-form-form-control {
+  margin-bottom: 16px;
+}
+
+.vaccination-service-form-alert {
+  margin-bottom: 16px;
+}
+
+.vaccination-service-form-button {
+  border-radius: 6px; 
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.vaccination-service-form-primary-button {
+  background-color: #27ae60; 
+  border-color: #27ae60;
+  color: #ffffff;
+}
+
+.vaccination-service-form-primary-button:hover {
+  background-color: #219653; 
+  border-color: #219653;
+}

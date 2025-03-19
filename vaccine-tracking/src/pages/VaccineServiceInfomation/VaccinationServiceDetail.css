@@ -1,19 +1,100 @@
 .vaccination-service-detail-paper {
+  padding: 30px;
+  margin: 30px auto;
+  max-width: 1000px; 
+  background: #ffffff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); 
+  border-radius: 15px; 
+  transition: transform 0.3s ease;
+  height: 650px;
+}
+
+.vaccination-service-detail-paper:hover {
+  transform: scale(1.02); 
+}
+
+.vaccination-service-detail-title {
+  font-size: 2rem; 
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  padding-top: 100px;
+}
+
+.vaccination-service-detail-subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #34495e; 
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding-top: 70px;
+}
+
+.vaccination-info-paper {
+  padding: 15px;
+  background: #f9f9f9; 
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+
+.vaccination-service-detail-paper .MuiTypography-body1 {
+  font-size: 1rem;
+  color: #34495e;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.vaccination-service-detail-paper .MuiTypography-body1 strong {
+  color: #2980b9;
+  font-weight: 600;
+}
+
+
+.vaccination-service-detail-paper .MuiChip-root {
+  background-color: #3498db; 
+  color: #fff;
+  margin: 0.35rem;
+  padding: 0.5rem;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.vaccination-service-detail-paper .MuiChip-root:hover {
+  background-color: #2980b9; 
+}
+
+
+.vaccination-service-detail-paper .MuiListItem-root {
+  padding: 10px 15px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.vaccination-service-detail-paper .MuiListItem-root:hover {
+  background: #e8ecef; 
+}
+
+
+@media (max-width: 768px) {
+  .vaccination-service-detail-paper {
     padding: 20px;
-    margin: 20px auto;
-    max-width: 900px; /* Tăng max-width để phù hợp với bố cục mới */
+    margin: 15px;
+    max-width: 100%;
   }
-  
+
   .vaccination-service-detail-title {
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 1.5rem;
   }
-  
+
   .vaccination-service-detail-subtitle {
-    margin-top: 20px;
-    margin-bottom: 10px;
+    font-size: 1rem;
   }
-  
-  .vaccination-info-paper {
-    padding: 10px;
+
+  .vaccination-service-detail-paper .MuiTypography-body1 {
+    font-size: 0.9rem;
   }
+}

@@ -20,7 +20,6 @@ function VaccinationServiceForm({ open, onClose, onSubmit, initialValues }) {
   const [description, setDescription] = useState(initialValues?.description || "");
   const [error, setError] = useState(null);
 
-  // Danh sách category mặc định
   const categories = [
     { categoryId: 1, name: "Tiêm lẻ" },
     { categoryId: 2, name: "Gói tiêm chủng cho trẻ sơ sinh" },
@@ -52,12 +51,16 @@ function VaccinationServiceForm({ open, onClose, onSubmit, initialValues }) {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm" className="vaccination-service-form-dialog">
+      <DialogTitle className="vaccination-service-form-title">
         {initialValues ? "Chỉnh sửa Dịch vụ Vaccine" : "Thêm Dịch vụ Vaccine"}
       </DialogTitle>
       <DialogContent>
-        {error && <Alert severity="error">{error}</Alert>}
+        {error && (
+          <Alert severity="error" className="vaccination-service-form-alert">
+            {error}
+          </Alert>
+        )}
         <TextField
           autoFocus
           margin="dense"
@@ -69,7 +72,12 @@ function VaccinationServiceForm({ open, onClose, onSubmit, initialValues }) {
           onChange={(e) => setServiceName(e.target.value)}
           className="vaccination-service-form-text-field"
         />
-        <FormControl fullWidth margin="dense" className="vaccination-service-form-form-control">
+        <FormControl
+          fullWidth
+          margin="dense"
+          variant="outlined"
+          className="vaccination-service-form-form-control"
+        >
           <InputLabel id="category-label">Danh Mục</InputLabel>
           <Select
             labelId="category-label"
@@ -78,6 +86,9 @@ function VaccinationServiceForm({ open, onClose, onSubmit, initialValues }) {
             label="Danh Mục"
             onChange={(e) => setCategoryId(e.target.value)}
           >
+            <MenuItem value="">
+              <em>Chọn danh mục</em>
+            </MenuItem>
             {categories.map((category) => (
               <MenuItem key={category.categoryId} value={category.categoryId}>
                 {category.name}
@@ -99,8 +110,13 @@ function VaccinationServiceForm({ open, onClose, onSubmit, initialValues }) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Hủy</Button>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={handleClose} className="vaccination-service-form-button">
+          Hủy
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="vaccination-service-form-button vaccination-service-form-primary-button"
+        >
           {initialValues ? "Cập Nhật" : "Thêm"}
         </Button>
       </DialogActions>

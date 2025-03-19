@@ -2,113 +2,129 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-left: 200px;
 }
 
 .manage-visit-content {
-  background: #fff;
-  padding: 32px;
+  background: #f4f6f8;
+  padding: 40px;
   min-height: 500px;
   width: 100%;
   margin: 0 auto;
   flex: 1;
 }
 
-/* Header styles */
 .manage-visit-header {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-family: "Roboto", sans-serif;
+  text-align: center; /* Căn giữa tiêu đề */
 }
 
-/* Table styles */
 .manage-visit-table-container {
-  overflow-x: auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
 }
 
-.manage-visit-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-.manage-visit-table th {
-  border: 1px solid #ddd;
-  padding: 8px;
+/* Đồng bộ với ManageAppointment */
+.appointment-manager-table-header {
+  background-color: #3498db;
+  color: #ffffff;
+  font-weight: 600;
   text-align: left;
-  background-color: #f0f0f0;
-  font-weight: bold;
+  padding: 16px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
 }
 
-.manage-visit-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.appointment-manager-table-cell {
+  padding: 16px;
   text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+  color: #34495e;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
 }
 
-/* Even row styles */
-.manage-visit-table-row-even {
+.appointment-manager-table-cell:hover {
   background-color: #f9f9f9;
 }
 
-/* No visits message styles */
 .manage-visit-no-visits-message {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 200px;
   flex-direction: column;
-  color: #777;
+  color: #7f8c8d;
+  font-size: 1.2rem;
 }
 
-/* Modal title styles */
 .manage-visit-modal-title {
-  font-weight: bold;
-  font-size: 18px;
-  color: #333;
+  font-weight: 700;
+  font-size: 20px;
+  color: #2c3e50;
 }
 
-/* Form label styles */
 .manage-visit-form-label {
-  font-weight: bold;
-  color: #555;
+  font-weight: 600;
+  color: #34495e;
 }
 
-/* Input styles */
 .manage-visit-input {
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  padding: 10px 14px;
+  transition: border-color 0.3s ease;
 }
 
-/* Primary button styles */
+.manage-visit-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
 .manage-visit-primary-button {
-  background-color: #1890ff;
-  border-color: #1890ff;
-  color: white;
+  background-color: #27ae60;
+  border-color: #27ae60;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
 }
 
-/* Button styles */
+.manage-visit-primary-button:hover {
+  background-color: #219653;
+  border-color: #219653;
+}
+
 .manage-visit-button {
-  border-radius: 4px;
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
 }
 
-/* Icon button styles */
 .manage-visit-icon-button {
-  margin-right: 4px;
+  margin-right: 8px;
+  color: #3498db;
+  transition: color 0.2s ease;
 }
 
-/* Breadcrumb styles */
+.manage-visit-icon-button:hover {
+  color: #2980b9;
+}
+
 .manage-visit-breadcrumb {
   margin: 16px 0;
-}
-
-/* Select filter styles */
-.manage-visit-select-filter {
-  width: 150px;
-}
-
-/* Modal footer button styles */
-.manage-visit-modal-footer-button {
-  margin-right: 8px;
+  color: #7f8c8d;
 }

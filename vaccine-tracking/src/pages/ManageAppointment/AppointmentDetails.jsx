@@ -45,25 +45,18 @@ function AppointmentDetails() {
   });
   const [appointmentVaccinations, setAppointmentVaccinations] = useState([]);
   const [showAllVaccinations, setShowAllVaccinations] = useState(false);
-  // State cho Dialog Change Requests - No longer needed, you can remove these lines
-  // const [changeRequestsDialogOpen, setChangeRequestsDialogOpen] = useState(false);
-  // const [selectedVisitChangeRequests, setSelectedVisitChangeRequests] = useState([]);
-  // const [loadingChangeRequests, setLoadingChangeRequests] = useState(false); // Loading state for Change Requests Dialog
 
   const fetchVisits = useCallback(async () => {
     try {
       const response = await getVisitsByAppointmentId(appointmentId);
-      console.log("Visits Data:", response?.data);
       if (Array.isArray(response?.data)) {
-        setVisits(response?.data);
-        console.log("Visits State After Fetch (Raw Data):", response?.data);
+        setVisits(response.data);
       } else {
-        console.warn("No visits found or unexpected data format. Setting visits to empty array.");
         setVisits([]);
       }
     } catch (err) {
       console.error("Error fetching visits:", err);
-      setError("Failed to load visits.");
+      setError("Không thể tải danh sách lượt thăm.");
     }
   }, [appointmentId]);
 
@@ -85,7 +78,7 @@ function AppointmentDetails() {
       }
     } catch (err) {
       console.error("Error fetching appointment details:", err);
-      setError("Failed to load appointment details.");
+      setError("Không thể tải chi tiết lịch hẹn.");
     } finally {
       setLoading(false);
     }
@@ -106,10 +99,7 @@ function AppointmentDetails() {
 
   const handleVisitInputChange = (e) => {
     const { name, value } = e.target;
-    setVisitData({
-      ...visitData,
-      [name]: value,
-    });
+    setVisitData({ ...visitData, [name]: value });
   };
 
   const handleVaccinationSelection = (event, appointmentVaccinationID) => {
@@ -135,48 +125,21 @@ function AppointmentDetails() {
         ...visitData,
         appointmentID: parseInt(appointmentId, 10),
       };
-
       await createVisit(visitDataWithAppointmentId);
-      console.log("Visit Created Successfully");
       await fetchVisits();
       await fetchAppointmentDetails();
       handleCloseVisitForm();
     } catch (err) {
       console.error("Error creating visit:", err);
-      setError("Failed to create visit.");
-      if (err.response) {
-        console.error("Backend response on visit creation error:", err.response.data);
-        setError(`Failed to create visit. ${err.response.data?.message || "Please check console for details."}`);
-      } else {
-        setError("Failed to create visit. Please check console for details.");
-      }
+      setError(`Không thể tạo lượt thăm: ${err.response?.data?.message || "Kiểm tra console để biết thêm chi tiết."}`);
     }
   };
-
-  // No longer needed, you can remove these functions
-  // const handleOpenChangeRequestsDialog = async (visitId) => { // Modified function to take visitId
-  //   setLoadingChangeRequests(true); // Set loading state
-  //   try {
-  //     const response = await getVisitDayChangeRequestsByVisitId(visitId); // Call API to fetch requests for visitId
-  //     setSelectedVisitChangeRequests(response.data); // Set fetched requests to state
-  //     setChangeRequestsDialogOpen(true); // Open Dialog
-  //   } catch (error) {
-  //     console.error("Error fetching visit day change requests:", error);
-  //     setError("Failed to load visit day change requests.");
-  //   } finally {
-  //     setLoadingChangeRequests(false); // Clear loading state
-  //   }
-  // };
-
-  // const handleCloseChangeRequestsDialog = () => {
-  //   setChangeRequestsDialogOpen(false);
-  // };
 
   if (loading) {
     return (
       <LayoutStaff>
-        <Box display="flex" justifyContent="center" alignItems="center" height={200}>
-          <CircularProgress />
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+          <CircularProgress size={60} />
         </Box>
       </LayoutStaff>
     );
@@ -185,7 +148,9 @@ function AppointmentDetails() {
   if (error) {
     return (
       <LayoutStaff>
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error" sx={{ mt: 3 }}>
+          {error}
+        </Alert>
       </LayoutStaff>
     );
   }
@@ -193,8 +158,8 @@ function AppointmentDetails() {
   if (!appointment) {
     return (
       <LayoutStaff>
-        <Typography variant="h6" align="center">
-          Appointment not found.
+        <Typography variant="h6" align="center" sx={{ mt: 3 }}>
+          Không tìm thấy lịch hẹn.
         </Typography>
       </LayoutStaff>
     );
@@ -202,201 +167,195 @@ function AppointmentDetails() {
 
   return (
     <LayoutStaff>
-      <Box padding={3}>
-        <Typography
-          variant="h4"
-          align="center"
-          gutterBottom
-          className="appointment-details-title"
-          marginBottom={3}
-        >
-          Appointment Details
+      <Box sx={{ padding: "40px 20px", backgroundColor: "#f4f6f8", minHeight: "100vh" }}>
+        <Typography variant="h4" align="center" className="appointment-details-title">
+          Chi Tiết Lịch Hẹn
         </Typography>
 
-        <Paper elevation={3} className="appointment-details-paper" style={{ padding: 16 }}>
-          <Grid container spacing={3}>
+        <Paper className="appointment-details-paper">
+          <Grid container spacing={4}>
+            {/* Thông tin lịch hẹn */}
             <Grid item xs={12} md={6}>
-              <Typography variant="h6" gutterBottom>
-                Appointment Information
+              <Typography variant="h6" gutterBottom sx={{ color: "#2c3e50", fontWeight: 600 }}>
+                Thông Tin Lịch Hẹn
               </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    Appointment ID: <strong>{appointment?.appointmentID}</strong>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    Appointment Date:{" "}
-                    <strong>
-                      {appointment?.appointmentDate
-                        ? new Date(appointment?.appointmentDate).toLocaleDateString()
-                        : "N/A"}
-                    </strong>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    Status: <strong>{appointment?.status}</strong>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    Patient ID: <strong>{appointment?.patientId}</strong>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    Patient Name: <strong>{appointment?.patientName}</strong>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    Notes: <strong>{appointment?.notes}</strong>
-                  </Typography>
-                </Grid>
-              </Grid>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Typography variant="body1">
+                  <strong>Ngày Hẹn:</strong>{" "}
+                  {appointment.appointmentDate
+                    ? new Date(appointment.appointmentDate).toLocaleDateString("vi-VN")
+                    : "N/A"}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Trạng Thái:</strong>{" "}
+                  <Chip
+                    label={appointment.status}
+                    sx={{
+                      bgcolor:
+                        appointment.status === "Đã hoàn thành lịch tiêm"
+                          ? "#27ae60"
+                          : appointment.status === "Lên lịch hoàn tất"
+                          ? "#3498db"
+                          : "#e67e22",
+                      color: "#fff",
+                    }}
+                  />
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Tên người tiêm:</strong> {appointment.patientName}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Ghi Chú:</strong> {appointment.notes || "Không có"}
+                </Typography>
+              </Box>
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6" mt={0} gutterBottom>
-                  Vaccinations
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+                <Typography variant="h6" sx={{ color: "#2c3e50", fontWeight: 600 }}>
+                  Danh Sách Vắc-Xin
                 </Typography>
-                {appointment?.appointmentVaccinations?.length > 3 && (
-                  <Button size="small" onClick={() => setShowAllVaccinations(!showAllVaccinations)}>
-                    {showAllVaccinations ? "Thu gọn" : `Xem thêm (${appointment.appointmentVaccinations.length - 3} +)`}
+                {appointment.appointmentVaccinations?.length > 3 && (
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => setShowAllVaccinations(!showAllVaccinations)}
+                  >
+                    {showAllVaccinations
+                      ? "Thu gọn"
+                      : `Xem thêm (${appointment.appointmentVaccinations.length - 3})`}
                   </Button>
                 )}
               </Box>
-              <Grid container spacing={2} mt={1}>
-                {appointment?.appointmentVaccinations
-                  ?.slice(0, showAllVaccinations ? appointment.appointmentVaccinations.length : 3)
-                  ?.map((vaccination) => (
-                    <Grid item xs={12} sm={6} md={6} lg={4} key={vaccination?.appointmentVaccinationID}>
-                      <Paper elevation={2} style={{ padding: 16 }}>
-                        <Typography variant="subtitle1" gutterBottom>
-                          <strong>{vaccination?.vaccinationName}</strong>
+              <Grid container spacing={2}>
+                {appointment.appointmentVaccinations
+                  ?.slice(0, showAllVaccinations ? undefined : 3)
+                  .map((vaccination) => (
+                    <Grid item xs={12} sm={6} key={vaccination.appointmentVaccinationID}>
+                      <Paper sx={{ p: 2, borderRadius: 2, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                          {vaccination.vaccinationName}
                         </Typography>
-                        <Typography variant="body2">
-                          Total Doses: {vaccination?.totalDoses}
-                        </Typography>
-                        <Typography variant="body2">
-                          Doses Remaining: {vaccination?.dosesRemaining}
-                        </Typography>
-                        <Typography variant="body2">
-                          Doses Scheduled: {vaccination?.dosesScheduled}
-                        </Typography>
-                        <Typography variant="body2">
-                          Status: {vaccination?.status}
-                        </Typography>
+                        <Typography variant="body2">Tổng Liều: {vaccination.totalDoses}</Typography>
+                        <Typography variant="body2">Liều Còn Lại: {vaccination.dosesRemaining}</Typography>
+                        <Typography variant="body2">Liều Đã Lên Lịch: {vaccination.dosesScheduled}</Typography>
+                        <Typography variant="body2">Trạng Thái: {vaccination.status}</Typography>
                       </Paper>
                     </Grid>
                   ))}
               </Grid>
             </Grid>
-          </Grid>
 
-          <Box mt={3} mb={1} display="flex" justifyContent="space-between" alignItems="center">
-            <Typography variant="h6" gutterBottom>
-              Visits
-            </Typography>
-            {appointment?.status !== "Lên lịch hoàn tất" && (
-              <Button variant="contained" color="primary" onClick={handleOpenVisitForm}>
-                Create Visit
-              </Button>
-            )}
-          </Box>
-          <TableContainer component={Paper} elevation={1}>
-            <Table aria-label="Visits table" size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Visit Date</TableCell>
-                  <TableCell>Notes</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Vaccinations</TableCell>
-                  {/* Remove Actions Column Header */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {visits?.map((visit) => (
-                  <TableRow key={visit?.visitID}>
-                    <TableCell>
-                      {visit?.visitDate ? new Date(visit.visitDate).toLocaleDateString() : "N/A"}
-                    </TableCell>
-                    <TableCell>{visit?.notes}</TableCell>
-                    <TableCell>{visit?.status}</TableCell>
-                    <TableCell>{/* Actions Cell */}
-                      {visit?.visitVaccinations?.map((vaccination) => (
-                        <Chip
-                          key={vaccination?.appointmentVaccinationID}
-                          label={vaccination?.vaccinationName}
-                          style={{ margin: "2px" }}
-                        />
-                      ))}
-                    </TableCell>
-                    {/* Remove Actions Column Data */}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+            {/* Danh sách lượt thăm */}
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+                <Typography variant="h6" sx={{ color: "#2c3e50", fontWeight: 600 }}>
+                  Danh Sách Lượt Thăm
+                </Typography>
+                {appointment.status !== "Lên lịch hoàn tất" && (
+                  <Button variant="contained" color="primary" onClick={handleOpenVisitForm}>
+                    Tạo Lượt Thăm
+                  </Button>
+                )}
+              </Box>
+              <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+                <Table aria-label="Visits table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell className="appointment-details-table-header">Ngày Thăm</TableCell>
+                      <TableCell className="appointment-details-table-header">Ghi Chú</TableCell>
+                      <TableCell className="appointment-details-table-header">Trạng Thái</TableCell>
+                      <TableCell className="appointment-details-table-header">Vắc-Xin</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {visits.map((visit) => (
+                      <TableRow key={visit.visitID}>
+                        <TableCell className="appointment-details-table-cell">
+                          {visit.visitDate ? new Date(visit.visitDate).toLocaleDateString("vi-VN") : "N/A"}
+                        </TableCell>
+                        <TableCell className="appointment-details-table-cell">{visit.notes || "Không có"}</TableCell>
+                        <TableCell className="appointment-details-table-cell">
+                          <Chip
+                            label={visit.status}
+                            sx={{
+                              bgcolor: visit.status === "Completed" ? "#27ae60" : "#e67e22",
+                              color: "#fff",
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell className="appointment-details-table-cell">
+                          {visit.visitVaccinations?.map((vaccination) => (
+                            <Chip
+                              key={vaccination.appointmentVaccinationID}
+                              label={vaccination.vaccinationName}
+                              sx={{ m: 0.5, bgcolor: "#3498db", color: "#fff" }}
+                            />
+                          ))}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </Grid>
         </Paper>
 
-        {/* Remove Change Requests Dialog COMPLETELY */}
-        {/* <Dialog open={changeRequestsDialogOpen} onClose={handleCloseChangeRequestsDialog}>
-          </Dialog> */}
-
-        {/* Create Visit Form Dialog (giữ nguyên) */}
-        <Dialog open={visitFormOpen} onClose={handleCloseVisitForm}>
-          <DialogTitle>Create Visit</DialogTitle>
-          <DialogContent>
-            <Box mt={2} display="flex" flexDirection="column" gap={2}>
-              <TextField
-                fullWidth
-                margin="normal"
-                label="Visit Date"
-                name="visitDate"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                value={visitData.visitDate || ""}
-                onChange={handleVisitInputChange}
-              />
-              <TextField
-                fullWidth
-                margin="normal"
-                label="Notes"
-                name="notes"
-                multiline
-                rows={3}
-                value={visitData.notes || ""}
-                onChange={handleVisitInputChange}
-              />
-              <Typography variant="subtitle1" mt={2}>
-                Select Vaccinations:
-              </Typography>
-              {appointmentVaccinations?.map((vaccination) => (
+        {/* Modal Tạo Lượt Thăm */}
+        <Dialog open={visitFormOpen} onClose={handleCloseVisitForm} maxWidth="sm" fullWidth>
+          <DialogTitle sx={{ bgcolor: "#3498db", color: "#fff", fontWeight: 600 }}>
+            Tạo Lượt Thăm
+          </DialogTitle>
+          <DialogContent sx={{ mt: 2 }}>
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Ngày Thăm"
+              name="visitDate"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={visitData.visitDate}
+              onChange={handleVisitInputChange}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Ghi Chú"
+              name="notes"
+              multiline
+              rows={3}
+              value={visitData.notes}
+              onChange={handleVisitInputChange}
+            />
+            <Typography variant="subtitle1" sx={{ mt: 2, fontWeight: 600 }}>
+              Chọn Vắc-Xin:
+            </Typography>
+            <Box sx={{ maxHeight: 200, overflowY: "auto", mt: 1 }}>
+              {appointmentVaccinations.map((vaccination) => (
                 <FormControlLabel
-                  key={vaccination?.appointmentVaccinationID}
+                  key={vaccination.appointmentVaccinationID}
                   control={
                     <Checkbox
                       checked={visitData.appointmentVaccinationIds.includes(
-                        vaccination?.appointmentVaccinationID
+                        vaccination.appointmentVaccinationID
                       )}
-                      onChange={(e) =>
-                        handleVaccinationSelection(e, vaccination?.appointmentVaccinationID)
-                      }
+                      onChange={(e) => handleVaccinationSelection(e, vaccination.appointmentVaccinationID)}
                     />
                   }
-                  label={`${vaccination.vaccinationName} (Doses Scheduled: ${vaccination.dosesScheduled})`}
+                  label={`${vaccination.vaccinationName} (Liều Đã Lên Lịch: ${vaccination.dosesScheduled})`}
+                  sx={{ display: "block", mb: 1 }}
                 />
               ))}
             </Box>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseVisitForm}>Cancel</Button>
-            <Button color="primary" onClick={handleCreateVisit}>
-              Create
+          <DialogActions sx={{ p: 2 }}>
+            <Button onClick={handleCloseVisitForm} variant="outlined" color="primary">
+              Hủy
+            </Button>
+            <Button onClick={handleCreateVisit} variant="contained" color="primary">
+              Tạo
             </Button>
           </DialogActions>
         </Dialog>

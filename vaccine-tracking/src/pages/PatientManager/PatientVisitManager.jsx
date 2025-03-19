@@ -83,12 +83,12 @@ const PatientVisitManager = () => {
 
     // Tạo sự kiện cho FullCalendar
     const calendarEvents = visits.map((visit) => {
-        if (!visit || !visit.status || !visit.visitDate || !visit.notes) {
+        if (!visit || !visit.status || !visit.visitDate ) {
             console.error("Invalid visit data:", visit);
             return null;
         }
         return {
-            title: `${visit.status}`,
+            title: `${visit.status} ${visit.notes}`, // Thêm status và notes vào tiêu đề
             start: visit.visitDate,
             extendedProps: {
                 visitId: visit.visitID,
@@ -105,7 +105,6 @@ const PatientVisitManager = () => {
         const visitForCell = visits.find((visit) => moment(visit.visitDate).format("YYYY-MM-DD") === cellDate);
 
         if (visitForCell) {
-        
             if (visitForCell.status === "Đã tiêm") {
                 return ["fc-day-green"]; 
             } else if (visitForCell.status === "Chưa tiêm") {
@@ -247,7 +246,11 @@ const PatientVisitManager = () => {
                                 initialView="dayGridMonth"
                                 events={calendarEvents}
                                 eventContent={(eventInfo) => (
-                                    <div dangerouslySetInnerHTML={{ __html: eventInfo.event.title }} />
+                                    <div>
+                                        <strong>{eventInfo.event.title}</strong> {/* Hiển thị tiêu đề sự kiện */}
+                                        <br />
+                                        <small>{moment(eventInfo.event.start).format("DD/MM/YYYY")}</small> {/* Hiển thị ngày */}
+                                    </div>
                                 )}
                                 eventClick={handleEventClick}
                                 dayCellClassNames={handleDayCellClassNames} // Sử dụng dayCellClassNames
@@ -278,7 +281,7 @@ const PatientVisitManager = () => {
                 />
             </Modal>
 
-         
+            {/* Modal thay đổi ngày tiêm */}
             <Modal
                 title="Thay đổi ngày tiêm"
                 visible={isChangeDateModalVisible}

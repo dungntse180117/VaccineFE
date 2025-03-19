@@ -1,34 +1,79 @@
 .vaccinationservice-list-container {
-    width: 800px;
-    margin-top: 20px;
+    width: 100%;
+    max-width: 1200px; 
+    margin: 0 auto;
     padding: 20px;
-    padding-right: 600px;
-    padding-right: 5px;
     display: flex;
     flex-direction: column;
-    align-items: center; 
-}
+    align-items: center;
+    background: #ecf0f1; 
+    min-height: 590px;
+  }
+  
+  .vaccination-list-paper {
+    padding: 30px;
+    margin: 30px auto;
+    max-width: 1200px; 
+    background: #ffffff;
+    border-radius: 15px; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+  }
+  
+  .vaccination-list-paper:hover {
+    transform: scale(1.01);
+  }
+  
 
-.vaccination-service-card {
-    height: 120px;
-    width: 500px;
+  .vaccination-service-card {   
+    height: 150px; 
+    width: 100%; 
+    width: 1500px; 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     text-align: center;
-    margin: 0 auto;
-    overflow: hidden;
-}
+    border-radius: 12px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .vaccination-service-card:hover {
+    transform: translateY(-6px); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); 
+  }
 
-.vaccination-list-paper {
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 800px;
-}
-
-.vaccination-item {
-    display: flex;        
-    justify-content: center; 
-    align-items: center;    
-}
+  .vaccination-service-card .MuiCardContent-root {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+ 
+  .vaccination-service-card .MuiTypography-h6 {
+    font-size: 1.25rem; 
+    font-weight: 600;
+    color: #2980b9; 
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .vaccination-service-card:hover .MuiTypography-h6 {
+    color: #2c3e50; 
+  }
+  
+  .vaccination-service-card .MuiTypography-body2 {
+    font-size: 0.95rem;
+    color: #34495e;
+  }
+  
+  
+  .vaccination-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  

@@ -1,64 +1,116 @@
-/* DiseaseManager.css */
+.disease-manager-container {
+  background: #f4f6f8; 
+  padding: 40px 20px;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+}
 
 .disease-manager-title {
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .disease-manager-button-box {
-    margin-bottom: 20px;
-  }
-  
-  .disease-manager-add-button {
-    background-color: #4CAF50;
-    color: white;
-    &:hover {
-      background-color: #367c39;
-    }
-  }
-  
-  .disease-manager-alert {
-    margin-bottom: 20px;
-  }
-  
-  .disease-manager-table-container {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .disease-manager-loading-box {
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .disease-manager-table {
-    min-width: 800px;
-  }
-  
-  .disease-manager-table-header {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    text-align: left;
-    padding: 12px;
-  }
-  
-  .disease-manager-table-cell {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .disease-manager-edit-button {
-    color: #2196f3;
-    &:hover {
-      background-color: rgba(33, 150, 243, 0.1);
-    }
-  }
-  
-  .disease-manager-delete-button {
-    color: #f44336;
-    &:hover {
-      background-color: rgba(244, 67, 54, 0.1);
-    }
-  }
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50; 
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+}
+
+.disease-manager-button-box {
+  display: flex;
+  justifyContent: flex-start;
+  margin-bottom: 24px;
+}
+
+.disease-manager-add-button {
+  background-color: #27ae60; 
+  border-color: #27ae60;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.disease-manager-add-button:hover {
+  background-color: #219653; 
+  border-color: #219653;
+}
+
+.disease-manager-alert {
+  margin-bottom: 20px;
+}
+
+.disease-manager-table-container {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); 
+  border-radius: 12px; 
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.disease-manager-table-header {
+  background-color: #3498db; 
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  padding: 16px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.disease-manager-table-cell {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+  color: #34495e; 
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.disease-manager-table-row:hover .disease-manager-table-cell {
+  background-color: #f9f9f9; 
+}
+
+.disease-manager-loading-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.disease-manager-edit-button {
+  color: #3498db; 
+  transition: color 0.2s ease;
+}
+
+.disease-manager-edit-button:hover {
+  color: #2980b9; 
+}
+
+.disease-manager-delete-button {
+  color: #e74c3c; 
+  transition: color 0.2s ease;
+}
+
+.disease-manager-delete-button:hover {
+  color: #c0392b; 
+}
+
+.disease-manager-dialog .MuiDialog-paper {
+  border-radius: 12px; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
+  padding: 24px;
+}
+
+.disease-manager-dialog-title {
+  color: #2c3e50; 
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.disease-manager-text-field {
+  margin-bottom: 16px;
+}

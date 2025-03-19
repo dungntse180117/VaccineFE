@@ -10,11 +10,13 @@ import {
     Chip,
     Box,
     Grid,
-    Paper
+    Paper,
+    Divider
 } from '@mui/material';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import "./VaccineDetail.css";
+import NoImage from "../../assets/NoImage.png";
 
 function VaccineDetail() {
     const { vaccinationId } = useParams();
@@ -32,11 +34,8 @@ function VaccineDetail() {
         setError(null);
         try {
             const response = await getVaccinationId(vaccinationId);
-            console.log("Response from API (getVaccinationId):", response);
-
             if (response && response.data) {
                 const vaccineData = response.data;
-                // Fetch diseases and image for the vaccine
                 const diseasesResponse = await getDiseaseByVaccinationId(vaccineData.vaccinationId);
                 let imageResponse = null;
                 try {
@@ -45,7 +44,7 @@ function VaccineDetail() {
                     console.warn(`Could not fetch image for vaccine ${vaccineData.vaccinationId}:`, imageError);
                 }
                 setVaccine({ ...vaccineData, diseases: diseasesResponse || [] });
-                setImageUrl(imageResponse ? imageResponse.data : "https://res.cloudinary.com/dzxkl9am6/image/upload/v1741271135/covid-vaccine-01_original_sf9of3.png");
+                setImageUrl(imageResponse ? imageResponse.data : NoImage);
             } else {
                 setError("Không thể tải thông tin chi tiết vaccine.");
             }
@@ -59,111 +58,118 @@ function VaccineDetail() {
 
     const getAgeUnitText = (ageUnitId) => {
         switch (ageUnitId) {
-            case 1:
-                return "ngày tuổi";
-            case 2:
-                return "tháng tuổi";
-            case 3:
-                return "năm tuổi";
-            default:
-                return "tuổi";
+            case 1: return "ngày tuổi";
+            case 2: return "tháng tuổi";
+            case 3: return "năm tuổi";
+            default: return "tuổi";
         }
     };
 
     const getIntervalUnitText = (unitId) => {
         switch (unitId) {
-            case 1:
-                return "ngày";
-            case 2:
-                return "tháng";
-            case 3:
-                return "năm";
-            default:
-                return "không xác định";
+            case 1: return "ngày";
+            case 2: return "tháng";
+            case 3: return "năm";
+            default: return "không xác định";
         }
     };
 
     if (loading) {
         return (
-            <Box>
-                <Header />
-                <Typography variant="h6" align="center">Đang tải...</Typography>
-                <Footer />
-            </Box>
+            <>
+                <Header /> 
+                <Box className="vaccine-detail-container">
+                    <Typography variant="h6" align="center">Đang tải...</Typography>
+                    <Footer />
+                </Box>
+            </>
         );
     }
 
     if (error) {
         return (
-            <Box>
-                <Header />
-                <Typography variant="h6" color="error" align="center">{error}</Typography>
-                <Footer />
-            </Box>
+            <>
+                <Header /> 
+                <Box className="vaccine-detail-container">
+                    <Typography variant="h6" color="error" align="center">{error}</Typography>
+                    <Footer />
+                </Box>
+            </>
         );
     }
 
     if (!vaccine) {
-        return <Typography variant="h6" align="center">Không tìm thấy vaccine.</Typography>;
+        return (
+            <>
+                <Header />
+                <Typography variant="h6" align="center">Không tìm thấy vaccine.</Typography>
+            </>
+        );
     }
 
     const ageUnitText = getAgeUnitText(vaccine.ageUnitId);
     const intervalUnitText = getIntervalUnitText(vaccine.unitId);
 
     return (
-        <Box>
-            <Header />
-            <Grid container spacing={2} padding={3} justifyContent="center" className="vaccination-list-container">
-                <Grid item xs={12} md={8}>
-                    <Paper className="vaccine-detail-paper" elevation={3}>
-                        <Box className="detail-content-container">
-                            <Box className="image-container">
-                                <img
-                                    src={imageUrl}
-                                    alt={vaccine.vaccinationName}
-                                    className="vaccine-detail-image"
-                                />
-                            </Box>
-
-                            <Box className="info-container">
-                                <Typography variant="h4" component="div" className="vaccine-detail-header">
-                                    {vaccine.vaccinationName}
-                                </Typography>
-                                <Typography variant="body1" color="textSecondary" className="vaccine-detail-info">
-                                    Nhà sản xuất: <strong>{vaccine.manufacturer}</strong>
-                                </Typography>
-                                <Typography variant="body1" color="textSecondary" className="vaccine-detail-info">
-                                    Số mũi tiêm: <strong>{vaccine.totalDoses}</strong>
-                                </Typography>
-                                <Typography variant="body1" color="textSecondary" className="vaccine-detail-info">
-                                    Khoảng cách giữa các mũi: <strong>{vaccine.interval} {intervalUnitText}</strong>
-                                </Typography>
-                                <Typography variant="body1" color="textSecondary" className="vaccine-detail-info">
-                                    Giá: <strong>{vaccine.price}</strong> vnđ
-                                </Typography>
-                                <Typography variant="body1" color="textSecondary" className="vaccine-detail-info">
-                                    Mô tả: {vaccine.description}
-                                </Typography>
-                                <Typography variant="body1" color="textSecondary" className="vaccine-detail-info">
-                                    Độ tuổi phù hợp: {vaccine.minAge} - {vaccine.maxAge} {ageUnitText}
-                                </Typography>
-                                <Box mt={2} className="vaccine-detail-diseases">
-                                    <Typography variant="h6">Phòng bệnh:</Typography>
-                                    {vaccine.diseases && vaccine.diseases.length > 0 ? (
-                                        vaccine.diseases.map((disease) => (
-                                            <Chip key={disease.diseaseId} label={disease.diseaseName} className="disease-chip" />
-                                        ))
-                                    ) : (
-                                        <Typography variant="body2" color="textSecondary" className="no-diseases">Không có bệnh liên quan</Typography>
-                                    )}
+        <>
+            <Header /> {/* Tách Header ra khỏi Box để full-width */}
+            <Box className="vaccine-detail-container">
+                <Grid container spacing={2} padding={3} justifyContent="center">
+                    <Grid item xs={12} md={10}>
+                        <Paper className="vaccine-detail-paper" elevation={3}>
+                            <Box className="detail-content-container">
+                                <Box className="image-container">
+                                    <img
+                                        src={imageUrl}
+                                        alt={vaccine.vaccinationName}
+                                        className="vaccine-detail-image"
+                                    />
+                                </Box>
+                                <Box className="info-container">
+                                    <Typography variant="h4" className="vaccine-detail-header">
+                                        {vaccine.vaccinationName}
+                                    </Typography>
+                                    <Divider sx={{ my: 1 }} />
+                                    <Typography variant="body1" className="vaccine-detail-info">
+                                        Nhà sản xuất: <strong>{vaccine.manufacturer}</strong>
+                                    </Typography>
+                                    <Typography variant="body1" className="vaccine-detail-info">
+                                        Số mũi tiêm: <strong>{vaccine.totalDoses}</strong>
+                                    </Typography>
+                                    <Typography variant="body1" className="vaccine-detail-info">
+                                        Khoảng cách giữa các mũi: <strong>{vaccine.interval} {intervalUnitText}</strong>
+                                    </Typography>
+                                    <Typography variant="body1" className="vaccine-detail-info">
+                                        Giá: <strong>{vaccine.price.toLocaleString()}</strong> vnđ
+                                    </Typography>
+                                    <Typography variant="body1" className="vaccine-detail-info">
+                                        Mô tả: {vaccine.description}
+                                    </Typography>
+                                    <Typography variant="body1" className="vaccine-detail-info">
+                                        Độ tuổi phù hợp: {vaccine.minAge} - {vaccine.maxAge} {ageUnitText}
+                                    </Typography>
+                                    <Box className="vaccine-detail-diseases">
+                                        <Typography variant="h6">Phòng bệnh:</Typography>
+                                        {vaccine.diseases && vaccine.diseases.length > 0 ? (
+                                            vaccine.diseases.map((disease) => (
+                                                <Chip
+                                                    key={disease.diseaseId}
+                                                    label={disease.diseaseName}
+                                                    className="disease-chip"
+                                                />
+                                            ))
+                                        ) : (
+                                            <Typography className="no-diseases">Không có bệnh liên quan</Typography>
+                                        )}
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                    </Paper>
+                        </Paper>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Footer />
-        </Box>
+                <Footer />
+            </Box>
+        </>
     );
 }
 
