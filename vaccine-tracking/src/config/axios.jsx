@@ -468,6 +468,16 @@ export const deleteRegistration = (id) => {
 };
 
 
+export const getAllRegistrationsByAccountId = async (accountId) => {
+  try {
+    const response = await api.get(`/api/Registrations/account/${accountId}`); 
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching registrations for accountId ${accountId}:`, error);
+    throw error;
+  }
+};
+
 export const getPatientsByPhone = async (phone) => {
   try {
     const response = await api.get(`/api/Patients/byphone/${phone}`);
@@ -489,8 +499,8 @@ export const getPatientsByPhone = async (phone) => {
 export const getAllVaccinationRegistration = async () => {
   try {
       const response = await api.get("/api/Vaccinations");
-      console.log("getAllVaccinationRegistration response.data:", response.data); // KEEP THIS LOG
-      return response.data; // Return directly.
+      console.log("getAllVaccinationRegistration response.data:", response.data); 
+      return response.data; 
   } catch (error) {
       console.error("getAllVaccinationRegistration: Error fetching vaccinations:", error);
       if (error.response) {
@@ -509,8 +519,8 @@ export const getAllVaccinationRegistration = async () => {
 export const getAllVaccinationServicesRegistration = async () => {
   try {
       const response = await api.get("/api/VaccinationServices");
-      console.log("getAllVaccinationServicesRegistration response.data:", response.data); // KEEP THIS LOG
-      return response.data; // Return directly.
+      console.log("getAllVaccinationServicesRegistration response.data:", response.data); 
+      return response.data;
   } catch (error) {
       console.error("getAllVaccinationServicesRegistration: Error fetching services:", error);
        if (error.response) {

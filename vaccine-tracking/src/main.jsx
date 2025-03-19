@@ -27,6 +27,7 @@ import Registration from "./pages/Registration/Registration";
 import PaymentSuccess from "./pages/Registration/PaymentSuccess";
 import PaymentFailed from "./pages/Registration/PaymentFailed";
 import Dashboard from "./pages/DashBoard/DashBoard";
+import HistoryRegistration from "./pages/ManageUser/HistoryRegistration";
 
 const App = () => {
   return (
@@ -45,7 +46,7 @@ const App = () => {
           <Route path="/registration" element={<Registration />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
-
+          <Route path="/history-registration/:accountId" element={<HistoryRegistration />} />
           <Route
             path="/profile"
             element={

@@ -23,6 +23,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Layout from '../../components/Layout/Layout';
 import { Box, Grid, styled } from '@mui/material';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const ManageAccount = () => {
     const [users, setUsers] = useState([]);
@@ -50,6 +51,7 @@ const ManageAccount = () => {
 
     const [selectedRoleId, setSelectedRoleId] = useState('');
     const [searchKeyword, setSearchKeyword] = useState('');
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const handleOpen = useCallback(() => {
         setOpen(true);
@@ -163,12 +165,16 @@ const ManageAccount = () => {
         });
     }, [users, selectedRoleId, searchKeyword]);
 
+    const handleViewHistory = useCallback((accountId) => {
+        navigate(`/history-registration/${accountId}`); // Navigate to HistoryRegistration page
+    }, [navigate]);
+
     return (
         <Layout>
             <h2 className="manage-account-title">User Management</h2>
             {error && <p className="manage-account-error">{error}</p>}
             <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }} className="manage-account-filter-container">
-                {/* Bộ lọc theo Role */}
+                {/* Role Filter */}
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel id="role-filter-label">Show only</InputLabel>
                     <Select
@@ -185,7 +191,7 @@ const ManageAccount = () => {
                         <MenuItem value="3">User</MenuItem>
                     </Select>
                 </FormControl>
-                {/*Search Account  */}
+                {/* Search Account */}
                 <TextField
                     label="Search by Name or Email"
                     variant="outlined"
@@ -209,6 +215,7 @@ const ManageAccount = () => {
                             <TableCell className="manage-account-table-header">Phone</TableCell>
                             <TableCell className="manage-account-table-header">Address</TableCell>
                             <TableCell className="manage-account-table-header">Actions</TableCell>
+                            <TableCell className="manage-account-table-header">Registration History</TableCell> {/* New Header */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -232,6 +239,11 @@ const ManageAccount = () => {
                                     <IconButton aria-label="delete" onClick={() => handleDelete(user.accountId)} className="manage-account-delete-button">
                                         <DeleteIcon />
                                     </IconButton>
+                                </TableCell>
+                                <TableCell className="manage-account-table-cell"> {/* New Cell */}
+                                    <Button variant="contained" size="small" onClick={() => handleViewHistory(user.accountId)}>
+                                        View History
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
