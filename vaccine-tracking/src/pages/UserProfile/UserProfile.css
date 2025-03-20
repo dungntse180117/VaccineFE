@@ -1,136 +1,144 @@
 .user-profile-layout {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .user-profile-row {
-    flex: 1;
-    padding-top: 120px;  /* Increased padding */
-    padding-bottom: 120px;  /* Increased padding */
-  }
-  
-  .user-profile-header {
-    background: #fff;
-    padding-bottom: 70px;
-    padding-top: 10px;  /* Increased padding */
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  .user-profile-header h2 {
-    margin: 0;
-    color: #333;
-    font-size: 28px;  /* Increased font size */
-  }
-  
-  .user-profile-sider {
-    background: #f7f5f3;
-    border-right: 1px solid #f0f0f0;
-  }
-  
-  .user-profile-menu {
-    height: 100%;
-    border-right: 0;
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  .user-profile-content {
-    background: #fff;
-    padding: 32px;  /* Increased padding */
-    min-height: 500px;  /* Increased min-height */
-    max-width: 2000px;  /* Increased max-width */
-  }
-  
-  .user-profile-form {
-    max-width: 700px;  /* Increased max-width */
-    margin: 0 auto;
-  }
-  
-  .user-profile-form-button {
-    background: linear-gradient(to right, #f9a825, #f57c00);
-    border-color: #f57c00;
-    font-size: 16px;  /* Increased font size */
-    height: 40px;  /* Increased height */
-  }
-  
-  .user-profile-form-button:hover,
-  .user-profile-form-button:focus {
-    background: linear-gradient(to right, #f57c00, #f9a825);
-    border-color: #f9a825;
-  }
-  
-  .password-change-button {
-    background: #f9a825;
-    border-color: #f9a825;
-    font-size: 16px;  /* Increased font size */
-    height: 40px;  /* Increased height */
-  }
-  
-  .password-change-button:hover,
-  .password-change-button:focus {
-    background: #f57c00;
-    border-color: #f57c00;
-  }
-  
-  .custom-disabled-input {
-    background-color: #f5f5f5 !important;
-    color: rgba(0, 0, 0, 0.85) !important;
-    cursor: not-allowed;
-    opacity: 1;
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  .custom-disabled-input:hover {
-    border-color: #d9d9d9 !important;
-  }
-  
-  .ant-input[disabled] {
-    color: rgba(0, 0, 0, 0.85) !important;
-    background-color: #f5f5f5 !important;
-    opacity: 1;
-    cursor: not-allowed;
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  .ant-layout-footer {
-    position: sticky;
-    bottom: 0;
-    z-index: 1;
-    width: 100%;
-    background-color: #f0f2f5;
-    padding: 15px 0;  /* Increased padding */
-    text-align: center;
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  /* Additional styles for form items */
-  .ant-form-item-label > label {
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  .ant-input, .ant-select-selector, .ant-picker {
-    font-size: 16px;  /* Increased font size */
-    height: 40px !important;  /* Increased height */
-  }
-  
-  .ant-select-selection-item {
-    line-height: 38px !important;  /* Adjust line height for select */
-  }
-  
-  .ant-picker-input > input {
-    height: 38px !important;  /* Adjust height for date picker input */
-  }
-  .wallet-card {
-    background-color: #f0f2f5;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 24px;
-  }
-  
-  .wallet-card h3 {
-    margin: 0;
-    color: #1890ff;
-    font-weight: bold;
-  }
-  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile-row {
+  flex: 1;
+  padding: 40px 20px;
+  background: #f4f6f8;
+}
+
+.user-profile-header {
+  background: #fff;
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.user-profile-header h2 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-family: "Roboto", sans-serif;
+}
+
+.user-profile-sider {
+  background: #ffffff;
+  border-right: 1px solid #ecf0f1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.user-profile-menu .ant-menu-item {
+  color: #34495e;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.user-profile-menu .ant-menu-item-selected {
+  background-color: #3498db;
+  color: #ffffff;
+}
+
+.user-profile-menu .ant-menu-item:hover {
+  background-color: #ecf0f1;
+  color: #3498db;
+}
+
+.user-profile-content {
+  background: #ffffff;
+  padding: 24px;
+  min-height: 500px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.user-profile-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.user-profile-form-button {
+  background-color: #27ae60;
+  border-color: #27ae60;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  height: 36px;
+  transition: background-color 0.2s ease;
+}
+
+.user-profile-form-button:hover,
+.user-profile-form-button:focus {
+  background-color: #219653;
+  border-color: #219653;
+}
+
+.password-change-button {
+  background-color: #f9a825;
+  border-color: #f9a825;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  height: 36px;
+  transition: none;
+}
+
+.user-profile-cancel-button {
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  height: 36px;
+  margin-left: 8px;
+}
+
+.custom-disabled-input {
+  background-color: #f5f5f5 !important;
+  color: #34495e !important;
+  cursor: not-allowed;
+  opacity: 1;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none !important; /* Bỏ viền cho input disabled */
+}
+
+.user-profile-breadcrumb {
+  margin: 16px 0;
+  color: #7f8c8d;
+}
+
+.user-profile-info {
+  font-size: 14px;
+  color: #34495e;
+}
+
+.user-profile-info p {
+  margin: 8px 0;
+}
+
+.user-profile-info strong {
+  color: #2c3e50;
+}
+
+.ant-layout-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  background-color: #f4f6f8;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 16px;
+  color: #7f8c8d;
+}
