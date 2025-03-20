@@ -1,64 +1,132 @@
-/* File: PatientVisitManager.css */
-
-/* Layout chính */
 .patient-visit-manager-layout {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: #f4f7fa; 
+    margin-left: 0px;
 }
 
-/* Header */
-.patient-visit-manager-header {
-    background: #fff;
-    padding-bottom: 70px;
-    padding-top: 10px;
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.patient-visit-manager-header h2 {
-    margin: 0;
-    color: #333;
-    font-size: 28px;
-}
-
-/* Main Content */
 .patient-visit-manager-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     padding: 24px;
-    margin-left: 200px;
+  
     overflow: hidden;
 }
 
-/* Breadcrumb */
-.ant-breadcrumb {
-    margin-bottom: 16px;
+.patient-visit-manager-content .content-container {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-right: 200px; 
+
 }
 
-/* Calendar Container */
-.calendar-container {
+
+.patient-visit-manager-content .ant-breadcrumb {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+.patient-visit-manager-content .ant-breadcrumb a {
+    color: #3498db;
+    transition: color 0.3s ease;
+}
+
+.patient-visit-manager-content .ant-breadcrumb a:hover {
+    color: #2980b9;
+}
+
+.patient-visit-manager-content h2 {
+    color: #2c3e50;
+    font-size: 32px;
+    font-weight: 700;
+    position: relative;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.patient-visit-manager-content h2::after {
+    content: "";
+    width: 60px;
+    height: 4px;
+    background-color: #3498db;
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.patient-visit-manager-content .change-date-button {
+    background: linear-gradient(to right, #3498db, #2980b9);
+    border-color: #3498db;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: transform 0.3s ease, background 0.3s ease;
+    margin-bottom: 24px;
+}
+
+.patient-visit-manager-content .change-date-button:hover {
+    background: linear-gradient(to right, #2980b9, #3498db);
+    border-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.patient-visit-manager-content .calendar-container {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 600px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* FullCalendar Styling */
 .fc {
     flex: 1;
     height: 100% !important;
+    background: #ffffff;
+}
+
+.fc-header-toolbar {
+    padding: 16px;
+    background: #f4f7fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.fc-button {
+    background: #3498db !important;
+    border-color: #3498db !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+    transition: background 0.3s ease, transform 0.3s ease !important;
+}
+
+.fc-button:hover {
+    background: #2980b9 !important;
+    border-color: #2980b9 !important;
+    transform: translateY(-2px) !important;
 }
 
 .fc-event {
     cursor: pointer;
-    font-size: 20px;
+    font-size: 14px;
     padding: 5px;
     border-radius: 4px;
-    color: whitesmoke;
+    color: #ffffff;
     border: none;
+    background: #3498db;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.fc-event:hover {
+    background: #2980b9;
+    transform: scale(1.05);
 }
 
 .fc-daygrid-event-dot {
@@ -70,28 +138,103 @@
 }
 
 .fc-day-green {
-    background-color: green !important; /* Đã tiêm */
+    background-color: #2ecc71 !important; 
 }
 
 .fc-day-red {
-    background-color: red !important; /* Chưa tiêm */
+    background-color: #e74c3c !important; 
 }
 
 .fc-daygrid-day.fc-day .fc-daygrid-day-number {
     font-weight: bold;
+    color: #34495e;
 }
 
-/* Form items */
+.ant-modal-content {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ant-modal-header {
+    background: #3498db !important;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.ant-modal-title {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-size: 18px !important;
+}
+
+.ant-modal-footer .ant-btn {
+    border-radius: 6px !important;
+    padding: 6px 16px !important;
+    font-weight: 500 !important;
+}
+
+.ant-modal-footer .ant-btn-primary {
+    background: #3498db !important;
+    border-color: #3498db !important;
+    transition: background 0.3s ease, transform 0.3s ease !important;
+}
+
+.ant-modal-footer .ant-btn-primary:hover {
+    background: #2980b9 !important;
+    border-color: #2980b9 !important;
+    transform: translateY(-2px) !important;
+}
+
+.ant-modal-footer .ant-btn-default {
+    border-color: #e0e0e0 !important;
+    color: #7f8c8d !important;
+    transition: color 0.3s ease, transform 0.3s ease !important;
+}
+
+.ant-modal-footer .ant-btn-default:hover {
+    color: #3498db !important;
+    border-color: #3498db !important;
+    transform: translateY(-2px) !important;
+}
+
 .ant-form-item-label > label {
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ant-form-item-label > label::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #3498db;
+    border-radius: 50%;
+    margin-right: 8px;
 }
 
 .ant-input, .ant-select-selector, .ant-picker {
-    padding: 0 !important;
-    margin: 0 !important;
+    border-radius: 8px !important;
     border: 1px solid #d9d9d9 !important;
-    border-radius: 4px !important;
-    font-size: 16px;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ant-input:hover, .ant-select-selector:hover, .ant-picker:hover {
+    border-color: #3498db !important;
+}
+
+.ant-input:focus, .ant-select-selector:focus, .ant-picker-focused {
+    border-color: #3498db !important;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2) !important;
+}
+
+.ant-select-selector, .ant-picker {
+    width: 100% !important;
 }
 
 .ant-select-selection-item {
@@ -102,7 +245,32 @@
     height: 38px !important;
 }
 
-/* Wallet Card */
+.ant-table {
+    border-radius: 8px !important;
+    overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
+    background-color: #3498db !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    padding: 16px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ant-table-tbody > tr > td {
+    font-size: 14px !important;
+    color: #34495e !important;
+    padding: 16px !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+    background-color: #f1f5f9 !important;
+}
+
 .patient-visit-manager-wallet-card {
     background-color: #f0f2f5;
     border-radius: 8px;
@@ -116,7 +284,6 @@
     font-weight: bold;
 }
 
-/* Modal */
 .ant-modal-mask {
     z-index: 1000;
 }

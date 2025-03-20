@@ -9,25 +9,21 @@ import {
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import HelpIcon from "@mui/icons-material/Help";
-import { ManageAccounts } from '@mui/icons-material'; // Corrected Import
+import { ManageAccounts } from '@mui/icons-material';
 
-
-
-const drawerWidth = 200; // Reduced width
+const drawerWidth = 200;
 
 const DashboardSidebar = () => {
   const location = useLocation();
-  const headerHeight = 73; 
+  const headerHeight = 73;
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-    {text: "Manage User",icon: <ManageAccounts />,  path: "/manageaccount"},
-    {text: "Vaccine",icon: <ManageAccounts />,  path: "/managevaccine"},
-    {text: "Disease",icon: <ManageAccounts />,  path: "/diseasemanager"},
-    {text: "Gói tiêm",icon: <ManageAccounts />,  path: "/managevaccinationservice"}
-
+    { text: "Manage User", icon: <ManageAccounts />, path: "/manageaccount" },
+    { text: "Vaccine", icon: <ManageAccounts />, path: "/managevaccine" },
+    { text: "Disease", icon: <ManageAccounts />, path: "/diseasemanager" },
+    { text: "Gói tiêm", icon: <ManageAccounts />, path: "/managevaccinationservice" },
   ];
-  
+
   return (
     <Drawer
       variant="permanent"
@@ -37,13 +33,14 @@ const DashboardSidebar = () => {
         [`& .MuiDrawer-paper`]: {
           width: drawerWidth,
           boxSizing: "border-box",
-          top: `${headerHeight}px`, // Adjust the top position
+          top: `${headerHeight}px`,
           left: 0,
           bottom: 0,
-          height: `calc(100% - ${headerHeight}px)`, // Adjust the height
-          position: 'fixed',
+          height: `calc(100% - ${headerHeight}px)`,
+          position: "fixed",
         },
       }}
+      classes={{ paper: "sidebar-container" }} // Áp dụng class CSS
     >
       <Box sx={{ overflow: "auto" }}>
         <List>
@@ -53,7 +50,7 @@ const DashboardSidebar = () => {
               key={item.text}
               component={Link}
               to={item.path}
-              selected={location.pathname === item.path}
+              className={`sidebar-item ${location.pathname === item.path ? "active" : ""}`}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
@@ -63,7 +60,6 @@ const DashboardSidebar = () => {
       </Box>
     </Drawer>
   );
-
 };
 
 export default DashboardSidebar;

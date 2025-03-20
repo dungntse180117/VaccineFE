@@ -15,6 +15,7 @@ import moment from "moment";
 import AppHeader from "../../components/Header/Header";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper"; // Thêm import Paper
 import { useParams } from 'react-router-dom';
 import "./PatientVisitManager.css";
 import {
@@ -83,12 +84,12 @@ const PatientVisitManager = () => {
 
     // Tạo sự kiện cho FullCalendar
     const calendarEvents = visits.map((visit) => {
-        if (!visit || !visit.status || !visit.visitDate ) {
+        if (!visit || !visit.status || !visit.visitDate) {
             console.error("Invalid visit data:", visit);
             return null;
         }
         return {
-            title: `${visit.status} ${visit.notes}`, // Thêm status và notes vào tiêu đề
+            title: `${visit.status} ${visit.notes || ""}`,
             start: visit.visitDate,
             extendedProps: {
                 visitId: visit.visitID,
@@ -97,18 +98,16 @@ const PatientVisitManager = () => {
     }).filter(event => event !== null);
 
     const handleDayCellClassNames = (args) => {
-        if (!args || !args.date) return []; // Kiểm tra args và args.date
+        if (!args || !args.date) return [];
 
         const cellDate = moment(args.date).format("YYYY-MM-DD");
-
-        // Tìm visit có ngày trùng với ô ngày hiện tại
         const visitForCell = visits.find((visit) => moment(visit.visitDate).format("YYYY-MM-DD") === cellDate);
 
         if (visitForCell) {
             if (visitForCell.status === "Đã tiêm") {
-                return ["fc-day-green"]; 
+                return ["fc-day-green"];
             } else if (visitForCell.status === "Chưa tiêm") {
-                return ["fc-day-red"]; 
+                return ["fc-day-red"];
             }
         }
         return [];
@@ -153,7 +152,7 @@ const PatientVisitManager = () => {
             message.success("Yêu cầu thay đổi ngày tiêm đã được gửi thành công");
             setIsChangeDateModalVisible(false);
             form.resetFields();
-            fetchChangeRequests(visitId); // Làm mới danh sách yêu cầu
+            fetchChangeRequests(visitId);
         } catch (error) {
             console.error("Error creating change request:", error);
             message.error("Gửi yêu cầu thay đổi ngày tiêm thất bại");
@@ -166,11 +165,11 @@ const PatientVisitManager = () => {
         return (
             <div>
                 <h3>Thông tin thăm khám</h3>
-                <p><strong>Bệnh nhân:</strong> {visit.patientName}</p>
-                <p><strong>Số điện thoại:</strong> {visit.patientPhone}</p>
+                <p><strong>Bệnh nhân:</strong> {visit.patientName || "N/A"}</p>
+                <p><strong>Số điện thoại:</strong> {visit.patientPhone || "N/A"}</p>
                 <p><strong>Ngày thăm khám:</strong> {moment(visit.visitDate).format('DD/MM/YYYY')}</p>
-                <p><strong>Trạng thái:</strong> {visit.status}</p>
-                <p><strong>Ghi chú:</strong> {visit.notes}</p>
+                <p><strong>Trạng thái:</strong> {visit.status || "N/A"}</p>
+                <p><strong>Ghi chú:</strong> {visit.notes || "N/A"}</p>
             </div>
         );
     };
@@ -222,40 +221,39 @@ const PatientVisitManager = () => {
                         flexDirection: "column",
                     }}
                 >
-                    <Box>
-                        <Breadcrumb
-                            items={[
-                                { title: 'Trang chủ' },
-                                { title: 'Lịch Hẹn Tiêm của Bệnh Nhân' },
-                            ]}
-                        />
-                    </Box>
-
                     <MainContent>
-                        <h2>Lịch hẹn tiêm</h2>
-                        <Button
-                            type="primary"
-                            onClick={handleChangeDateClick}
-                            style={{ marginBottom: 16 }}
-                        >
-                            Thay đổi ngày tiêm
-                        </Button>
-                        <div className="calendar-container">
-                            <FullCalendar
-                                plugins={[dayGridPlugin, interactionPlugin]}
-                                initialView="dayGridMonth"
-                                events={calendarEvents}
-                                eventContent={(eventInfo) => (
-                                    <div>
-                                        <strong>{eventInfo.event.title}</strong> {/* Hiển thị tiêu đề sự kiện */}
-                                        <br />
-                                        <small>{moment(eventInfo.event.start).format("DD/MM/YYYY")}</small> {/* Hiển thị ngày */}
-                                    </div>
-                                )}
-                                eventClick={handleEventClick}
-                                dayCellClassNames={handleDayCellClassNames} // Sử dụng dayCellClassNames
+                        <Paper className="content-container">
+                            <Breadcrumb
+                                items={[
+                                    { title: 'Trang chủ' },
+                                    { title: 'Lịch Hẹn Tiêm của Bệnh Nhân' },
+                                ]}
                             />
-                        </div>
+                            <h2>Lịch hẹn tiêm</h2>
+                            <Button
+                                type="primary"
+                                onClick={handleChangeDateClick}
+                                className="change-date-button"
+                            >
+                                Thay đổi ngày tiêm
+                            </Button>
+                            <div className="calendar-container">
+                                <FullCalendar
+                                    plugins={[dayGridPlugin, interactionPlugin]}
+                                    initialView="dayGridMonth"
+                                    events={calendarEvents}
+                                    eventContent={(eventInfo) => (
+                                        <div>
+                                            <strong>{eventInfo.event.title}</strong>
+                                            <br />
+                                            <small>{moment(eventInfo.event.start).format("DD/MM/YYYY")}</small>
+                                        </div>
+                                    )}
+                                    eventClick={handleEventClick}
+                                    dayCellClassNames={handleDayCellClassNames}
+                                />
+                            </div>
+                        </Paper>
                     </MainContent>
                 </Content>
             </Layout>
@@ -275,7 +273,7 @@ const PatientVisitManager = () => {
                 <h3>Yêu cầu thay đổi ngày tiêm đã được phản hồi</h3>
                 <Table
                     columns={columns}
-                    dataSource={changeRequests.filter(request => request.status !== "Pending")} // Filter changeRequests
+                    dataSource={changeRequests.filter(request => request.status !== "Pending")}
                     rowKey="changeRequestId"
                     pagination={false}
                 />
@@ -308,7 +306,7 @@ const PatientVisitManager = () => {
                         label="Ngày muốn thay đổi"
                         rules={[{ required: true, message: "Vui lòng chọn ngày" }]}
                     >
-                        <DatePicker format="DD/MM/YYYY" />
+                        <DatePicker format="DD/MM/YYYY" style={{ width: '100%' }} />
                     </Form.Item>
 
                     <Form.Item

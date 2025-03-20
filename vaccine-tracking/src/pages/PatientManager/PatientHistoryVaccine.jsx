@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
-getVaccinationHistoriesByPatientId, 
-getPatientById } from '../../config/axios';
+  getVaccinationHistoriesByPatientId, 
+  getPatientById 
+} from '../../config/axios';
 import {
   Layout,
   Breadcrumb,
@@ -32,23 +33,22 @@ const MainContent = styled(Box)(({ theme }) => ({
   overflow: "auto",
 }));
 
-
 const PatientHistoryVaccine = () => {
   const { patientId } = useParams();
   const [vaccinationHistory, setVaccinationHistory] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [patientName, setPatientName] = useState(""); // State for patient name
+  const [patientName, setPatientName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPatientData(); // Fetch patient data to get name
+    fetchPatientData();
     fetchVaccinationHistory();
   }, [patientId]);
 
   const fetchPatientData = async () => {
     try {
       const response = await getPatientById(patientId);
-      setPatientName(response.data.patientName); // Set patient name from response
+      setPatientName(response.data.patientName);
     } catch (error) {
       console.error("Error fetching patient data:", error);
       message.error("Failed to load patient information");
@@ -69,13 +69,6 @@ const PatientHistoryVaccine = () => {
     }
   };
 
-  const historyColumns = [
-    { title: 'Reaction', dataIndex: 'reaction', key: 'reaction' },
-    { title: 'Notes', dataIndex: 'notes', key: 'notes' },
-  ];
-
-  console.log('vaccinationHistory before render:', vaccinationHistory);
-
   return (
     <Layout className="patient-history-vaccine-layout" style={{ minHeight: '100vh' }}>
       <AppHeader />
@@ -86,64 +79,54 @@ const PatientHistoryVaccine = () => {
             marginLeft: drawerWidth,
           }}
         >
-          <Box>
-            <Breadcrumb items={[
-              { title: 'Trang chủ' },
-              { title: 'Quản lý hồ sơ tiêm chủng' },
-              { title: 'Lịch sử tiêm chủng' },
-            ]} style={{ margin: '16px 0' }} />
-          </Box>
-
           <MainContent>
-            <h2>Lịch sử tiêm chủng bệnh nhân: {patientName}</h2> {/* Display Patient Name */}
+            <Paper className="content-container">
+              <Breadcrumb items={[
+                { title: 'Trang chủ' },
+                { title: 'Quản lý hồ sơ tiêm chủng' },
+                { title: 'Lịch sử tiêm chủng' },
+              ]} style={{ margin: '16px 0' }} />
+              <h2>Lịch sử tiêm chủng bệnh nhân: {patientName || "Đang tải..."}</h2>
 
-            {/* REMOVED "Quay lại danh sách bệnh nhân" BUTTON */}
-
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="vaccination history table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Reaction</TableCell>
-                    <TableCell>Notes</TableCell>
-                    {/* Removed headers for "Vaccination Date" and "Vaccine ID" */}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {loading ? (
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="vaccination history table">
+                  <TableHead>
                     <TableRow>
-                      <TableCell colSpan={2} style={{ textAlign: 'center' }}> {/* Updated colSpan */}
-                        <Spin tip="Loading..." />
-                      </TableCell>
+                      <TableCell>Reaction</TableCell>
+                      <TableCell>Notes</TableCell>
                     </TableRow>
-                  ) : vaccinationHistory ? (
-                    (() => {
-                      console.log('vaccinationHistory inside conditional render:', vaccinationHistory);
-                      return vaccinationHistory.map(history => (
+                  </TableHead>
+                  <TableBody>
+                    {loading ? (
+                      <TableRow>
+                        <TableCell colSpan={2} style={{ textAlign: 'center' }}>
+                          <Spin tip="Đang tải lịch sử tiêm chủng..." />
+                        </TableCell>
+                      </TableRow>
+                    ) : vaccinationHistory && vaccinationHistory.length > 0 ? (
+                      vaccinationHistory.map(history => (
                         <TableRow
                           key={history.vaccinationHistoryID}
                           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                          <TableCell>{history.reaction}</TableCell>
-                          <TableCell>{history.notes}</TableCell>
-                           {/* Removed cells for "Vaccination Date" and "Vaccine ID" */}
+                          <TableCell>{history.reaction || "N/A"}</TableCell>
+                          <TableCell>{history.notes || "N/A"}</TableCell>
                         </TableRow>
-                      ));
-                    })()
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={2} style={{ textAlign: 'center' }}> {/* Updated colSpan */}
-                        No vaccination history found.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={2} style={{ textAlign: 'center' }}></TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
           </MainContent>
         </Content>
       </Layout>
     </Layout>
   );
-};3
+};
 
 export default PatientHistoryVaccine;

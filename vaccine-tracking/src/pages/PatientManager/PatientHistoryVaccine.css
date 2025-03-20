@@ -1,11 +1,122 @@
+.patient-history-vaccine-layout {
+  min-height: 1000px;
+  display: flex;
+  flex-direction: column;
+  background: #f4f7fa; 
+}
 
-  .patient-history-vaccine-layout .MuiTableContainer-root {
-    margin-top: 20px;
-  }
-  
-  .patient-history-vaccine-layout .MuiTableCell-head {
-    background-color: #f0f0f0; 
-    font-weight: bold;
-  }
-  
+.patient-history-vaccine-layout .MuiBox-root {
+  background: transparent;
+  padding: 40px;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.patient-history-vaccine-layout .content-container {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+
+.patient-history-vaccine-layout h2 {
+  color: #2c3e50;
+  font-size: 32px;
+  font-weight: 700;
+  position: relative;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.patient-history-vaccine-layout h2::after {
+  content: "";
+  width: 60px;
+  height: 4px;
+  background-color: #3498db;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.patient-history-vaccine-layout .ant-breadcrumb {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 20px;
+}
+
+.patient-history-vaccine-layout .ant-breadcrumb a {
+  color: #3498db;
+  transition: color 0.3s ease;
+}
+
+.patient-history-vaccine-layout .ant-breadcrumb a:hover {
+  color: #2980b9;
+}
+
+
+.patient-history-vaccine-layout .MuiTableContainer-root {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: none; 
+}
+
+.patient-history-vaccine-layout .MuiTableHead-root {
+  background-color: #3498db !important;
+}
+
+.patient-history-vaccine-layout .MuiTableCell-head {
+  background-color: #3498db !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 16px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.patient-history-vaccine-layout .MuiTableRow-root {
+  transition: background-color 0.3s ease;
+}
+
+.patient-history-vaccine-layout .MuiTableRow-root:hover {
+  background-color: #f1f5f9;
+}
+
+.patient-history-vaccine-layout .MuiTableCell-body {
+  font-size: 14px !important;
+  color: #34495e !important;
+  padding: 16px !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+
+.patient-history-vaccine-layout .ant-spin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.patient-history-vaccine-layout .ant-spin-dot {
+  font-size: 32px !important;
+}
+
+.patient-history-vaccine-layout .ant-spin-text {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #7f8c8d;
+}
+
+
+.patient-history-vaccine-layout .MuiTableCell-body:empty::after {
+  content: "Không tìm thấy lịch sử tiêm chủng.";
+  display: block;
+  text-align: center;
+  padding: 40px 0;
+  font-size: 16px;
+  color: #7f8c8d;
+}
 

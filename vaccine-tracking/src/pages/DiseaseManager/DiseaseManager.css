@@ -19,7 +19,6 @@
 
 .disease-manager-button-box {
   display: flex;
-  justifyContent: flex-start;
   margin-bottom: 24px;
 }
 

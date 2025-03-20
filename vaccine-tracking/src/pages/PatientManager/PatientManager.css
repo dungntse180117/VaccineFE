@@ -1,129 +1,342 @@
 .patient-manager-layout {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .patient-manager-row {
-    flex: 1;
-    padding-top: 120px;  /* Increased padding */
-    padding-bottom: 120px;  /* Increased padding */
-  }
-  
-  .patient-manager-header {
-    background: #fff;
-    padding-bottom: 70px;
-    padding-top: 10px;  /* Increased padding */
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  .patient-manager-header h2 {
-    margin: 0;
-    color: #333;
-    font-size: 28px;  /* Increased font size */
-  }
-  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f4f7fa;
+}
+
+.patient-manager-row {
+  flex: 1;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.patient-manager-header {
+  background: #fff;
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.patient-manager-header h2 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 32px;
+  font-weight: 700;
+  position: relative;
+}
+
+.patient-manager-header h2::after {
+  content: "";
+  width: 60px;
+  height: 4px;
+  background-color: #3498db;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.patient-manager-content {
+  background: #fff;
+  padding: 40px;
+  min-height: 600px;
+  max-width: 2000px;
+  max-height: max-content;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Bảng */
+.MuiTableContainer-root {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.MuiTableHead-root {
+  background-color: #3498db !important;
+}
+
+.MuiTableCell-head {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 16px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.MuiTableRow-root {
+  transition: background-color 0.3s ease;
+}
+
+.MuiTableRow-root:hover {
+  background-color: #f1f5f9;
+}
+
+.MuiTableCell-body {
+  font-size: 14px !important;
+  color: #34495e !important;
+  padding: 16px !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Nút "Thêm hồ sơ" */
+.MuiButton-contained {
+  background: linear-gradient(to right, #3498db, #2980b9) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  transition: transform 0.3s ease, background 0.3s ease !important;
+}
+
+.MuiButton-contained:hover {
+  background: linear-gradient(to right, #2980b9, #3498db) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Biểu tượng hành động */
+.MuiIconButton-root {
+  color: #7f8c8d !important;
+  transition: color 0.3s ease, transform 0.3s ease !important;
+}
+
+.MuiIconButton-root:hover {
+  color: #3498db !important;
+  transform: scale(1.1) !important;
+}
+
+.MuiIconButton-root[aria-label="delete"]:hover {
+  color: #e74c3c !important;
+}
+
+/* Modal */
+.ant-modal-content {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ant-modal-header {
+  background: #3498db !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.ant-modal-title {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+}
+
+.ant-modal-footer .ant-btn {
+  border-radius: 6px !important;
+  padding: 6px 16px !important;
+  font-weight: 500 !important;
+}
+
+.ant-modal-footer .ant-btn-primary {
+  background: #3498db !important;
+  border-color: #3498db !important;
+  transition: background 0.3s ease, transform 0.3s ease !important;
+}
+
+.ant-modal-footer .ant-btn-primary:hover {
+  background: #2980b9 !important;
+  border-color: #2980b9 !important;
+  transform: translateY(-2px) !important;
+}
+
+.ant-modal-footer .ant-btn-default {
+  border-color: #e0e0e0 !important;
+  color: #7f8c8d !important;
+  transition: color 0.3s ease, transform 0.3s ease !important;
+}
+
+.ant-modal-footer .ant-btn-default:hover {
+  color: #3498db !important;
+  border-color: #3498db !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Form trong modal (PatientForm) */
+.patient-form-container {
+  padding: 20px 0;
+}
+
+.patient-form-container .ant-form-item {
+  margin-bottom: 20px;
+}
+
+.patient-form-container .ant-form-item-label > label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.patient-form-container .ant-form-item-label > label::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #3498db;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.patient-form-container .ant-input,
+.patient-form-container .ant-picker {
+  border-radius: 8px !important;
+  border: 1px solid #d9d9d9 !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.patient-form-container .ant-input:hover,
+.patient-form-container .ant-picker:hover {
+  border-color: #3498db !important;
+}
+
+.patient-form-container .ant-input:focus,
+.patient-form-container .ant-picker-focused {
+  border-color: #3498db !important;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2) !important;
+}
+
+.patient-form-container .ant-picker {
+  width: 100% !important;
+}
+
+/* Breadcrumb */
+.ant-breadcrumb {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.ant-breadcrumb a {
+  color: #3498db;
+  transition: color 0.3s ease;
+}
+
+.ant-breadcrumb a:hover {
+  color: #2980b9;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
   .patient-manager-content {
-    background: #fff;
-    padding: 32px;  /* Increased padding */
-    min-height: 500px;  /* Increased min-height */
-    max-width: 2000px;  /* Increased max-width */
-    max-height: max-content;
-    margin: 0 auto;
+    padding: 20px;
   }
-  
-  .patient-manager-form {
-    max-width: 700px;  /* Increased max-width */
-    margin: 0 auto;
+
+  .MuiTableCell-head,
+  .MuiTableCell-body {
+    font-size: 12px !important;
+    padding: 12px !important;
   }
-  
-  .patient-manager-form-button {
-    background: linear-gradient(to right, #f9a825, #f57c00);
-    border-color: #f57c00;
-    font-size: 16px;  /* Increased font size */
-    height: 40px;  /* Increased height */
+
+  .MuiTableContainer-root {
+    overflow-x: auto;
   }
-  
-  .patient-manager-form-button:hover,
-  .patient-manager-form-button:focus {
-    background: linear-gradient(to right, #f57c00, #f9a825);
-    border-color: #f9a825;
+
+  .patient-form-container .ant-form-item {
+    margin-bottom: 16px;
   }
-  
-  .password-change-button {
-    background: #f9a825;
-    border-color: #f9a825;
-    font-size: 16px;  /* Increased font size */
-    height: 40px;  /* Increased height */
+
+  .patient-form-container .ant-input,
+  .patient-form-container .ant-picker {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
   }
-  
-  .password-change-button:hover,
-  .password-change-button:focus {
-    background: #f57c00;
-    border-color: #f57c00;
-  }
-  
-  .custom-disabled-input {
-    background-color: #f5f5f5 !important;
-    color: rgba(0, 0, 0, 0.85) !important;
-    cursor: not-allowed;
-    opacity: 1;
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  .custom-disabled-input:hover {
-    border-color: #d9d9d9 !important;
-  }
-  
-  .ant-input[disabled] {
-    color: rgba(0, 0, 0, 0.85) !important;
-    background-color: #f5f5f5 !important;
-    opacity: 1;
-    cursor: not-allowed;
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  .ant-layout-footer {
-    position: sticky;
-    bottom: 0;
-    z-index: 1;
-    width: 100%;
-    background-color: #f0f2f5;
-    padding: 15px 0;  /* Increased padding */
-    text-align: center;
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  /* Additional styles for form items */
-  .ant-form-item-label > label {
-    font-size: 16px;  /* Increased font size */
-  }
-  
-  .ant-input, .ant-select-selector, .ant-picker {
-    padding: 0 !important;
-    margin: 0 !important;
-    border: 1px solid #d9d9d9 !important;
-    border-radius: 4px !important;
-  }
-  
-  .ant-select-selection-item {
-    line-height: 38px !important;  /* Adjust line height for select */
-  }
-  
-  .ant-picker-input > input {
-    height: 38px !important;  /* Adjust height for date picker input */
-  }
-  .wallet-card {
-    background-color: #f0f2f5;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 24px;
-  }
-  
-  .wallet-card h3 {
-    margin: 0;
-    color: #1890ff;
-    font-weight: bold;
-  }
-  
+}
+
+
+.patient-manager-form {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.patient-manager-form-button {
+  background: linear-gradient(to right, #f9a825, #f57c00);
+  border-color: #f57c00;
+  font-size: 16px;
+  height: 40px;
+}
+
+.patient-manager-form-button:hover,
+.patient-manager-form-button:focus {
+  background: linear-gradient(to right, #f57c00, #f9a825);
+  border-color: #f9a825;
+}
+
+.password-change-button {
+  background: #f9a825;
+  border-color: #f9a825;
+  font-size: 16px;
+  height: 40px;
+}
+
+.password-change-button:hover,
+.password-change-button:focus {
+  background: #f57c00;
+  border-color: #f57c00;
+}
+
+.custom-disabled-input {
+  background-color: #f5f5f5 !important;
+  color: rgba(0, 0, 0, 0.85) !important;
+  cursor: not-allowed;
+  opacity: 1;
+  font-size: 16px;
+}
+
+.custom-disabled-input:hover {
+  border-color: #d9d9d9 !important;
+}
+
+.ant-input[disabled] {
+  color: rgba(0, 0, 0, 0.85) !important;
+  background-color: #f5f5f5 !important;
+  opacity: 1;
+  cursor: not-allowed;
+  font-size: 16px;
+}
+
+.ant-layout-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  background-color: #f0f2f5;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 16px;
+}
+
+.ant-select-selection-item {
+  line-height: 38px !important;
+}
+
+.ant-picker-input > input {
+  height: 38px !important;
+}
+
+.wallet-card {
+  background-color: #f0f2f5;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.wallet-card h3 {
+  margin: 0;
+  color: #1890ff;
+  font-weight: bold;
+}

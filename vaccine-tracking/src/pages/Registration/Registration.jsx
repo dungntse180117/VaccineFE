@@ -106,7 +106,7 @@ function Registration() {
 
     const handleVaccineSelection = (vaccinationId, vaccinationName) => {
         if (selectedService !== null) {
-            setErrors({ selection: 'Chỉ được chọn 1 gói tiêm chủng hoặc nhiều vắc xin lẻ, không thể được chọn cả hai.' });
+            setErrors({ selection: 'You cannot select individual vaccines when a service is selected.' });
             return;
         }
         if (selectedVaccinations.includes(vaccinationId)) {
@@ -121,7 +121,7 @@ function Registration() {
 
    const handleServiceSelection = (serviceId, serviceName) => {
         if (selectedVaccinations.length > 0) {
-            setErrors({ selection: 'Bạn không thể chọn gói tiêm khi đã chọn vaccine lẻ' });
+            setErrors({ selection: 'You cannot select a service when individual vaccines are selected.' });
             return;
         }
         setSelectedService(serviceId === selectedService ? null : serviceId);
@@ -133,17 +133,28 @@ function Registration() {
     const handleSearchPatient = async () => {
         setLoading(true);
         setErrors({});
+        
         try {
-            const patients = await getPatientsByPhone(searchPhone);
+            // Lấy accountId từ localStorage
+            const accountId = parseInt(localStorage.getItem('accountId'), 10);
+            
+            if (!accountId) {
+                throw new Error('Vui lòng đăng nhập để tìm kiếm');
+            }
+            
+            // Gọi API với cả phone và accountId
+            const patients = await getPatientsByPhone(searchPhone, accountId);
+            
+            // Xử lý kết quả
             if (patients.length === 0) {
                 setNewPatientData(prev => ({ ...prev, phone: searchPhone }));
                 setFoundPatients([]);
             } else {
                 setFoundPatients(patients);
             }
+            
         } catch (error) {
-            setErrors({ search: error.message || 'Failed to search for patients.' });
-            setFoundPatients([]);
+            setErrors({ search: error.message || 'Tìm kiếm thất bại' });
         } finally {
             setLoading(false);
         }

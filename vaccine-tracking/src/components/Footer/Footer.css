@@ -1,42 +1,103 @@
 .footer {
-  background-color: #333;
-  color: #fff;
-  padding: 20px;
+  background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%); /* Gradient nền */
+  color: #ecf0f1;
+  padding: 40px 20px;
   text-align: center;
   width: 100%;
+  border-top: 4px solid #3498db; /* Viền trên màu xanh */
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.footer-content {
+  max-width: 1300px; /* Tăng chiều rộng tối đa */
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-brand {
+  flex: 1;
+  min-width: 250px;
+  text-align: left;
+}
+
+.footer-brand p {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 10px 0;
+}
+
+.footer-brand .tagline {
+  font-size: 14px;
+  color: #b0bec5;
+  margin: 0;
+}
+
+.footer-nav {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.footer-nav a {
+  color: #ecf0f1;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-nav a:hover {
+  color: #3498db;
+  transform: translateX(5px); /* Hiệu ứng dịch chuyển khi hover */
+}
+
+.footer-social {
+  flex: 1;
+  min-width: 250px;
+  text-align: right;
+}
+
+.footer-social h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+.footer-social .social-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.footer-social .social-links a {
+  color: #ecf0f1;
+  font-size: 20px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-social .social-links a:hover {
+  color: #3498db;
+  transform: scale(1.2); /* Hiệu ứng phóng to khi hover */
 }
 
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ensure the body takes at least the full viewport height */
-  margin: 0; /* Remove default margin */
+  min-height: 100vh;
+  margin: 0;
 }
 
 main {
-  flex: 1; /* Allow the main content to grow and fill the remaining space */
-}
-
-.footer-content {
-  max-width: 1200px; /* Adjust as needed */
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.footer-nav {
-  display: flex;
-  gap: 20px;
-}
-
-.footer-nav a {
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-nav a:hover {
-  color: #ddd;
+  flex: 1;
 }

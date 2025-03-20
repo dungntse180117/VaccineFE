@@ -478,21 +478,21 @@ export const getAllRegistrationsByAccountId = async (accountId) => {
   }
 };
 
-export const getPatientsByPhone = async (phone) => {
+export const getPatientsByPhone = async (phone, accountId) => {
   try {
-    const response = await api.get(`/api/Patients/byphone/${phone}`);
+    const response = await api.get(`/api/Patients/byphone/${phone}/${accountId}`);
     return response.data;
   } catch (error) {
-      if (error.response) {
-          console.error("Server responded with error:", error.response.status, error.response.data);
-          throw new Error(error.response.data || "Server Error");
-      } else if (error.request) {
-          console.error("No response received:", error.request);
-          throw new Error("Network Error");
-      } else {
-          console.error("Request setup error:", error.message);
-          throw new Error(error.message || "An unexpected error occurred");
-      }
+    if (error.response) {
+      console.error("Server responded with error:", error.response.status, error.response.data);
+      throw new Error(error.response.data || "Server Error");
+    } else if (error.request) {
+      console.error("No response received:", error.request);
+      throw new Error("Network Error");
+    } else {
+      console.error("Request setup error:", error.message);
+      throw new Error(error.message || "An unexpected error occurred");
+    }
   }
 };
 

@@ -17,7 +17,7 @@ import api, {
   deletePatient,
   getAllPatientsByAccountId,
 } from "../../config/axios";
-import "./PatientManager.css"; // Make sure this CSS file exists and styles are applied correctly
+import "./PatientManager.css";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import {
@@ -30,6 +30,7 @@ import {
   TableBody,
   Paper,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -40,7 +41,7 @@ import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
-const drawerWidth = 200; // Adjust as needed
+const drawerWidth = 200;
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
@@ -54,11 +55,10 @@ const PatientManager = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [addPatientForm] = Form.useForm();  // Form instance for Add
-  const [editPatientForm] = Form.useForm(); // Form instance for Edit
+  const [addPatientForm] = Form.useForm();
+  const [editPatientForm] = Form.useForm();
   const navigate = useNavigate();
 
-  // Fetch patients on component mount
   useEffect(() => {
     const fetchPatients = async () => {
       setLoading(true);
@@ -68,7 +68,7 @@ const PatientManager = () => {
           const response = await getAllPatientsByAccountId(accountId);
           setPatients(response.data);
         } else {
-          console.warn("accountId not found in localStorage."); // Add a warning
+          console.warn("accountId not found in localStorage.");
         }
       } catch (error) {
         console.error("Error fetching patients:", error);
@@ -91,35 +91,32 @@ const PatientManager = () => {
 
   const handleAddCancel = () => {
     setIsAddModalOpen(false);
-    addPatientForm.resetFields(); // Reset form fields
+    addPatientForm.resetFields();
   };
 
   const handleAddPatient = async () => {
     try {
       setLoading(true);
-      const values = await addPatientForm.validateFields(); // Validate
+      const values = await addPatientForm.validateFields();
       const accountId = localStorage.getItem("accountId");
 
       if (!accountId) {
         message.error("AccountId not found in localStorage.");
-        return; // Exit if accountId is missing
+        return;
       }
 
       await createPatient({
         ...values,
-        accountId: parseInt(accountId, 10), // Ensure accountId is an integer
-        dob: values.dob.format("YYYY-MM-DD"), // Format date
+        accountId: parseInt(accountId, 10),
+        dob: values.dob.format("YYYY-MM-DD"),
       });
 
       message.success("Patient created successfully");
 
-      // Refetch patients
       const response = await getAllPatientsByAccountId(accountId);
-      console.log("Patients after create:", response.data); // Debug: Check fetched data
       setPatients(response.data);
 
-      handleAddCancel(); // Close and reset
-
+      handleAddCancel();
     } catch (error) {
       console.error("Error adding patient:", error);
       message.error(
@@ -133,34 +130,32 @@ const PatientManager = () => {
   const showEditModal = (record) => {
     setSelectedPatient(record);
     setIsEditModalOpen(true);
-    editPatientForm.setFieldsValue({ // Set initial values
+    editPatientForm.setFieldsValue({
       ...record,
-      dob: moment(record.dob, 'YYYY-MM-DD'), // Convert to Moment object
+      dob: moment(record.dob, 'YYYY-MM-DD'),
     });
   };
 
   const handleEditCancel = () => {
     setIsEditModalOpen(false);
     setSelectedPatient(null);
-    editPatientForm.resetFields(); // Reset
+    editPatientForm.resetFields();
   };
 
   const handleEditPatient = async () => {
     try {
       setLoading(true);
-      const values = await editPatientForm.validateFields(); // Validate
+      const values = await editPatientForm.validateFields();
       await updatePatient(selectedPatient.patientId, {
         ...values,
-        dob: values.dob.format('YYYY-MM-DD'), // Format
+        dob: values.dob.format('YYYY-MM-DD'),
       });
 
       message.success("Patient updated successfully");
 
-      // Refetch patients
       const accountId = localStorage.getItem("accountId");
       if (accountId) {
         const response = await getAllPatientsByAccountId(accountId);
-        console.log("Patients after update:", response.data); // Debug: Check fetched data
         setPatients(response.data);
       }
 
@@ -174,37 +169,41 @@ const PatientManager = () => {
       setLoading(false);
     }
   };
-    const handleDeletePatient = (record) => {
-        Modal.confirm({
-            title: "Confirm Delete",
-            content: `Are you sure you want to delete ${record.patientName}?`,
-            okText: "Yes",
-            okType: "danger",
-            cancelText: "No",
-            onOk: async () => {
-                try {
-                    setLoading(true);
-                    await deletePatient(record.patientId);
-                    message.success("Patient deleted successfully");
 
-                    // Refetch
-                    const accountId = localStorage.getItem("accountId");
-                    if (accountId) {
-                        const response = await getAllPatientsByAccountId(accountId);
-                         console.log("Patients after delete:", response.data); // Debug: Check fetched data
-                        setPatients(response.data);
-                    }
-                } catch (error) {
-                    console.error("Error Deleting patient:", error);
-                    message.error(
-                        error.response?.data?.message || error.message || "An error occurred while deleting patient."
-                    );
-                } finally {
-                    setLoading(false);
-                }
-            },
-        });
-    };
+  const handleDeletePatient = (record) => {
+    Modal.confirm({
+      title: "Confirm Delete",
+      content: `Are you sure you want to delete ${record.patientName}?`,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk: async () => {
+        try {
+          setLoading(true);
+          await deletePatient(record.patientId);
+          message.success("Patient deleted successfully");
+
+          const accountId = localStorage.getItem("accountId");
+          if (accountId) {
+            const response = await getAllPatientsByAccountId(accountId);
+            setPatients(response.data);
+          }
+        } catch (error) {
+          console.error("Error Deleting patient:", error);
+          message.error(
+            error.response?.data?.message || error.message || "An error occurred while deleting patient."
+          );
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return moment(dateString).format("DD/MM/YYYY");
+  };
 
   return (
     <Layout className="patient-manager-layout" style={{ minHeight: "100vh" }}>
@@ -218,12 +217,13 @@ const PatientManager = () => {
             flexDirection: "column",
           }}
         >
-            <Box>
-                <Breadcrumb items={[
+          <Box>
+            <Breadcrumb
+              items={[
                 { title: 'Trang chủ' },
                 { title: 'Quản lý hồ sơ tiêm chủng' },
-                ]}
-                style={{ margin: "16px 0" }}
+              ]}
+              style={{ margin: "16px 0" }}
             />
           </Box>
 
@@ -260,56 +260,63 @@ const PatientManager = () => {
                   {loading ? (
                     <TableRow>
                       <TableCell colSpan={10} style={{ textAlign: 'center' }}>
-                        Loading...
+                        <CircularProgress size={40} thickness={4} />
+                      </TableCell>
+                    </TableRow>
+                  ) : patients.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={10} style={{ textAlign: 'center', padding: '40px 0' }}>
+                        Không tìm thấy hồ sơ tiêm chủng.
                       </TableCell>
                     </TableRow>
                   ) : (
-                  patients.map((patient) => (
-                    <TableRow
-                      key={patient.patientId}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {patient.patientName}
-                      </TableCell>
-                      <TableCell>{patient.dob}</TableCell>
-                      <TableCell>{patient.gender}</TableCell>
-                      <TableCell>{patient.guardianPhone}</TableCell>
-                      <TableCell>{patient.address}</TableCell>
-                      <TableCell>{patient.relationshipToAccount}</TableCell>
-                      <TableCell>{patient.phone}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          aria-label="view-visits"
-                          onClick={() => navigate(`/patient-visits/${patient.patientId}`)}
-                        >
-                          <VisibilityIcon />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          aria-label="view-vaccination-history"
-                          onClick={() => navigate(`/patient-history-vaccine/${patient.patientId}`)}
-                        >
-                          <HistoryIcon />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          aria-label="edit"
-                          onClick={() => showEditModal(patient)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => handleDeletePatient(patient)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  )))}
+                    patients.map((patient) => (
+                      <TableRow
+                        key={patient.patientId}
+                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {patient.patientName}
+                        </TableCell>
+                        <TableCell>{formatDate(patient.dob)}</TableCell>
+                        <TableCell>{patient.gender || "N/A"}</TableCell>
+                        <TableCell>{patient.guardianPhone || "N/A"}</TableCell>
+                        <TableCell>{patient.address || "N/A"}</TableCell>
+                        <TableCell>{patient.relationshipToAccount || "N/A"}</TableCell>
+                        <TableCell>{patient.phone || "N/A"}</TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="view-visits"
+                            onClick={() => navigate(`/patient-visits/${patient.patientId}`)}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="view-vaccination-history"
+                            onClick={() => navigate(`/patient-history-vaccine/${patient.patientId}`)}
+                          >
+                            <HistoryIcon />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="edit"
+                            onClick={() => showEditModal(patient)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => handleDeletePatient(patient)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -375,39 +382,37 @@ const PatientManager = () => {
                 </AntButton>,
               ]}
             >
-
               <Form form={editPatientForm} layout="vertical">
-                    <Form.Item
-                        name="patientName"
-                        label="Họ và tên"
-                        rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="dob"
-                        label="Ngày sinh"
-                        rules={[{ required: true, message: 'Vui lòng nhập ngày sinh' }]}
-                    >
-                        <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
-                    </Form.Item>
-                    <Form.Item name="gender" label="Giới tính">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="guardianPhone" label="Số điện thoại người thân">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="address" label="Địa chỉ">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="relationshipToAccount" label="Mối quan hệ">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="phone" label="Số điện thoại">
-                        <Input />
-                    </Form.Item>
-                </Form>
-
+                <Form.Item
+                  name="patientName"
+                  label="Họ và tên"
+                  rules={[{ required: true, message: 'Vui lòng nhập họ và tên' }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name="dob"
+                  label="Ngày sinh"
+                  rules={[{ required: true, message: 'Vui lòng nhập ngày sinh' }]}
+                >
+                  <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
+                </Form.Item>
+                <Form.Item name="gender" label="Giới tính">
+                  <Input />
+                </Form.Item>
+                <Form.Item name="guardianPhone" label="Số điện thoại người thân">
+                  <Input />
+                </Form.Item>
+                <Form.Item name="address" label="Địa chỉ">
+                  <Input />
+                </Form.Item>
+                <Form.Item name="relationshipToAccount" label="Mối quan hệ">
+                  <Input />
+                </Form.Item>
+                <Form.Item name="phone" label="Số điện thoại">
+                  <Input />
+                </Form.Item>
+              </Form>
             </Modal>
           </MainContent>
         </Content>
