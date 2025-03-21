@@ -23,7 +23,56 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+// Account API
+export const getAccountById = async (id) => {
+  try {
+    const response = await api.get(`/api/Account/${id}`);
+    return response.data; 
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status === 404) {
+        throw new Error("Không tìm thấy tài khoản với ID này.");
+      } else if (error.response.status === 500) {
+        throw new Error("Lỗi server: Không thể lấy thông tin tài khoản.");
+      } else {
+        throw new Error(error.response.data.message || "Lỗi không xác định từ server.");
+      }
+    } else if (error.request) {
+      throw new Error("Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng.");
+    } else {
+      throw new Error(error.message || "Đã xảy ra lỗi không xác định.");
+    }
+  }
+};
+export const getAccountByEmail = async (email) => {
+  try {
+    const response = await api.get(`/api/Account/email/${email}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching account with email ${email}:`, error);
+    throw error;
+  }
+};
 
+export const updateAccount = async (id, data) => {
+  try {
+    const response = await api.put(`/api/Account/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating account with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const changePassword = async (id, data) => {
+  try {
+    const response = await api.put(`/api/Account/${id}/change-password`, data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error changing password for account ID ${id}:`, error);
+    throw error;
+  }
+};
 // Patient API
 export const createPatient = (data) => {
   return api.post("/api/Patients", data);

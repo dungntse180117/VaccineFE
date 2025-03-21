@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Layout, Menu, Form, Input, Button, Row, Col, message, Breadcrumb } from "antd";
 import AppHeader from "../../components/Header/Header";
 import FooterComponent from "../../components/Footer/Footer";
-import api from "../../config/axios";
+import {
+  getAccountById, // Thay getAccountByEmail bằng getAccountById
+  updateAccount,
+  changePassword,
+  getAllRegistrationsByAccountId,
+} from "../../config/axios";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,17 +17,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import "./UserProfile.css";
-
-// Hàm gọi API để lấy danh sách đăng ký
-export const getAllRegistrationsByAccountId = async (accountId) => {
-  try {
-    const response = await api.get(`/api/Registrations/account/${accountId}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching registrations for accountId ${accountId}:`, error);
-    throw error;
-  }
-};
 
 const { Header, Content, Sider } = Layout;
 
@@ -43,12 +37,11 @@ const UserProfile = () => {
   const fetchUserData = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const email = localStorage.getItem("email");
-      const response = await api.get(`api/Account/email/${email}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const user = response.data;
+      const accountId = localStorage.getItem("accountId"); // Lấy accountId từ localStorage
+      if (!accountId) {
+        throw new Error("Không tìm thấy accountId trong localStorage.");
+      }
+      const user = await getAccountById(accountId); // Sử dụng getAccountById thay vì getAccountByEmail
       setUserData(user);
       form.setFieldsValue({
         name: user.name,
@@ -68,10 +61,12 @@ const UserProfile = () => {
     setRegistrationLoading(true);
     setRegistrationError("");
     try {
-      const accountId = userData?.accountId;
+      const accountId = localStorage.getItem("accountId");
       if (accountId) {
         const data = await getAllRegistrationsByAccountId(accountId);
         setRegistrations(data);
+      } else {
+        setRegistrationError("Không tìm thấy accountId trong localStorage.");
       }
     } catch (error) {
       setRegistrationError("Không thể tải lịch sử đăng ký.");
@@ -81,7 +76,7 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    if (selectedMenuItem === "3" && userData?.accountId) {
+    if (selectedMenuItem === "3" && userData) {
       fetchRegistrations();
     }
   }, [selectedMenuItem, userData]);
@@ -107,13 +102,8 @@ const UserProfile = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
+      const accountId = localStorage.getItem("accountId");
       const email = localStorage.getItem("email");
-
-      const userResponse = await api.get(`api/Account/email/${email}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const accountId = userResponse.data.accountId;
 
       const dataToSend = {
         name: values.name,
@@ -122,22 +112,18 @@ const UserProfile = () => {
         roleId: 2,
       };
 
-      await api.put(`api/Account/${accountId}`, dataToSend, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await updateAccount(accountId, dataToSend);
 
       await fetchUserData();
       setEditing(false);
       message.success("Thông tin cá nhân đã được cập nhật thành công.");
 
-      const updatedUserData = await api.get(`api/Account/email/${email}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      localStorage.setItem("user", JSON.stringify(updatedUserData.data));
-      window.dispatchEvent(new CustomEvent("userProfileUpdated", { detail: updatedUserData.data }));
+      const updatedUserData = await getAccountById(accountId); // Cập nhật để sử dụng getAccountById
+      localStorage.setItem("user", JSON.stringify(updatedUserData));
+      window.dispatchEvent(new CustomEvent("userProfileUpdated", { detail: updatedUserData }));
     } catch (error) {
-      console.error("Error updating profile:", error.response?.data || error.message);
-      message.error(`Lỗi cập nhật thông tin: ${error.response?.data?.message || error.message}`);
+      console.error("Error updating profile:", error);
+      message.error(`Lỗi cập nhật thông tin: ${error.message || "Không xác định"}`);
     } finally {
       setLoading(false);
     }
@@ -146,30 +132,20 @@ const UserProfile = () => {
   const onPasswordChange = async (values) => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
-      const email = localStorage.getItem("email");
+      const accountId = localStorage.getItem("accountId");
 
-      const userResponse = await api.get(`api/Account/email/${email}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const accountId = userResponse.data.accountId;
+      const passwordData = {
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      };
 
-      await api.put(
-        `api/Account/${accountId}/change-password`,
-        {
-          currentPassword: values.currentPassword,
-          newPassword: values.newPassword,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await changePassword(accountId, passwordData);
 
       message.success("Đổi mật khẩu thành công.");
       form.resetFields(["currentPassword", "newPassword", "confirmPassword"]);
     } catch (error) {
-      console.error("Error changing password:", error.response?.data || error.message);
-      message.error(`Lỗi đổi mật khẩu: ${error.response?.data?.message || error.message}`);
+      console.error("Error changing password:", error);
+      message.error(`Lỗi đổi mật khẩu: ${error.message || "Không xác định"}`);
     } finally {
       setLoading(false);
     }
@@ -483,7 +459,7 @@ const UserProfile = () => {
                 ? "Cài đặt tài khoản"
                 : "Lịch sử đăng ký"}
             </Breadcrumb.Item>
-          </Breadcrumb>   
+          </Breadcrumb>
           <Layout>
             <Sider width={250} className="user-profile-sider">
               <Menu

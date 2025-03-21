@@ -1,43 +1,98 @@
 import React, { useState, useEffect } from "react";
-import { getRevenuePerMonth, getMostPurchasedVaccine } from "../../config/axios";
+import {
+  getRevenuePerMonth,
+  getVisitsPerMonth,
+  getMostPurchasedVaccine,
+  getMostPurchasedPackage,
+} from "../../config/axios";
 import "./Dashboard.css";
 import Layout from "../../components/Layout/Layout";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { CircularProgress, Typography } from "@mui/material";
+import { Select } from "antd";
+
+const { Option } = Select;
 
 function Dashboard() {
   const [mostPurchasedVaccine, setMostPurchasedVaccine] = useState("");
-  const [revenueData, setRevenueData] = useState([]);
+  const [mostPurchasedPackage, setMostPurchasedPackage] = useState("");
+  const [combinedData, setCombinedData] = useState([]); // Dữ liệu kết hợp
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const vaccineResult = await getMostPurchasedVaccine();
-        setMostPurchasedVaccine(vaccineResult.data);
+    fetchData(selectedYear);
+  }, [selectedYear]);
 
-        const currentYear = new Date().getFullYear();
-        const revenueResult = await getRevenuePerMonth(currentYear);
-        setRevenueData(formatChartData(revenueResult.data));
-      } catch (err) {
-        setError(err);
-        console.error("Error fetching dashboard data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async (year) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const vaccineResult = await getMostPurchasedVaccine();
+      setMostPurchasedVaccine(vaccineResult.data);
 
-    fetchData();
-  }, []);
+      const packageResult = await getMostPurchasedPackage();
+      setMostPurchasedPackage(packageResult.data);
 
-  const formatChartData = (data) => {
-    return Object.keys(data).map((key) => ({
-      month: `Tháng ${key}`,
-      value: data[key],
+      const revenueResult = await getRevenuePerMonth(year);
+      const visitsResult = await getVisitsPerMonth(year);
+
+      // Gộp dữ liệu doanh thu và số lượt thăm khám
+      setCombinedData(formatCombinedChartData(revenueResult.data, visitsResult.data));
+    } catch (err) {
+      setError(err);
+      console.error("Error fetching dashboard data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatCombinedChartData = (revenueData, visitsData) => {
+    // Tạo mảng 12 tháng với giá trị mặc định là 0 cho cả revenue và visits
+    const allMonths = Array.from({ length: 12 }, (_, i) => ({
+      month: `Tháng ${i + 1}`,
+      revenue: 0,
+      visits: 0,
     }));
+
+    // Cập nhật giá trị từ dữ liệu API
+    Object.keys(revenueData).forEach((key) => {
+      const monthIndex = parseInt(key) - 1;
+      if (monthIndex >= 0 && monthIndex < 12) {
+        allMonths[monthIndex].revenue = revenueData[key];
+      }
+    });
+
+    Object.keys(visitsData).forEach((key) => {
+      const monthIndex = parseInt(key) - 1;
+      if (monthIndex >= 0 && monthIndex < 12) {
+        allMonths[monthIndex].visits = visitsData[key];
+      }
+    });
+
+    return allMonths;
+  };
+
+  const handleYearChange = (year) => {
+    setSelectedYear(year);
+  };
+
+  // Formatter cho Tooltip để hiển thị đơn vị
+  const formatTooltipValue = (value, name) => {
+    if (name === "revenue") {
+      return `${value.toLocaleString("vi-VN")} VNĐ`;
+    }
+    return value;
   };
 
   if (loading) {
@@ -73,34 +128,77 @@ function Dashboard() {
   return (
     <Layout>
       <div className="dashboard-container">
-        <Typography variant="h4" className="dashboard-title">
-          Dashboard
-        </Typography>
+        <div className="dashboard-header">
+          <Typography variant="h4" className="dashboard-title">
+            Dashboard
+          </Typography>
+          <Select
+            value={selectedYear}
+            onChange={handleYearChange}
+            className="year-select"
+          >
+            {[...Array(10)].map((_, i) => {
+              const year = new Date().getFullYear() - i;
+              return (
+                <Option key={year} value={year}>
+                  {year}
+                </Option>
+              );
+            })}
+          </Select>
+        </div>
 
         <div className="dashboard-grid">
-          <div className="dashboard-card">
-            <h2>Vaccine Được Mua Nhiều Nhất</h2>
-            <p>{mostPurchasedVaccine || "Không có dữ liệu"}</p>
+          {/* Cột trái: Biểu đồ */}
+          <div className="dashboard-charts">
+            {/* Biểu đồ kết hợp: Doanh Thu và Số Lượt Thăm Khám Theo Tháng */}
+            <div className="dashboard-card">
+              <h2>Doanh Thu và Số Lượt Thăm Khám Theo Tháng (Năm {selectedYear})</h2>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={combinedData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ecf0f1" />
+                  <XAxis dataKey="month" stroke="#34495e" />
+                  <YAxis yAxisId="left" stroke="#34495e" />
+                  <YAxis yAxisId="right" orientation="right" stroke="#34495e" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#ffffff",
+                      borderRadius: "6px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
+                    formatter={formatTooltipValue}
+                  />
+                  <Legend />
+                  <Bar
+                    yAxisId="left"
+                    dataKey="revenue"
+                    name="Doanh Thu (VNĐ)"
+                    fill="#3498db"
+                  />
+                  <Bar
+                    yAxisId="right"
+                    dataKey="visits"
+                    name="Số Lượt Thăm Khám"
+                    fill="#2ecc71"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
-          <div className="dashboard-card">
-            <h2>Doanh Thu Theo Tháng</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={revenueData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ecf0f1" />
-                <XAxis dataKey="month" stroke="#34495e" />
-                <YAxis stroke="#34495e" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#ffffff",
-                    borderRadius: "6px",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                  }}
-                />
-                <Legend />
-                <Bar dataKey="value" fill="#3498db" /> {/* Đồng bộ màu với header bảng */}
-              </BarChart>
-            </ResponsiveContainer>
+          {/* Cột phải: Card thống kê */}
+          <div className="dashboard-stats">
+            {/* Card: Vaccine Được Mua Nhiều Nhất */}
+            <div className="dashboard-card">
+              <h2>Vaccine Được Mua Nhiều Nhất</h2>
+              <p>{mostPurchasedVaccine || "Không có dữ liệu"}</p>
+            </div>
+
+            {/* Card: Gói Dịch Vụ Được Mua Nhiều Nhất */}
+            <div className="dashboard-card">
+              <h2>Gói Dịch Vụ Được Mua Nhiều Nhất</h2>
+              <p>{mostPurchasedPackage || "Không có dữ liệu"}</p>
+            </div>
           </div>
         </div>
       </div>

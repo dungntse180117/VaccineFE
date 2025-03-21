@@ -1,86 +1,155 @@
-
 .dashboard-container {
-    font-family: "Roboto", sans-serif; 
-    padding: 40px 20px;
-    background-color: #f4f6f8; 
-    min-height: 100vh;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .dashboard-title {
-    margin-bottom: 30px;
-    font-size: 28px;
-    font-weight: 700;
-    color: #2c3e50; 
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    text-align: center;
-  }
-  
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  
-  .dashboard-card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px; 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); 
-  }
-  
-  .dashboard-card h2 {
-    margin-top: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2c3e50; 
-  }
-  
-  .dashboard-card p {
-    font-size: 1rem;
-    color: #34495e; 
-    margin: 10px 0 0;
-  }
-  
-  .data-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .data-list li {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #ecf0f1; 
-    color: #34495e;
-  }
-  
-  .data-list li:last-child {
-    border-bottom: none;
-  }
-  
-  .data-list strong {
-    font-weight: 600;
-    margin-right: 10px;
-    color: #2c3e50;
-  }
-  
-  .dashboard-loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-  }
-  
-  .dashboard-error {
-    color: #e74c3c; 
-    text-align: center;
-    margin: 20px 0;
-  }
+  padding: 40px;
+  min-width: 1500px;
+  margin: 0 auto;
+  background: #f4f7fa; 
+  min-height: 800px;
+}
+
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+
+.dashboard-title {
+  color: #2c3e50;
+  font-size: 32px;
+  font-weight: 700;
+  position: relative;
+  text-align: center;
+  margin: 0;
+}
+
+.dashboard-title::after {
+  content: "";
+  width: 60px;
+  height: 4px;
+  background-color: #3498db;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.year-select {
+  width: 120px;
+}
+
+.year-select .ant-select-selector {
+  border-radius: 6px !important;
+  border: 1px solid #d9d9d9 !important;
+  padding: 6px 12px !important;
+  font-size: 14px !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.year-select .ant-select-selector:hover {
+  border-color: #3498db !important;
+}
+
+.year-select .ant-select-selector:focus {
+  border-color: #3498db !important;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2) !important;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr; 
+  gap: 24px;
+}
+
+
+.dashboard-charts {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+
+.dashboard-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.dashboard-stats .dashboard-card {
+  padding: 16px;/
+}
+
+
+.dashboard-charts .dashboard-card {
+  padding: 24px; 
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h2 {
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+
+.dashboard-stats .dashboard-card h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.dashboard-card p {
+  color: #34495e;
+  font-size: 16px;
+  margin: 0;
+}
+
+.dashboard-stats .dashboard-card p {
+  font-size: 14px; 
+}
+
+
+.recharts-cartesian-axis-tick {
+  font-size: 12px;
+  fill: #34495e;
+}
+
+
+.recharts-legend-item-text {
+  font-size: 14px;
+  color: #34495e !important;
+}
+
+.dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+
+.dashboard-error {
+  color: #e74c3c;
+  font-size: 16px;
+  text-align: center;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
