@@ -16,10 +16,12 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: var(--background-color);
   padding: 24px;
+  position: relative;
 }
 
 .RegistrationStepHeading {
   margin-bottom: 20px;
+  margin-top: 48px; 
   color: var(--text-color);
   border-bottom: 2px solid var(--primary-color);
   padding-bottom: 5px;
@@ -27,7 +29,7 @@
 }
 
 .RegistrationErrorMessage {
-  color: red; /* Đổi màu lỗi thành đỏ cho dễ nhìn */
+  color: red;
   margin-top: 5px;
   font-size: 0.9em;
 }
@@ -45,12 +47,15 @@
 .RegistrationSelectionList {
   flex: 1;
 }
-.RegistrationVaccinationListContainer{
-   margin-bottom: 20px;
+
+.RegistrationVaccinationListContainer {
+  margin-bottom: 20px;
 }
+
 .RegistrationServiceListContainer {
   margin-bottom: 20px;
 }
+
 .RegistrationLoadingIndicator {
   border: 4px solid #f3f3f3;
   border-top: 4px solid var(--primary-color);
@@ -65,7 +70,6 @@
   0% {
       transform: rotate(0deg);
   }
-
   100% {
       transform: rotate(360deg);
   }
@@ -76,6 +80,7 @@
   height: 150px;  
   cursor: pointer;
 }
+
 .RegistrationCardSelected {
   background-color: #bec3c2f6;
   border-color: #010809;
@@ -91,8 +96,9 @@
 .RegistrationNextButton {
   margin-top: 20px;
 }
+
 .RegistrationSearchButton {
-  margin-top:0px;
+  margin-top: 0px;
   padding-right: 0px;
   margin-left: 0px;
 }
@@ -108,13 +114,24 @@
 }
 
 .RegistrationFormControlGroup {
-   margin-bottom: 15px;
-   padding-right: 0px;
-   padding-left: 0px;
+  margin-bottom: 15px;
+  padding-right: 0px;
+  padding-left: 0px;
 }
-.RegistrationCreateButton{
+
+.RegistrationCreateButton {
   margin-top: 20px;
 }
+
 .RegistrationPaymentButton {
   margin-top: 20px;
+}
+
+.MuiButton-outlined.MuiButton-colorNeutral {
+  border-color: #1976d2;
+  color: #1976d2;
+}
+
+.MuiButton-outlined.MuiButton-colorNeutral:hover {
+  background-color: rgba(25, 118, 210, 0.04);
 }

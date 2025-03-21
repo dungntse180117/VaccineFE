@@ -37,8 +37,7 @@ import { getVisits, updateVisit, deleteVisit, updateVisitStatus } from "../../co
 import "./ManageVisit.css";
 import { useNavigate } from "react-router-dom";
 
-const { Content } = Layout;
-const drawerWidth = 200;
+const { Content, Sider } = Layout;
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
@@ -179,8 +178,10 @@ const ManageVisit = () => {
   return (
     <Layout className="manage-visit-layout">
       <AppHeader />
-      <Layout>
-        <StaffSideBar />
+      <Layout style={{ marginTop: 64 }}>
+        <Sider width={200} className="manage-visit-sider">
+          <StaffSideBar />
+        </Sider>
         <Content className="manage-visit-content">
           <Breadcrumb className="manage-visit-breadcrumb">
             <Breadcrumb.Item>Trang chủ</Breadcrumb.Item>

@@ -1,82 +1,97 @@
 .visit-history-container {
-    padding: 40px 20px;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #f4f6f8;
-    min-height: 100vh;
-  }
-  
-  .visit-history-title {
-    color: #2c3e50;
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    margin-bottom: 40px;
-    text-align: center;
-  }
-  
-  .visit-history-table-container {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: #ffffff;
-  }
-  
-  .visit-history-table-header {
-    background-color: #3498db;
-    color: #ffffff;
-    font-weight: 600;
-    text-align: left;
-    padding: 16px;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-  }
-  
-  .visit-history-table-cell {
-    padding: 16px;
-    text-align: left;
-    border-bottom: 1px solid #ecf0f1;
-    color: #34495e;
-    font-size: 0.95rem;
-    transition: background-color 0.2s ease;
-  }
-  
-  .visit-history-table-row:hover .visit-history-table-cell {
-    background-color: #f9f9f9;
-  }
-  
-  .visit-history-no-data {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    flex-direction: column;
-    color: #7f8c8d;
-    font-size: 1.2rem;
-  }
-  
-  .visit-history-modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 24px;
-  }
-  
-  .visit-history-modal-title {
-    color: #2c3e50;
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin-bottom: 16px;
-  }
-  
-  .visit-history-breadcrumb {
-    margin: 16px 0;
-    color: #7f8c8d;
-  }
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.visit-history-container .ant-layout-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #e6f0fa; /* Màu nền xanh nhạt như trong hình */
+  padding: 0 20px;
+  height: 64px;
+  line-height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 100px;
+}
+
+.visit-history-title {
+  color: #2c3e50;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.visit-history-table-container {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.visit-history-table-header {
+  background-color: #3498db;
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  padding: 16px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.visit-history-table-cell {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+  color: #34495e;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.visit-history-table-row:hover .visit-history-table-cell {
+  background-color: #f9f9f9;
+}
+
+.visit-history-no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  flex-direction: column;
+  color: #7f8c8d;
+  font-size: 1.2rem;
+}
+
+.visit-history-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.visit-history-modal-title {
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+}
+
+.visit-history-breadcrumb {
+  margin: 16px 0;
+  color: #7f8c8d;
+}

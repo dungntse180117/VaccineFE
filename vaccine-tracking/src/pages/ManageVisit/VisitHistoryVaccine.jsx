@@ -88,27 +88,45 @@ const VisitHistoryVaccine = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
-        <CircularProgress size={60} thickness={4} />
-      </Box>
+      <Layout className="visit-history-container">
+        <AppHeader />
+        <Layout style={{ marginTop: 64 }}>
+          <Content>
+            <Breadcrumb className="visit-history-breadcrumb">
+              <Breadcrumb.Item>Trang chủ</Breadcrumb.Item>
+              <Breadcrumb.Item>Quản lý Lịch Hẹn Tiêm</Breadcrumb.Item>
+              <Breadcrumb.Item>Lịch Sử Tiêm Chủng</Breadcrumb.Item>
+            </Breadcrumb>
+            <MainContent>
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
+                <CircularProgress size={60} thickness={4} />
+              </Box>
+            </MainContent>
+          </Content>
+        </Layout>
+      </Layout>
     );
   }
 
   if (error) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
-        <Alert severity="error">{error}</Alert>
-      </Box>
-    );
-  }
-
-  if (!histories || histories.length === 0) {
-    return (
-      <Box className="visit-history-no-data">
-        <Typography variant="h6" color="textSecondary">
-          Không có lịch sử tiêm cho lần khám này.
-        </Typography>
-      </Box>
+      <Layout className="visit-history-container">
+        <AppHeader />
+        <Layout style={{ marginTop: 64 }}>
+          <Content>
+            <Breadcrumb className="visit-history-breadcrumb">
+              <Breadcrumb.Item>Trang chủ</Breadcrumb.Item>
+              <Breadcrumb.Item>Quản lý Lịch Hẹn Tiêm</Breadcrumb.Item>
+              <Breadcrumb.Item>Lịch Sử Tiêm Chủng</Breadcrumb.Item>
+            </Breadcrumb>
+            <MainContent>
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
+                <Alert severity="error">{error}</Alert>
+              </Box>
+            </MainContent>
+          </Content>
+        </Layout>
+      </Layout>
     );
   }
 
@@ -149,7 +167,7 @@ const VisitHistoryVaccine = () => {
   return (
     <Layout className="visit-history-container">
       <AppHeader />
-      <Layout>
+      <Layout style={{ marginTop: 64 }}>
         <Content>
           <Breadcrumb className="visit-history-breadcrumb">
             <Breadcrumb.Item>Trang chủ</Breadcrumb.Item>
@@ -162,30 +180,38 @@ const VisitHistoryVaccine = () => {
               Lịch Sử Tiêm Vaccine
             </Typography>
 
-            <TableContainer component={Paper} className="visit-history-table-container">
-              <Table aria-label="vaccination history table">
-                <TableHead>
-                  <TableRow>
-                    {columns.map((column) => (
-                      <TableCell key={column.key} className="visit-history-table-header">
-                        {column.title}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {histories.map((history) => (
-                    <TableRow key={history.vaccinationHistoryID} className="visit-history-table-row">
+            {histories.length === 0 ? (
+              <Box className="visit-history-no-data">
+                <Typography variant="h6" color="textSecondary">
+                  Không có lịch sử tiêm cho lần khám này.
+                </Typography>
+              </Box>
+            ) : (
+              <TableContainer component={Paper} className="visit-history-table-container">
+                <Table aria-label="vaccination history table">
+                  <TableHead>
+                    <TableRow>
                       {columns.map((column) => (
-                        <TableCell key={column.key} className="visit-history-table-cell">
-                          {column.render(history[column.dataIndex], history)}
+                        <TableCell key={column.key} className="visit-history-table-header">
+                          {column.title}
                         </TableCell>
                       ))}
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {histories.map((history) => (
+                      <TableRow key={history.vaccinationHistoryID} className="visit-history-table-row">
+                        {columns.map((column) => (
+                          <TableCell key={column.key} className="visit-history-table-cell">
+                            {column.render(history[column.dataIndex], history)}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </MainContent>
         </Content>
       </Layout>
