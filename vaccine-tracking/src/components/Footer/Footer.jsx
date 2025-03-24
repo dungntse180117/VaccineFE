@@ -12,10 +12,10 @@ const Footer = () => {
           <p className="tagline">Bảo vệ sức khỏe, an tâm tương lai.</p>
         </div>
         <nav className="footer-nav">
-          <a href="tel:03746681">
+          <a >
             <FontAwesomeIcon icon={faPhone} /> Số điện liên hệ: 03746681
           </a>
-          <a href="mailto:vaccineforlife2025@gmail.com">
+          <a>
             <FontAwesomeIcon icon={faEnvelope} /> Email: vaccineforlife2025@gmail.com
           </a>
         </nav>
