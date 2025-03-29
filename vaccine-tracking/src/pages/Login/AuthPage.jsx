@@ -173,7 +173,6 @@ export default function AuthPage() {
                 color="neutral"
                 onClick={handleHomeClick}
               >
-                UNINEST
               </Button>
             </Box>
             <ColorSchemeToggle />
@@ -289,7 +288,7 @@ export default function AuthPage() {
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body-xs" sx={{ textAlign: "center" }}>
-              © Your company {new Date().getFullYear()}
+              © Cơ sở tiêm vaccine {new Date().getFullYear()}
             </Typography>
           </Box>
         </Box>

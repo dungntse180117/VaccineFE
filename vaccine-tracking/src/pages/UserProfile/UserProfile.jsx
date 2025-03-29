@@ -3,7 +3,7 @@ import { Layout, Menu, Form, Input, Button, Row, Col, message, Breadcrumb } from
 import AppHeader from "../../components/Header/Header";
 import FooterComponent from "../../components/Footer/Footer";
 import {
-  getAccountById, // Thay getAccountByEmail bằng getAccountById
+  getAccountById, 
   updateAccount,
   changePassword,
   getAllRegistrationsByAccountId,
