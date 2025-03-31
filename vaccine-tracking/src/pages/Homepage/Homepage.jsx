@@ -62,7 +62,9 @@ const HomePage = () => {
                 if (feedbackResponse && Array.isArray(feedbackResponse)) {
                     const approved = feedbackResponse.filter(fb => fb.status === "Approved");
                     setApprovedFeedbacks(approved);
-                    const initialFiltered = approved.filter(fb => fb.rating === 5);
+                    const initialFiltered = approved
+                        .filter(fb => fb.rating === 5)
+                        .sort((a, b) => new Date(b.feedbackDate) - new Date(a.feedbackDate));
                     setFilteredFeedbacks(initialFiltered);
                 } else {
                     console.warn("Không thể tải danh sách phản hồi hoặc dữ liệu không hợp lệ.");
@@ -83,7 +85,10 @@ const HomePage = () => {
         const filtered = approvedFeedbacks.filter(
             (feedback) => feedback.rating === rating
         );
-        setFilteredFeedbacks(filtered);
+        const sortedFiltered = filtered.sort((a, b) => 
+            new Date(b.feedbackDate) - new Date(a.feedbackDate)
+        );
+        setFilteredFeedbacks(sortedFiltered);
     };
 
     const getAgeUnitText = (ageUnitId) => {
@@ -245,7 +250,7 @@ const HomePage = () => {
                                         </Box>
                                     </Box>
                                     <Typography variant="body1">
-                                        "{feedback.comment || "Không có bình luận"}"
+                                        {feedback.comment || "Không có bình luận"}
                                     </Typography>
                                 </CardContent>
                             </Card>

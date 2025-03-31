@@ -17,7 +17,6 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import { useNavigate } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import api from "../../config/axios";
 import { message } from "antd"; 
 
@@ -167,7 +166,6 @@ export default function AuthPage() {
               >
               </Button>
             </Box>
-            <ColorSchemeToggle />
           </Box>
           <Box
             component="main"
