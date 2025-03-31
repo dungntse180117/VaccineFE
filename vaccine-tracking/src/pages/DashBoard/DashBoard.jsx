@@ -25,7 +25,7 @@ const { Option } = Select;
 function Dashboard() {
   const [mostPurchasedVaccine, setMostPurchasedVaccine] = useState("");
   const [mostPurchasedPackage, setMostPurchasedPackage] = useState("");
-  const [combinedData, setCombinedData] = useState([]); // Dữ liệu kết hợp
+  const [combinedData, setCombinedData] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -46,8 +46,6 @@ function Dashboard() {
 
       const revenueResult = await getRevenuePerMonth(year);
       const visitsResult = await getVisitsPerMonth(year);
-
-      // Gộp dữ liệu doanh thu và số lượt thăm khám
       setCombinedData(formatCombinedChartData(revenueResult.data, visitsResult.data));
     } catch (err) {
       setError(err);
@@ -58,14 +56,12 @@ function Dashboard() {
   };
 
   const formatCombinedChartData = (revenueData, visitsData) => {
-    // Tạo mảng 12 tháng với giá trị mặc định là 0 cho cả revenue và visits
     const allMonths = Array.from({ length: 12 }, (_, i) => ({
       month: `Tháng ${i + 1}`,
       revenue: 0,
       visits: 0,
     }));
 
-    // Cập nhật giá trị từ dữ liệu API
     Object.keys(revenueData).forEach((key) => {
       const monthIndex = parseInt(key) - 1;
       if (monthIndex >= 0 && monthIndex < 12) {
@@ -87,7 +83,6 @@ function Dashboard() {
     setSelectedYear(year);
   };
 
-  // Formatter cho Tooltip để hiển thị đơn vị
   const formatTooltipValue = (value, name) => {
     if (name === "revenue") {
       return `${value.toLocaleString("vi-VN")} VNĐ`;
@@ -149,9 +144,8 @@ function Dashboard() {
         </div>
 
         <div className="dashboard-grid">
-          {/* Cột trái: Biểu đồ */}
+
           <div className="dashboard-charts">
-            {/* Biểu đồ kết hợp: Doanh Thu và Số Lượt Thăm Khám Theo Tháng */}
             <div className="dashboard-card">
               <h2>Doanh Thu và Số Lượt Thăm Khám Theo Tháng (Năm {selectedYear})</h2>
               <ResponsiveContainer width="100%" height={400}>
@@ -186,15 +180,15 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Cột phải: Card thống kê */}
+
           <div className="dashboard-stats">
-            {/* Card: Vaccine Được Mua Nhiều Nhất */}
+       
             <div className="dashboard-card">
               <h2>Vaccine Được Mua Nhiều Nhất</h2>
               <p>{mostPurchasedVaccine || "Không có dữ liệu"}</p>
             </div>
 
-            {/* Card: Gói Dịch Vụ Được Mua Nhiều Nhất */}
+       
             <div className="dashboard-card">
               <h2>Gói Dịch Vụ Được Mua Nhiều Nhất</h2>
               <p>{mostPurchasedPackage || "Không có dữ liệu"}</p>

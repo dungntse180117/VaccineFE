@@ -90,7 +90,6 @@ function VaccinationServiceDetail() {
       <Header />
       <Paper className="vaccination-service-detail-paper" elevation={3}>
         <Grid container spacing={3}>
-          {/* Thông tin gói vaccine (bên trái) */}
           <Grid item xs={12} md={6}>
             <Typography variant="h4" className="vaccination-service-detail-title">
               {vaccinationService.serviceName}
@@ -109,7 +108,7 @@ function VaccinationServiceDetail() {
                 <strong>Mô tả:</strong> {vaccinationService.description}
               </Typography>
             </Paper>
-            {/* Hiển thị danh sách các bệnh phòng ngừa */}
+         
             <Typography variant="subtitle1" mt={2}>
               <strong>Phòng bệnh:</strong>
             </Typography>

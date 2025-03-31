@@ -19,11 +19,7 @@ import Stack from "@mui/joy/Stack";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import api from "../../config/axios";
-import { message } from "antd"; // Import message từ Ant Design
-
-function ColorSchemeToggle(props) {
-  // Toggle theme (lightmode or darkmode) logic here
-}
+import { message } from "antd"; 
 
 const customTheme = extendTheme({ defaultColorScheme: "dark" });
 
@@ -70,10 +66,8 @@ export default function AuthPage() {
             password: data.password,
           });
 
-          // Lấy dữ liệu từ phản hồi
           const { id, name, email, roleId, token } = response.data;
 
-          // Lưu trữ dữ liệu vào localStorage
           localStorage.setItem("token", token);
           localStorage.setItem(
             "user",
@@ -87,12 +81,10 @@ export default function AuthPage() {
           localStorage.setItem("accountId", id);
           localStorage.setItem("roleId", roleId);
 
-          // Hiển thị thông báo thành công
           message.success("Đăng nhập thành công!");
           navigate("/");
         } catch (err) {
           console.error(err);
-          // Hiển thị thông báo lỗi từ phản hồi API
           message.error(err.response?.data || "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!");
         }
         break;
@@ -114,11 +106,11 @@ export default function AuthPage() {
             address: data.address,
           });
           console.log("Registration successful", response.data);
-          // Hiển thị thông báo thành công
+      
           message.success("Đăng ký thành công!");
         } catch (error) {
           console.error("Registration failed", error.response.data);
-          // Hiển thị thông báo lỗi từ phản hồi API
+          
           message.error(error.response?.data || "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin!");
         }
         break;

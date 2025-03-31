@@ -55,7 +55,7 @@
 .appointment-manager-delete-button:hover {
   color: #c0392b;
 }
-/*appointment-details */
+
 .appointment-details-paper {
   padding: 24px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);

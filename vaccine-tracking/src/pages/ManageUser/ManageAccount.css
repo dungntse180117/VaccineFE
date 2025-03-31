@@ -14,7 +14,7 @@
   text-transform: uppercase;
   letter-spacing: 1.2px;
   font-family: "Roboto", sans-serif;
-  text-align: center; /* Căn giữa tiêu đề */
+  text-align: center; 
 }
 
 .manage-account-filter-container {

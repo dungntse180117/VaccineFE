@@ -8,8 +8,11 @@ import {
   Box,
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import { ManageAccounts } from '@mui/icons-material';
+import DashboardIcon from "@mui/icons-material/Dashboard"; 
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"; 
+import VaccinesIcon from "@mui/icons-material/Vaccines"; 
+import BugReportIcon from "@mui/icons-material/BugReport"; 
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices"; 
 
 const drawerWidth = 200;
 
@@ -18,10 +21,10 @@ const DashboardSidebar = () => {
   const headerHeight = 73;
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-    { text: "Manage User", icon: <ManageAccounts />, path: "/manageaccount" },
-    { text: "Vaccine", icon: <ManageAccounts />, path: "/managevaccine" },
-    { text: "Disease", icon: <ManageAccounts />, path: "/diseasemanager" },
-    { text: "Gói tiêm", icon: <ManageAccounts />, path: "/managevaccinationservice" },
+    { text: "Manage User", icon: <ManageAccountsIcon />, path: "/manageaccount" },
+    { text: "Vaccine", icon: <VaccinesIcon />, path: "/managevaccine" },
+    { text: "Disease", icon: <BugReportIcon />, path: "/diseasemanager" },
+    { text: "Gói tiêm", icon: <MedicalServicesIcon />, path: "/managevaccinationservice" },
   ];
 
   return (
@@ -40,7 +43,7 @@ const DashboardSidebar = () => {
           position: "fixed",
         },
       }}
-      classes={{ paper: "sidebar-container" }} // Áp dụng class CSS
+      classes={{ paper: "sidebar-container" }} 
     >
       <Box sx={{ overflow: "auto" }}>
         <List>

@@ -241,7 +241,6 @@ const ManageAccount = () => {
           </Table>
         </TableContainer>
 
-        {/* Dialog Tạo Tài Khoản */}
         <Dialog open={open} onClose={handleClose} className="manage-account-dialog-container">
           <DialogTitle className="manage-account-dialog-title">Tạo Tài Khoản Mới</DialogTitle>
           <DialogContent>
@@ -312,8 +311,7 @@ const ManageAccount = () => {
             </Button>
           </DialogActions>
         </Dialog>
-
-        {/* Dialog Sửa Tài Khoản */}
+     
         <Dialog open={editOpen} onClose={handleEditClose} className="manage-account-dialog-container">
           <DialogTitle className="manage-account-dialog-title">Sửa Tài Khoản</DialogTitle>
           <DialogContent>

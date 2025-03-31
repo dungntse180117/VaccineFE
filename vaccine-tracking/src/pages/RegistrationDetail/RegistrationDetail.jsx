@@ -203,7 +203,6 @@ function RegistrationDetail() {
           )}
         </TableContainer>
 
-        {/* Modal Tạo Lịch Hẹn */}
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
           <DialogTitle sx={{ bgcolor: "#3498db", color: "#fff", fontWeight: 600 }}>
             Tạo Lịch Hẹn

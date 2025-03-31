@@ -15,7 +15,7 @@ import moment from "moment";
 import AppHeader from "../../components/Header/Header";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper"; // Thêm import Paper
+import Paper from "@mui/material/Paper"; 
 import { useParams } from 'react-router-dom';
 import "./PatientVisitManager.css";
 import {
@@ -24,7 +24,7 @@ import {
     getVisitDayChangeRequestsByVisitId,
 } from "../../config/axios";
 
-// FullCalendar Imports
+
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -82,7 +82,7 @@ const PatientVisitManager = () => {
         }
     };
 
-    // Tạo sự kiện cho FullCalendar
+    
     const calendarEvents = visits.map((visit) => {
         if (!visit || !visit.status || !visit.visitDate) {
             console.error("Invalid visit data:", visit);
@@ -113,7 +113,7 @@ const PatientVisitManager = () => {
         return [];
     };
 
-    // Xử lý khi click vào sự kiện trên calendar
+   
     const handleEventClick = (eventInfo) => {
         const visitIdFromEvent = eventInfo.event.extendedProps.visitId;
         const visit = visits.find(v => v.visitID === visitIdFromEvent);
@@ -128,12 +128,12 @@ const PatientVisitManager = () => {
         }
     };
 
-    // Xử lý khi nhấn nút "Thay đổi ngày tiêm"
+  
     const handleChangeDateClick = () => {
         setIsChangeDateModalVisible(true);
     };
 
-    // Xử lý khi gửi yêu cầu thay đổi ngày tiêm
+  
     const handleSubmitChangeDate = async (values) => {
         const { visitId, requestedDate, reason } = values;
 
@@ -159,7 +159,7 @@ const PatientVisitManager = () => {
         }
     };
 
-    // Hiển thị thông tin chi tiết của lần thăm khám
+
     const renderVisitDetails = (visit) => {
         if (!visit) return null;
         return (
@@ -174,7 +174,7 @@ const PatientVisitManager = () => {
         );
     };
 
-    // Cột cho bảng hiển thị yêu cầu thay đổi ngày tiêm
+
     const columns = [
         {
             title: "Ngày yêu cầu",
@@ -258,7 +258,7 @@ const PatientVisitManager = () => {
                 </Content>
             </Layout>
 
-            {/* Modal hiển thị thông tin chi tiết */}
+    
             <Modal
                 title="Thông tin thăm khám"
                 visible={isModalVisible}
@@ -279,7 +279,7 @@ const PatientVisitManager = () => {
                 />
             </Modal>
 
-            {/* Modal thay đổi ngày tiêm */}
+       
             <Modal
                 title="Thay đổi ngày tiêm"
                 visible={isChangeDateModalVisible}

@@ -1,0 +1,57 @@
+.feedback-manager-title {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .feedback-manager-table-container {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+  }
+  
+  .feedback-manager-table-header {
+    background-color: #3498db;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 16px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .feedback-manager-table-cell {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+    color: #34495e;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .feedback-manager-table-cell:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .feedback-manager-edit-button {
+    color: #3498db;
+    transition: color 0.2s ease;
+  }
+  
+  .feedback-manager-edit-button:hover {
+    color: #2980b9;
+  }
+  
+  .feedback-manager-delete-button {
+    color: #e74c3c;
+    transition: color 0.2s ease;
+  }
+  
+  .feedback-manager-delete-button:hover {
+    color: #c0392b;
+  }

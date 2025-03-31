@@ -8,8 +8,11 @@ import {
   Box,
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import VaccinesIcon from '@mui/icons-material/Vaccines'; 
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'; 
+import EventIcon from '@mui/icons-material/Event'; 
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle'; 
+import FeedbackIcon from '@mui/icons-material/Feedback';
 import './StaffSidebar.css';
 
 const drawerWidth = 200;
@@ -20,23 +23,28 @@ const StaffSideBar = () => {
   const menuItems = [
     {
       text: "Quản lí đăng kí tiêm",
-      icon: <LocalHospitalIcon />,
+      icon: <VaccinesIcon />, 
       path: "/registrationdetail",
     },
     {
       text: "Quản lí lịch tiêm tổng quát",
-      icon: <EventAvailableIcon />,
+      icon: <CalendarTodayIcon />, 
       path: "/manageappointment",
     },
     {
       text: "Quản lí lịch tiêm",
-      icon: <EventAvailableIcon />,
+      icon: <EventIcon />,
       path: "/managevisit",
     },
     {
       text: "Quản lí yêu cầu thay đổi ngày tiêm",
-      icon: <EventAvailableIcon />,
+      icon: <ChangeCircleIcon />, 
       path: "/managevisitdaychangerequest",
+    },
+    {
+      text: "Quản lí phản hồi",
+      icon: <FeedbackIcon />, 
+      path: "/managefeedback",
     },
   ];
 
@@ -55,7 +63,7 @@ const StaffSideBar = () => {
           height: `calc(100% - ${headerHeight}px)`,
         },
       }}
-      classes={{ paper: "sidebar-container" }} // Áp dụng class CSS
+      classes={{ paper: "sidebar-container" }}
     >
       <Box sx={{ overflow: "auto" }}>
         <List>

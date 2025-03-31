@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Typography, Grid, Card, CardContent, CardMedia, CardActionArea, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, CardMedia, CardActionArea, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import { Star, StarBorder } from '@mui/icons-material';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import { getAllVaccination, getVaccinationImage, getDiseaseByVaccinationId } from '../../config/axios';
+import { getAllVaccination, getVaccinationImage, getDiseaseByVaccinationId, getAllFeedbacks } from '../../config/axios';
 import './HomePage.css';
 import NoImage from "../../assets/NoImage.png";
+
 const HomePage = () => {
     const [featuredVaccines, setFeaturedVaccines] = useState([]);
     const [allVaccinesForPriceTable, setAllVaccinesForPriceTable] = useState([]);
+    const [approvedFeedbacks, setApprovedFeedbacks] = useState([]);
+    const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
+    const [selectedRating, setSelectedRating] = useState(5);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchVaccineData = async () => {
+        const fetchData = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await getAllVaccination();
-                if (response && response.data && Array.isArray(response.data)) {
-                    const allVaccinesData = response.data;
+                const vaccineResponse = await getAllVaccination();
+                if (vaccineResponse && vaccineResponse.data && Array.isArray(vaccineResponse.data)) {
+                    const allVaccinesData = vaccineResponse.data;
                     setAllVaccinesForPriceTable(allVaccinesData);
 
                     const vaccinesToFeature = allVaccinesData.slice(0, 6);
@@ -52,28 +57,55 @@ const HomePage = () => {
                 } else {
                     setError("Không thể tải danh sách vaccine.");
                 }
+
+                const feedbackResponse = await getAllFeedbacks();
+                if (feedbackResponse && Array.isArray(feedbackResponse)) {
+                    const approved = feedbackResponse.filter(fb => fb.status === "Approved");
+                    setApprovedFeedbacks(approved);
+                    const initialFiltered = approved.filter(fb => fb.rating === 5);
+                    setFilteredFeedbacks(initialFiltered);
+                } else {
+                    console.warn("Không thể tải danh sách phản hồi hoặc dữ liệu không hợp lệ.");
+                }
             } catch (error) {
-                console.error("Error fetching featured vaccines:", error);
-                setError("Có lỗi xảy ra khi lấy dữ liệu vaccine.");
+                console.error("Error fetching data:", error);
+                setError("Có lỗi xảy ra khi lấy dữ liệu.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchVaccineData();
+        fetchData();
     }, []);
+
+    const handleStarClick = (rating) => {
+        setSelectedRating(rating);
+        const filtered = approvedFeedbacks.filter(
+            (feedback) => feedback.rating === rating
+        );
+        setFilteredFeedbacks(filtered);
+    };
 
     const getAgeUnitText = (ageUnitId) => {
         switch (ageUnitId) {
-            case 1:
-                return "ngày tuổi";
-            case 2:
-                return "tháng tuổi";
-            case 3:
-                return "năm tuổi";
-            default:
-                return "tuổi";
+            case 1: return "ngày tuổi";
+            case 2: return "tháng tuổi";
+            case 3: return "năm tuổi";
+            default: return "tuổi";
         }
+    };
+
+    const renderStars = (rating) => {
+        return (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {[...Array(5)].map((_, index) => (
+                    <Star
+                        key={index}
+                        sx={{ color: index < rating ? '#f5c518' : '#e0e0e0', fontSize: '1.2rem' }}
+                    />
+                ))}
+            </Box>
+        );
     };
 
     if (loading) {
@@ -167,9 +199,7 @@ const HomePage = () => {
                         <TableBody>
                             {allVaccinesForPriceTable.map((vaccine) => (
                                 <TableRow key={vaccine.vaccinationId}>
-                                    <TableCell component="th" scope="row">
-                                        {vaccine.vaccinationName}
-                                    </TableCell>
+                                    <TableCell component="th" scope="row">{vaccine.vaccinationName}</TableCell>
                                     <TableCell align="left">{vaccine.manufacturer}</TableCell>
                                     <TableCell align="left">{vaccine.price}</TableCell>
                                 </TableRow>
@@ -179,6 +209,54 @@ const HomePage = () => {
                 </TableContainer>
             </Box>
 
+            <Box className="feedback-section">
+                <Typography variant="h5" gutterBottom align="center">
+                    Phản Hồi Từ Khách Hàng
+                </Typography>
+                <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                        <IconButton
+                            key={star}
+                            onClick={() => handleStarClick(star)}
+                            sx={{ p: 0.5 }}
+                        >
+                            {star <= selectedRating ? (
+                                <Star sx={{ color: '#f5c518' }} />
+                            ) : (
+                                <StarBorder sx={{ color: '#f5c518' }} />
+                            )}
+                        </IconButton>
+                    ))}
+                </Box>
+                <Box className="feedback-wrapper">
+                    {filteredFeedbacks.length > 0 ? (
+                        filteredFeedbacks.map((feedback) => (
+                            <Card key={feedback.feedbackId} className="feedback-card">
+                                <CardContent>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                                        <Typography variant="h6" component="div">
+                                            {feedback.accountName || "Ẩn danh"}
+                                        </Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            {renderStars(feedback.rating)}
+                                            <Typography variant="caption" color="textSecondary" sx={{ ml: 1 }}>
+                                                {feedback.feedbackDate ? new Date(feedback.feedbackDate).toLocaleDateString("vi-VN") : "N/A"}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                    <Typography variant="body1">
+                                        "{feedback.comment || "Không có bình luận"}"
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        ))
+                    ) : (
+                        <Typography variant="body1" align="center">
+                            Không có phản hồi nào phù hợp với số sao đã chọn.
+                        </Typography>
+                    )}
+                </Box>
+            </Box>
             <Footer />
         </Box>
     );

@@ -11,7 +11,7 @@ import {
 } from "antd";
 import moment from "moment";
 import AppHeader from "../../components/Header/Header";
-import api, {
+import  {
   createPatient,
   updatePatient,
   deletePatient,
@@ -320,8 +320,6 @@ const PatientManager = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-
-            {/* Add Patient Modal */}
             <Modal
               title="Tạo Hồ Sơ Tiêm Chủng"
               open={isAddModalOpen}
@@ -367,8 +365,6 @@ const PatientManager = () => {
                 </Form.Item>
               </Form>
             </Modal>
-
-            {/* Edit Patient Modal */}
             <Modal
               title="Chỉnh sửa thông tin bệnh nhân"
               open={isEditModalOpen}

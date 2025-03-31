@@ -1,17 +1,16 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import Header from '../../components/Header/Header'; // Import Header
-import Footer from '../../components/Footer/Footer'; // Import Footer
-import { Box, Typography, Button } from '@mui/material'; // Import Material-UI components
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Import icon
+import Header from '../../components/Header/Header'; 
+import Footer from '../../components/Footer/Footer'; 
+import { Box, Typography, Button } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'; 
 
 const PaymentSuccess = () => {
     return (
         <Box className="payment-success-container">
-            {/* Header */}
+  
             <Header />
 
-            {/* Main Content */}
             <Box
                 sx={{
                     display: 'flex',
@@ -23,7 +22,7 @@ const PaymentSuccess = () => {
                     padding: '20px',
                 }}
             >
-                {/* Success Icon */}
+                
                 <CheckCircleIcon
                     sx={{
                         fontSize: '80px',
@@ -32,7 +31,7 @@ const PaymentSuccess = () => {
                     }}
                 />
 
-                {/* Success Message */}
+              
                 <Typography variant="h4" gutterBottom>
                     Thanh toán thành công!
                 </Typography>
@@ -40,7 +39,7 @@ const PaymentSuccess = () => {
                     Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.
                 </Typography>
 
-                {/* Back to Home Button */}
+                
                 <Button
                     variant="contained"
                     color="primary"
@@ -56,7 +55,7 @@ const PaymentSuccess = () => {
                 </Button>
             </Box>
 
-            {/* Footer */}
+            
             <Footer />
         </Box>
     );

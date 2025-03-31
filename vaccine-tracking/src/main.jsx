@@ -28,6 +28,8 @@ import PaymentSuccess from "./pages/Registration/PaymentSuccess";
 import PaymentFailed from "./pages/Registration/PaymentFailed";
 import Dashboard from "./pages/DashBoard/DashBoard";
 import HistoryRegistration from "./pages/ManageUser/HistoryRegistration";
+import FeedbackForUser from "./pages/FeedbackForUser/FeedbackForUser";
+import ManageFeedback from "./pages/ManageFeedback/ManageFeedback";
 
 const App = () => {
   return (
@@ -47,6 +49,7 @@ const App = () => {
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
           <Route path="/history-registration/:accountId" element={<HistoryRegistration />} />
+          <Route path="/feedback" element={<FeedbackForUser />} />
           <Route
             path="/profile"
             element={
@@ -137,12 +140,19 @@ const App = () => {
             }
           />
           <Route path="/visit-history-vaccine/:visitId" 
-          element=
-          {
+          element={
           <ProtectedRoute requiredRole={2}>
           <VisitHistoryVaccine />
           </ProtectedRoute>
           } 
+          />
+           <Route
+            path="/managefeedback"
+            element={
+              <ProtectedRoute requiredRole={2}>
+                <ManageFeedback />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </Router>

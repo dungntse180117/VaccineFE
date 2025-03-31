@@ -622,4 +622,68 @@ export const getMostPurchasedPackage = () => {
   return api.get('/api/Dashboard/MostPurchasedPackage'); 
 };
 
+//Feedback API
+export const createFeedback = async (feedbackData) => {
+  try {
+    const response = await api.post("/api/feedbacks", feedbackData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating feedback:", error);
+    throw error;
+  }
+};
+
+export const getFeedbackById = async (feedbackId) => {
+  try {
+    const response = await api.get(`/api/feedbacks/${feedbackId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting feedback with ID ${feedbackId}:`, error);
+    throw error;
+  }
+};
+
+export const getAllFeedbacks = async () => {
+  try {
+    const response = await api.get("/api/feedbacks");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all feedbacks:", error);
+    throw error;
+  }
+};
+
+export const updateFeedback = async (feedbackId, feedbackData) => {
+  try {
+    const response = await api.put(
+      `/api/feedbacks/${feedbackId}`,
+      feedbackData
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating feedback with ID ${feedbackId}:`, error);
+    throw error;
+  }
+};
+
+export const deleteFeedback = async (feedbackId) => {
+  try {
+    await api.delete(`/api/feedbacks/${feedbackId}`);
+    return;
+  } catch (error) {
+    console.error(`Error deleting feedback with ID ${feedbackId}:`, error);
+    throw error;
+  }
+};
+
+export const checkFeedbackExistence = async (visitId) => {
+  try {
+      const response = await api.get(`/api/feedbacks/checkExistence/${visitId}`);
+      return response.data;    
+  } catch (error) {
+      console.error("Error checking feedback existence:", error);
+      return false; 
+      
+  }
+};
 export default api;
