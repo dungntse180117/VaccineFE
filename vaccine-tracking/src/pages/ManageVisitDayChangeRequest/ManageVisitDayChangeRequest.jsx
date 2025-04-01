@@ -304,7 +304,7 @@ const ManageVisitDayChangeRequest = () => {
                     htmlType="submit"
                     className="manage-visit-day-change-request-primary-button"
                   >
-                    Đồng Ý (Từ Chối)
+                    Ok
                   </AntButton>
                 )}
                 {!isRejectButtonClicked && (
