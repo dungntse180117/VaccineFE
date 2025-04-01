@@ -274,7 +274,7 @@ export default function AuthPage() {
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body-xs" sx={{ textAlign: "center" }}>
-              © Cơ sở tiêm vaccine {new Date().getFullYear()}
+              © Cơ sở tiêm chủng  Vaccine Care {new Date().getFullYear()}
             </Typography>
           </Box>
         </Box>

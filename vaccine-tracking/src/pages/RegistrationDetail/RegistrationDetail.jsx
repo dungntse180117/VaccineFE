@@ -38,7 +38,7 @@ function RegistrationDetail() {
     appointmentDate: new Date().toISOString().slice(0, 10),
     notes: "",
   });
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState("all");
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState("pending"); 
   const [filteredRegistrationDetails, setFilteredRegistrationDetails] = useState([]);
 
   useEffect(() => {

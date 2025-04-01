@@ -45,7 +45,7 @@ function ManageAppointment() {
     appointmentDate: null,
     notes: "",
   });
-  const [statusFilter, setStatusFilter] = useState(""); 
+  const [statusFilter, setStatusFilter] = useState("Chưa được lên lịch"); 
 
   const navigate = useNavigate();
 
@@ -60,7 +60,11 @@ function ManageAppointment() {
       const data = await getAppointment();
       if (data && Array.isArray(data)) {
         setAppointments(data);
-        setFilteredAppointments(data); 
+        // Áp dụng bộ lọc mặc định ngay khi dữ liệu được tải
+        const filtered = data.filter(
+          (appointment) => appointment.status === "Chưa được lên lịch"
+        );
+        setFilteredAppointments(filtered);
       } else {
         setError("Dữ liệu từ API không hợp lệ.");
       }

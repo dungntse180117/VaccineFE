@@ -37,11 +37,11 @@ const UserProfile = () => {
   const fetchUserData = async () => {
     setLoading(true);
     try {
-      const accountId = localStorage.getItem("accountId"); // Lấy accountId từ localStorage
+      const accountId = localStorage.getItem("accountId"); 
       if (!accountId) {
         throw new Error("Không tìm thấy accountId trong localStorage.");
       }
-      const user = await getAccountById(accountId); // Sử dụng getAccountById thay vì getAccountByEmail
+      const user = await getAccountById(accountId);
       setUserData(user);
       form.setFieldsValue({
         name: user.name,
@@ -118,7 +118,7 @@ const UserProfile = () => {
       setEditing(false);
       message.success("Thông tin cá nhân đã được cập nhật thành công.");
 
-      const updatedUserData = await getAccountById(accountId); // Cập nhật để sử dụng getAccountById
+      const updatedUserData = await getAccountById(accountId); 
       localStorage.setItem("user", JSON.stringify(updatedUserData));
       window.dispatchEvent(new CustomEvent("userProfileUpdated", { detail: updatedUserData }));
     } catch (error) {
@@ -412,7 +412,7 @@ const UserProfile = () => {
                       <TableCell colSpan={4}>
                         <Box sx={{ textAlign: "center", padding: "20px" }}>
                           <Typography variant="h6" color="textSecondary">
-                            Không tìm thấy lịch sử đăng ký.
+                            Bạn chưa bao giờ đăng ký tiêm chủng ở Vaccine Care
                           </Typography>
                         </Box>
                       </TableCell>

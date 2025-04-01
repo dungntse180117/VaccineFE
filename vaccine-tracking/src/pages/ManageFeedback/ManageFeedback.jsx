@@ -43,7 +43,7 @@ function ManageFeedback() {
   const [formData, setFormData] = useState({
     status: "",
   });
-  const [statusFilter, setStatusFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("Pending"); 
 
   useEffect(() => {
     fetchFeedbacks();
@@ -56,7 +56,8 @@ function ManageFeedback() {
       const data = await getAllFeedbacks();
       if (data && Array.isArray(data)) {
         setFeedbacks(data);
-        setFilteredFeedbacks(data);
+        const filtered = data.filter((feedback) => feedback.status === "Pending");
+        setFilteredFeedbacks(filtered);
       } else {
         setError("Dữ liệu phản hồi từ API không hợp lệ.");
       }
@@ -85,7 +86,7 @@ function ManageFeedback() {
   const handleOpenDialog = (feedback) => {
     setSelectedFeedback(feedback);
     setFormData({
-      status: feedback.status || "Pending", // Default remains "Pending" or adjust as needed
+      status: feedback.status || "Pending",
     });
     setOpenDialog(true);
   };
@@ -147,8 +148,8 @@ function ManageFeedback() {
             >
               <MenuItem value="">Tất cả</MenuItem>
               <MenuItem value="Pending">Pending</MenuItem>
-              <MenuItem value="Approved">Approved</MenuItem> {/* Changed to Approved */}
-              <MenuItem value="Reject">Reject</MenuItem>    {/* Changed to Reject */}
+              <MenuItem value="Approved">Approved</MenuItem> 
+              <MenuItem value="Reject">Reject</MenuItem>    
             </Select>
           </FormControl>
         </Box>
@@ -192,10 +193,10 @@ function ManageFeedback() {
                           borderRadius: "12px",
                           bgcolor:
                             feedback.status === "Pending"
-                              ? "#e67e22" // Orange - Pending
-                              : feedback.status === "Approved"    // Added Approved Status
-                              ? "#27ae60" // Green - Approved
-                              : "#e74c3c",  // Red - Reject (Used to be "#3498db" for Reviewed, now for Reject)
+                              ? "#e67e22"
+                              : feedback.status === "Approved"    
+                              ? "#27ae60" 
+                              : "#e74c3c", 
                           color: "#fff",
                           fontSize: "0.85rem",
                         }}
@@ -254,8 +255,8 @@ function ManageFeedback() {
                 onChange={handleInputChange}
               >
                 <MenuItem value="Pending">Pending</MenuItem>
-                <MenuItem value="Approved">Approved</MenuItem> {/* Changed to Approved */}
-                <MenuItem value="Reject">Reject</MenuItem>    {/* Changed to Reject */}
+                <MenuItem value="Approved">Approved</MenuItem>
+                <MenuItem value="Reject">Reject</MenuItem>    
               </Select>
             </FormControl>
           </DialogContent>
