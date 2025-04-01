@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './header.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSyringe, faUser, faClipboardList, faTachometerAlt, faCalendarCheck, faHistory } from '@fortawesome/free-solid-svg-icons'; 
+import { faSyringe, faUser, faClipboardList, faTachometerAlt, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'; 
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,7 +46,8 @@ const Header = () => {
       <div className="header-content">
         <div className="logo">
           <Link to="/" className="logo-link">
-            <img src="https://content.govdelivery.com/attachments/fancy_images/USVHA/2021/01/4005196/covid-vaccine-01_original.png" alt="Your Company Logo" />
+            <img src="https://content.govdelivery.com/attachments/fancy_images/USVHA/2021/01/4005196/covid-vaccine-01_original.png" alt="VaccineCare Logo" />
+            <span className="logo-text">Vaccine Care</span>
           </Link>
         </div>
         <nav className="header-nav">
@@ -83,10 +84,10 @@ const Header = () => {
                 </div>
               </div>
 
-              <button onClick={handleLogout}>Logout</button>
+              <button onClick={handleLogout}>Đăng xuất</button>
             </div>
           ) : (
-            <Link to="/login">Login</Link>
+            <Link to="/login">Đăng nhập</Link>
           )}
         </div>
       </div>

@@ -193,12 +193,12 @@ export default function AuthPage() {
             <Stack sx={{ gap: 4, mb: 2 }}>
               <Stack sx={{ gap: 1 }}>
                 <Typography component="h1" level="h3">
-                  {authMode === "signin" ? "Sign in" : "Sign up"}
+                  {authMode === "signin" ? "Đăng nhập" : "Đăng ký tài khoản"}
                 </Typography>
-                <Typography level="body-sm">
+                <Typography level="body-sm">  
                   {authMode === "signin"
-                    ? "Don't have an account yet? "
-                    : "Already have an account? "}
+                    ? "Chưa có toài khoản, hãy  "
+                    : "Đã có tài khoản, hãy? "}
                   <Link
                     component="button"
                     level="title-sm"
@@ -206,7 +206,7 @@ export default function AuthPage() {
                       toggleAuthMode(authMode === "signin" ? "signup" : "signin")
                     }
                   >
-                    {authMode === "signin" ? "Sign up!" : "Sign in!"}
+                    {authMode === "signin" ? "Đăng ký tài khoản!" : "Đăng nhập!"}
                   </Link>
                 </Typography>
               </Stack>
@@ -215,7 +215,7 @@ export default function AuthPage() {
               <form onSubmit={handleSubmit}>
                 {authMode === "signup" && (
                   <FormControl required>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Họ và tên</FormLabel>
                     <Input type="text" name="name" />
                   </FormControl>
                 )}
@@ -224,24 +224,24 @@ export default function AuthPage() {
                   <Input type="email" name="email" />
                 </FormControl>
                 <FormControl required>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Mật khẩu</FormLabel>
                   <Input type="password" name="password" />
                 </FormControl>
                 {authMode === "signup" && (
                   <FormControl required>
-                    <FormLabel>Confirm Password</FormLabel>
+                    <FormLabel>Xác nhận mật khẩu</FormLabel>
                     <Input type="password" name="confirmPassword" />
                   </FormControl>
                 )}
                 {authMode === "signup" && (
                   <FormControl required>
-                    <FormLabel>Phone</FormLabel>
+                    <FormLabel>Số điện thoại</FormLabel>
                     <Input type="text" name="phone" />
                   </FormControl>
                 )}
                 {authMode === "signup" && (
                   <FormControl required>
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>Địa chỉ</FormLabel>
                     <Input type="text" name="address" />
                   </FormControl>
                 )}
@@ -255,22 +255,18 @@ export default function AuthPage() {
                         alignItems: "center",
                       }}
                     >
-                      <Checkbox
-                        size="sm"
-                        label="Remember me"
-                        name="persistent"
-                      />
+
                     </Box>
                   )}
                   {authMode === "signup" && (
                     <Checkbox
                       size="sm"
-                      label="I agree to the terms and conditions"
+                      label="Tôi đồng ý với các điều khoản và điều kiện"
                       name="terms"
                     />
                   )}
                   <Button type="submit" fullWidth>
-                    {authMode === "signin" ? "Sign in" : "Sign up"}
+                    {authMode === "signin" ? "Đăng nhập" : "Đăng ký"}
                   </Button>
                 </Stack>
               </form>

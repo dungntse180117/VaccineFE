@@ -148,9 +148,6 @@ const ManageVisitDayChangeRequest = () => {
   };
 
   const requestColumns = [
-    { title: "ID Yêu Cầu", dataIndex: "changeRequestId", key: "changeRequestId" },
-    { title: "ID Lượt Thăm", dataIndex: "visitID", key: "visitID" },
-    { title: "ID Bệnh Nhân", dataIndex: "patientId", key: "patientId" },
     {
       title: "Ngày Yêu Cầu",
       dataIndex: "requestedDate",
@@ -170,7 +167,7 @@ const ManageVisitDayChangeRequest = () => {
       title: "Hành Động",
       key: "actions",
       render: (text, record) => (
-        <TableCell className="manage-visit-day-change-request-table-cell">
+        <>
           <IconButton
             aria-label="edit"
             onClick={() => showEditModal(record)}
@@ -185,7 +182,7 @@ const ManageVisitDayChangeRequest = () => {
           >
             <DeleteIcon />
           </IconButton>
-        </TableCell>
+        </>
       ),
     },
   ];
@@ -269,18 +266,18 @@ const ManageVisitDayChangeRequest = () => {
           <Form form={editRequestForm} layout="vertical" onFinish={handleRejectSubmit}>
             {selectedRequest && (
               <>
-                <Text strong>ID Yêu Cầu: </Text>
-                <Text>{selectedRequest.changeRequestId}</Text>
+                <Typography component="span" fontWeight="bold">ID Yêu Cầu: </Typography>
+                <Typography component="span">{selectedRequest.changeRequestId}</Typography>
                 <br />
-                <Text strong>Ngày Yêu Cầu: </Text>
-                <Text>
+                <Typography component="span" fontWeight="bold">Ngày Yêu Cầu: </Typography>
+                <Typography component="span">
                   {selectedRequest.requestedDate
                     ? moment(selectedRequest.requestedDate).format("DD/MM/YYYY")
                     : "N/A"}
-                </Text>
+                </Typography>
                 <br />
-                <Text strong>Lý Do: </Text>
-                <Text>{selectedRequest.reason || "N/A"}</Text>
+                <Typography component="span" fontWeight="bold">Lý Do: </Typography>
+                <Typography component="span">{selectedRequest.reason || "N/A"}</Typography>
                 <br />
               </>
             )}

@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-brand">
-          <p>© {new Date().getFullYear()} Cơ sở tiêm vaccine.</p>
+          <p>© {new Date().getFullYear()} Cơ sở Vaccine Care.</p>
           <p className="tagline">Bảo vệ sức khỏe, an tâm tương lai.</p>
         </div>
         <nav className="footer-nav">

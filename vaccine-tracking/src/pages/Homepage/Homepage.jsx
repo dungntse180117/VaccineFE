@@ -7,6 +7,8 @@ import Footer from '../../components/Footer/Footer';
 import { getAllVaccination, getVaccinationImage, getDiseaseByVaccinationId, getAllFeedbacks } from '../../config/axios';
 import './HomePage.css';
 import NoImage from "../../assets/NoImage.png";
+import UnloginBanner from "../../assets/UnloginBanner.png";
+import Banner from "../../assets/HomepageBanner.png"
 
 const HomePage = () => {
     const [featuredVaccines, setFeaturedVaccines] = useState([]);
@@ -16,11 +18,15 @@ const HomePage = () => {
     const [selectedRating, setSelectedRating] = useState(5);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             setError(null);
+            const token = localStorage.getItem('token');
+            setIsLoggedIn(!!token);
+
             try {
                 const vaccineResponse = await getAllVaccination();
                 if (vaccineResponse && vaccineResponse.data && Array.isArray(vaccineResponse.data)) {
@@ -138,7 +144,11 @@ const HomePage = () => {
             <Header />
 
             <Box className="banner-container">
-                <img src="https://res.cloudinary.com/dzxkl9am6/image/upload/v1742193045/BannerHomePage_ffuuhf.png" alt="Banner HomePage" className="banner-image" />
+                <img 
+                    src={isLoggedIn ? Banner : UnloginBanner} 
+                    alt="Banner HomePage" 
+                    className="banner-image" 
+                />
             </Box>
 
             <Box className="featured-vaccines-section">

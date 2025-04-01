@@ -91,6 +91,7 @@ function AppointmentDetails() {
       notes: "",
       appointmentVaccinationIds: [],
     });
+    setError(null); // Xóa lỗi trước đó khi mở form
   };
 
   const handleCloseVisitForm = () => {
@@ -120,6 +121,12 @@ function AppointmentDetails() {
 
   const handleCreateVisit = async () => {
     setError(null);
+    // Kiểm tra nếu không chọn vaccine nào
+    if (visitData.appointmentVaccinationIds.length === 0) {
+      setError("Vui lòng chọn ít nhất một vắc-xin để tạo lượt thăm.");
+      return;
+    }
+
     try {
       const visitDataWithAppointmentId = {
         ...visitData,
@@ -145,7 +152,7 @@ function AppointmentDetails() {
     );
   }
 
-  if (error) {
+  if (error && !visitFormOpen) { // Chỉ hiển thị lỗi chung nếu không mở form
     return (
       <LayoutStaff>
         <Alert severity="error" sx={{ mt: 3 }}>
@@ -308,6 +315,11 @@ function AppointmentDetails() {
             Tạo Lượt Thăm
           </DialogTitle>
           <DialogContent sx={{ mt: 2 }}>
+            {error && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {error}
+              </Alert>
+            )}
             <TextField
               fullWidth
               margin="normal"
