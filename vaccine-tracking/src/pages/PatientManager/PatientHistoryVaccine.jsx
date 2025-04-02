@@ -38,7 +38,7 @@ const PatientHistoryVaccine = () => {
   const [vaccinationHistory, setVaccinationHistory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [patientName, setPatientName] = useState("");
-  const navigate = useNavigate();
+ 
 
   useEffect(() => {
     fetchPatientData();
@@ -92,8 +92,8 @@ const PatientHistoryVaccine = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="vaccination history table">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Reaction</TableCell>
-                      <TableCell>Notes</TableCell>
+                      <TableCell>Phản ứng</TableCell>
+                      <TableCell>Vaccine đã tiêm</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
